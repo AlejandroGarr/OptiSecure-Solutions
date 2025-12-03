@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cuenta_administrativo__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Contacto administrativo</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>Contacto__c.Name</field>
+            <operation>equals</operation>
+            <valueField>$User.Alias</valueField>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Contacto__c</referenceTo>
+    <relationshipLabel>Facturas</relationshipLabel>
+    <relationshipName>Facturas1</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

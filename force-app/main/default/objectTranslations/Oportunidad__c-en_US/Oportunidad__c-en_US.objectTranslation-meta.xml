@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Oportunidad</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Oportunidades</value>
+    </caseValues>
+    <layouts>
+        <layout>Oportunidad Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Una vez que la oportunidad esté en estado &apos;Cerrada - Ganada&apos;, no puede ser modificada. --></errorMessage>
+        <name>parte2</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Debe indicar el motivo de pérdida cuando la etapa sea Cerrada - Perdida. --></errorMessage>
+        <name>verific</name>
+    </validationRules>
+</CustomObjectTranslation>

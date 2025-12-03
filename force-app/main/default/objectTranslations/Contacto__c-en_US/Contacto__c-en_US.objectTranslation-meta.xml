@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Contacto</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Contactos</value>
+    </caseValues>
+    <layouts>
+        <layout>Contacto Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- New Section --></label>
+            <section>New Section</section>
+        </sections>
+        <sections>
+            <label><!-- email --></label>
+            <section>email</section>
+        </sections>
+    </layouts>
+    <quickActions>
+        <label><!-- Enviar Email --></label>
+        <name>Enviar_Email</name>
+    </quickActions>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Debe informar al menos un dato de contacto: correo electrónico o teléfono. --></errorMessage>
+        <name>Datos_de_contacto</name>
+    </validationRules>
+</CustomObjectTranslation>

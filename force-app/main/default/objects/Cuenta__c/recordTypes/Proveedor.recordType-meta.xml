@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Proveedor</fullName>
+    <active>true</active>
+    <label>Proveedor</label>
+    <picklistValues>
+        <picklist>Sector__c</picklist>
+        <values>
+            <fullName>Registro1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registro2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registro3</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

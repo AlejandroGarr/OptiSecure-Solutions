@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPromptTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <activeVersionIdentifier>F0+mF+pd+um56+Tv/RmZ0X3w4AV+5eWoN7A00yOzbzQ=_1</activeVersionIdentifier>
+    <description>Summary of case details</description>
+    <developerName>Case_Comments_Summary</developerName>
+    <masterLabel>Case Comments Summary</masterLabel>
+    <relatedEntity>Case</relatedEntity>
+    <relatedField>Case.Case_AI_Summary__c</relatedField>
+    <templateVersions>
+        <content>Usted es representante de asistencia técnica y le han asignado la tarea de crear un breve resumen sobre un caso que tuvo lugar entre un cliente y un representante de asistencia técnica de la empresa.
+</content>
+        <inputs>
+            <apiName>RelatedEntity</apiName>
+            <definition>SOBJECT://Case</definition>
+            <referenceName>Input:Case</referenceName>
+            <required>true</required>
+        </inputs>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <versionIdentifier>F0+mF+pd+um56+Tv/RmZ0X3w4AV+5eWoN7A00yOzbzQ=_1</versionIdentifier>
+    </templateVersions>
+    <type>einstein_gpt__fieldCompletion</type>
+    <visibility>Global</visibility>
+</GenAiPromptTemplate>

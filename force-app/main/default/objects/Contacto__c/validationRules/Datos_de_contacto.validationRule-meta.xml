@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Datos_de_contacto</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+  ISBLANK(  $ObjectType.Contacto__c.Fields.Correo__c  ),
+  ISBLANK( CreatedBy.Phone )
+)</errorConditionFormula>
+    <errorMessage>Debe informar al menos un dato de contacto: correo electrónico o teléfono.</errorMessage>
+</ValidationRule>

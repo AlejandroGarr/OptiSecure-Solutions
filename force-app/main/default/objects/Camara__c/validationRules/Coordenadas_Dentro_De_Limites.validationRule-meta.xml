@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Coordenadas_Dentro_De_Limites</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(
+  Posicion_X__c &lt; 0,
+  Posicion_X__c &gt; 100,
+  Posicion_Y__c &lt; 0,
+  Posicion_Y__c &gt; 100
+)</errorConditionFormula>
+    <errorMessage>Las coordenadas X e Y deben ser un porcentaje entre 0 y 100 para situarse dentro del mapa.</errorMessage>
+</ValidationRule>
