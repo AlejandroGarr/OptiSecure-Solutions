@@ -1,0 +1,415 @@
+/* ═══════════════════════════════════════════════════════
+   HOUSE SECURITY MAP — CSS Grid Layout
+   Grid:  map (75%)  | sidebar (25%)
+          footer     | footer
+═══════════════════════════════════════════════════════ */
+
+/* ── Host ── */
+:host {
+    display: block;
+    --color-bg:        #0a0e1a;
+    --color-surface:   #111827;
+    --color-border:    #1e293b;
+    --color-accent:    #3b82f6;
+    --color-accent-glow: rgba(59, 130, 246, 0.4);
+    --color-text:      #e2e8f0;
+    --color-text-dim:  #94a3b8;
+    --color-danger:    #ef4444;
+    --color-success:   #22c55e;
+    --radius:          0.5rem;
+}
+
+/* ── Grid principal ── */
+.house-security-map {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+        "map     sidebar"
+        "footer  footer";
+    height: 85vh;
+    min-height: 500px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+    color: var(--color-text);
+}
+
+/* ═══ GRID AREA: MAP ═══ */
+.grid-area-map {
+    grid-area: map;
+    position: relative;
+    overflow: hidden;
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.map-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.floor-plan-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0.85;
+}
+
+/* Badge de cámaras activas sobre el mapa */
+.map-badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    display: flex;
+    align-items: center;
+    background: rgba(10, 14, 26, 0.8);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--color-border);
+    border-radius: 2rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-accent);
+}
+
+/* ── Pins de cámara ── */
+.camera-pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: rgba(59, 130, 246, 0.2);
+    border: 2px solid var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    padding: 0;
+}
+
+.camera-pin:hover {
+    transform: translate(-50%, -50%) scale(1.25);
+    background: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 0 16px var(--color-accent-glow);
+}
+
+.camera-pin:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.camera-icon {
+    --sds-c-icon-color-foreground-default: #60a5fa;
+    pointer-events: none;
+}
+
+/* Pulso animado */
+.camera-pin-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid var(--color-accent);
+    animation: pulse-ring 2s ease-out infinite;
+    pointer-events: none;
+}
+
+@keyframes pulse-ring {
+    0%   { transform: scale(1);   opacity: 0.6; }
+    100% { transform: scale(2.2); opacity: 0;   }
+}
+
+/* ═══ GRID AREA: SIDEBAR ═══ */
+.grid-area-sidebar {
+    grid-area: sidebar;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    background: rgba(10, 14, 26, 0.5);
+}
+
+.sidebar-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0;
+    color: var(--color-text);
+}
+
+.sidebar-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Items de cámara en la lista */
+.cam-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: background 0.15s ease, border-left 0.15s ease;
+    border-left: 3px solid transparent;
+}
+
+.cam-list-item:hover {
+    background: rgba(59, 130, 246, 0.08);
+}
+
+.cam-list-item--selected {
+    background: rgba(59, 130, 246, 0.12);
+    border-left-color: var(--color-accent);
+}
+
+.cam-list-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.cam-list-icon {
+    --sds-c-icon-color-foreground-default: #60a5fa;
+    flex-shrink: 0;
+}
+
+.cam-list-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.cam-list-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cam-list-zone {
+    font-size: 0.65rem;
+    color: var(--color-text-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.badge-online {
+    --sds-c-badge-color-background: rgba(34, 197, 94, 0.15);
+    --sds-c-badge-text-color: #4ade80;
+    --slds-c-badge-color-background: rgba(34, 197, 94, 0.15);
+    --slds-c-badge-text-color: #4ade80;
+    font-size: 0.6rem;
+    flex-shrink: 0;
+}
+
+/* ── Panel de detalle (debajo de la lista) ── */
+.sidebar-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    color: var(--color-text-dim);
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+.sidebar-detail {
+    border-top: 1px solid var(--color-border);
+    padding: 1rem;
+    background: rgba(10, 14, 26, 0.5);
+}
+
+.detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.detail-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--color-accent);
+}
+
+.detail-close-btn {
+    --sds-c-button-icon-color-foreground: var(--color-text-dim);
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    margin: 0;
+}
+
+.detail-grid dt {
+    color: var(--color-text-dim);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+    padding: 0.15rem 0;
+}
+
+.detail-grid dd {
+    margin: 0;
+    padding: 0.15rem 0;
+    color: var(--color-text);
+}
+
+.detail-live-btn {
+    width: 100%;
+}
+
+/* ═══ GRID AREA: FOOTER ═══ */
+.grid-area-footer {
+    grid-area: footer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    background: rgba(10, 14, 26, 0.85);
+    border-top: 1px solid var(--color-border);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-text-dim);
+}
+
+.footer-icon {
+    --sds-c-icon-color-foreground-default: var(--color-accent);
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.footer-datetime {
+    color: var(--color-text-dim);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ═══ MODAL — Visor de vídeo ═══ */
+.slds-modal__container {
+    max-width: 72rem;
+}
+
+.modal-header-custom {
+    background: var(--color-bg) !important;
+    border-bottom: 1px solid var(--color-border) !important;
+    padding: 0.75rem 1rem !important;
+}
+
+.modal-title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.slds-modal__title {
+    color: var(--color-text) !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+}
+
+.modal-live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--color-danger);
+    padding: 0.2rem 0.6rem;
+    border-radius: 2rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.live-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--color-danger);
+    border-radius: 50%;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.3; }
+}
+
+.modal-body-custom {
+    padding: 0 !important;
+    background: #000 !important;
+    height: 65vh;
+}
+
+.modal-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+.modal-footer-custom {
+    background: var(--color-bg) !important;
+    border-top: 1px solid var(--color-border) !important;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 768px) {
+    .house-security-map {
+        grid-template-columns: 1fr;
+        grid-template-rows: 60vh auto auto;
+        grid-template-areas:
+            "map"
+            "sidebar"
+            "footer";
+        height: auto;
+    }
+
+    .grid-area-map {
+        border-right: none;
+    }
+
+    .grid-area-sidebar {
+        max-height: 40vh;
+    }
+}

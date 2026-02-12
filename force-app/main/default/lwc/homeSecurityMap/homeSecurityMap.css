@@ -1,0 +1,108 @@
+/* DISEÑO DE CUADRÍCULA (GRID) */
+.main-grid {
+    display: grid;
+    /* Definimos columnas: El mapa ocupa 3 partes, la derecha 1 parte */
+    grid-template-columns: 3fr 1fr; 
+    /* Definimos filas: El mapa es automático, el pie ocupa 150px */
+    grid-template-rows: auto 150px; 
+    gap: 10px; /* Espacio entre huecos */
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #f3f3f3;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+/* ZONA 1: EL MAPA */
+.map-container {
+    grid-column: 1 / 2; /* Ocupa la primera columna */
+    position: relative; /* Importante para que las chinchetas se muevan aquí dentro */
+    width: 100%;
+    overflow: hidden;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.map-image {
+    width: 100%;
+    display: block; /* Quita espacios extraños */
+}
+
+/* LA CHINCHETA */
+.camera-pin {
+    position: absolute; /* Se mueve libremente sobre el mapa */
+    transform: translate(-50%, -50%); /* Centra el pin EXACTAMENTE en el punto */
+    background-color: #ff4b4b; /* Color rojo */
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    transition: transform 0.2s;
+    z-index: 10;
+}
+
+.camera-pin:hover {
+    transform: translate(-50%, -50%) scale(1.2); /* Efecto zoom al pasar ratón */
+    background-color: #ff0000;
+}
+
+/* ZONA 2: BARRA LATERAL DERECHA */
+.sidebar-container {
+    grid-column: 2 / 3;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+/* ZONA 3: PIE DE PÁGINA (Footer) */
+.footer-container {
+    grid-column: 1 / 3; /* Ocupa todo el ancho (columna 1 hasta el final) */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+/* ESTILOS DEL MODAL (VIDEO) */
+.modal-backdrop {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); /* Fondo negro semitransparente */
+    z-index: 900;
+}
+
+.modal-content {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 800px;
+    background: #000;
+    padding: 10px;
+    z-index: 1000;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* Ratio 16:9 para video */
+    height: 0;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+}
+
+.close-btn {
+    position: absolute;
+    top: -40px; right: 0;
+    background: none; border: none;
+    color: white; font-size: 30px;
+    cursor: pointer;
+}

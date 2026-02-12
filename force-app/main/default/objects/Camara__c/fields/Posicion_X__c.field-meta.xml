@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Posicion_X__c</fullName>
+    <description>Coordenada X en porcentaje (0-100) para posicionar la cámara en el plano.</description>
     <externalId>false</externalId>
-    <label>Posicion X</label>
-    <precision>18</precision>
+    <label>Posición X</label>
+    <precision>5</precision>
     <required>false</required>
-    <scale>0</scale>
+    <scale>2</scale>
     <trackTrending>false</trackTrending>
     <type>Number</type>
     <unique>false</unique>

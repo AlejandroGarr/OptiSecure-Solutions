@@ -2,13 +2,15 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>65.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>Centro de Vigilancia</masterLabel>
-    <description>Monitor de cámaras de seguridad en tiempo real con pantalla dividida en 4</description>
+    
     <targets>
-        <target>lightning__AppPage</target>
-        <target>lightning__RecordPage</target>
-        <target>lightning__HomePage</target>
         <target>lightningCommunity__Page</target>
         <target>lightningCommunity__Default</target>
     </targets>
+    
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="componentTitle" type="String" default="Mapa de Seguridad" label="Título del Componente"/>
+        </targetConfig>
+    </targetConfigs>
 </LightningComponentBundle>

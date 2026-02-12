@@ -154,12 +154,12 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>Private</externalSharingModel>
-    <label>Camara</label>
+    <label>Cámara</label>
     <nameField>
-        <label>Camara Name</label>
+        <label>Cámara Name</label>
         <type>Text</type>
     </nameField>
-    <pluralLabel>Camaras</pluralLabel>
+    <pluralLabel>Cámaras</pluralLabel>
     <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>

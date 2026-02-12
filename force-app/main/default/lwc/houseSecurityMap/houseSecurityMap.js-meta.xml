@@ -2,8 +2,8 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>65.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>Centro de Vigilancia</masterLabel>
-    <description>Monitor de cámaras de seguridad en tiempo real con pantalla dividida en 4</description>
+    <masterLabel>Mapa de Seguridad</masterLabel>
+    <description>Mapa interactivo de la vivienda con cámaras de seguridad posicionadas. Permite ver el stream en vivo al hacer clic.</description>
     <targets>
         <target>lightning__AppPage</target>
         <target>lightning__RecordPage</target>

@@ -1,0 +1,183 @@
+<template>
+    <!-- ═══════════════════════════════════════════════════════
+         HOUSE SECURITY MAP — OptiSecure Solutions
+         Layout CSS Grid: Mapa (75%) | Sidebar (25%) | Footer
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="house-security-map">
+
+        <!-- ─── MAPA PRINCIPAL (grid-area: map) ─── -->
+        <div class="grid-area-map">
+            <div class="map-container">
+                <!-- Imagen de fondo del plano -->
+                <img src={floorPlanUrl} alt="Plano de la casa" class="floor-plan-img" />
+
+                <!-- Iconos de cámaras posicionados sobre el plano -->
+                <template for:each={cameras} for:item="cam">
+                    <button
+                        key={cam.Id}
+                        class="camera-pin"
+                        style={cam.positionStyle}
+                        title={cam.Name}
+                        onclick={handleCameraClick}
+                        data-id={cam.Id}
+                    >
+                        <lightning-icon
+                            icon-name="utility:video"
+                            size="x-small"
+                            alternative-text={cam.Name}
+                            class="camera-icon"
+                        ></lightning-icon>
+                        <span class="camera-pin-pulse"></span>
+                    </button>
+                </template>
+
+                <!-- Badge de cámaras activas -->
+                <div class="map-badge">
+                    <lightning-icon icon-name="utility:connected_apps" size="xx-small"></lightning-icon>
+                    <span class="slds-m-left_xx-small">{cameraCount} cámaras activas</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── SIDEBAR DERECHA (grid-area: sidebar) ─── -->
+        <div class="grid-area-sidebar">
+            <div class="sidebar-header">
+                <lightning-icon icon-name="utility:list" size="small" class="slds-m-right_x-small"></lightning-icon>
+                <h2 class="sidebar-title">Cámaras</h2>
+            </div>
+
+            <div class="sidebar-list">
+                <template lwc:if={isLoading}>
+                    <div class="slds-align_absolute-center slds-p-around_large">
+                        <lightning-spinner alternative-text="Cargando..." size="small"></lightning-spinner>
+                    </div>
+                </template>
+
+                <template lwc:elseif={hasCameras}>
+                    <template for:each={cameras} for:item="cam">
+                        <div
+                            key={cam.Id}
+                            class={cam.listItemClass}
+                            onclick={handleCameraClick}
+                            data-id={cam.Id}
+                        >
+                            <div class="cam-list-left">
+                                <lightning-icon
+                                    icon-name="utility:video"
+                                    size="xx-small"
+                                    class="slds-m-right_x-small cam-list-icon"
+                                ></lightning-icon>
+                                <div class="cam-list-info">
+                                    <span class="cam-list-name">{cam.Name}</span>
+                                    <span class="cam-list-zone">{cam.Zone__c}</span>
+                                </div>
+                            </div>
+                            <lightning-badge label="ONLINE" class="badge-online"></lightning-badge>
+                        </div>
+                    </template>
+                </template>
+
+                <template lwc:else>
+                    <div class="sidebar-empty">
+                        <lightning-icon icon-name="utility:info" size="small" class="slds-m-bottom_small"></lightning-icon>
+                        <p>No hay cámaras activas</p>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Detalle de cámara seleccionada -->
+            <template lwc:if={selectedCamera}>
+                <div class="sidebar-detail">
+                    <div class="detail-header">
+                        <h3 class="detail-title">{selectedCamera.Name}</h3>
+                        <lightning-button-icon
+                            icon-name="utility:close"
+                            alternative-text="Cerrar detalle"
+                            size="small"
+                            onclick={handleCloseDetail}
+                            class="detail-close-btn"
+                        ></lightning-button-icon>
+                    </div>
+                    <dl class="detail-grid">
+                        <dt>Zona</dt>
+                        <dd>{selectedCamera.Zone__c}</dd>
+                        <dt>Posición X</dt>
+                        <dd>{selectedCamera.Posicion_X__c}%</dd>
+                        <dt>Posición Y</dt>
+                        <dd>{selectedCamera.Posicion_Y__c}%</dd>
+                    </dl>
+                    <lightning-button
+                        label="Ver en vivo"
+                        variant="brand"
+                        icon-name="utility:play"
+                        onclick={handleOpenModal}
+                        data-id={selectedCamera.Id}
+                        class="slds-m-top_small detail-live-btn"
+                    ></lightning-button>
+                </div>
+            </template>
+        </div>
+
+        <!-- ─── FOOTER (grid-area: footer) ─── -->
+        <div class="grid-area-footer">
+            <div class="footer-left">
+                <lightning-icon icon-name="utility:shield" size="xx-small" class="footer-icon"></lightning-icon>
+                <span>OPTISECURE — Mapa de Seguridad Interactivo</span>
+            </div>
+            <div class="footer-right">
+                <lightning-button
+                    label="Refrescar"
+                    variant="neutral"
+                    icon-name="utility:refresh"
+                    onclick={handleRefresh}
+                    class="slds-m-right_x-small"
+                ></lightning-button>
+                <span class="footer-datetime">{currentDateTime}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ MODAL — Visor de vídeo en vivo ═══ -->
+    <template lwc:if={isModalOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-modal="true" aria-label="Cámara en vivo">
+            <div class="slds-modal__container">
+                <!-- Header del modal -->
+                <div class="slds-modal__header modal-header-custom">
+                    <lightning-button-icon
+                        icon-name="utility:close"
+                        alternative-text="Cerrar"
+                        variant="bare-inverse"
+                        onclick={handleCloseModal}
+                        class="slds-modal__close"
+                    ></lightning-button-icon>
+                    <div class="modal-title-group">
+                        <span class="modal-live-badge">
+                            <span class="live-dot"></span>
+                            EN VIVO
+                        </span>
+                        <h2 class="slds-modal__title">{modalCameraName}</h2>
+                    </div>
+                </div>
+                <!-- Body del modal con iframe -->
+                <div class="slds-modal__content modal-body-custom">
+                    <iframe
+                        src={modalVideoUrl}
+                        title={modalCameraName}
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                        class="modal-iframe"
+                    ></iframe>
+                </div>
+                <!-- Footer del modal -->
+                <div class="slds-modal__footer modal-footer-custom">
+                    <lightning-button
+                        label="Cerrar"
+                        onclick={handleCloseModal}
+                    ></lightning-button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>
