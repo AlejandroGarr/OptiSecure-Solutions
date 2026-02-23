@@ -110,7 +110,7 @@
                         label="Ver en vivo"
                         variant="brand"
                         icon-name="utility:play"
-                        onclick={handleOpenModal}
+                        onclick={handleOpenFullscreen}
                         data-id={selectedCamera.Id}
                         class="slds-m-top_small detail-live-btn"
                     ></lightning-button>
@@ -137,47 +137,34 @@
         </div>
     </div>
 
-    <!-- ═══ MODAL — Visor de vídeo en vivo ═══ -->
-    <template lwc:if={isModalOpen}>
-        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-modal="true" aria-label="Cámara en vivo">
-            <div class="slds-modal__container">
-                <!-- Header del modal -->
-                <div class="slds-modal__header modal-header-custom">
-                    <lightning-button-icon
-                        icon-name="utility:close"
-                        alternative-text="Cerrar"
-                        variant="bare-inverse"
-                        onclick={handleCloseModal}
-                        class="slds-modal__close"
-                    ></lightning-button-icon>
-                    <div class="modal-title-group">
-                        <span class="modal-live-badge">
-                            <span class="live-dot"></span>
-                            EN VIVO
-                        </span>
-                        <h2 class="slds-modal__title">{modalCameraName}</h2>
-                    </div>
+    <!-- ═══ FULLSCREEN — Visor de vídeo a pantalla completa ═══ -->
+    <template lwc:if={isFullscreen}>
+        <div class="fullscreen-overlay">
+            <!-- Barra superior -->
+            <div class="fullscreen-topbar">
+                <div class="fullscreen-title-group">
+                    <span class="fullscreen-live-badge">
+                        <span class="live-dot"></span>
+                        EN VIVO
+                    </span>
+                    <span class="fullscreen-cam-name">{fullscreenCameraName}</span>
                 </div>
-                <!-- Body del modal con iframe -->
-                <div class="slds-modal__content modal-body-custom">
-                    <iframe
-                        src={modalVideoUrl}
-                        title={modalCameraName}
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                        class="modal-iframe"
-                    ></iframe>
-                </div>
-                <!-- Footer del modal -->
-                <div class="slds-modal__footer modal-footer-custom">
-                    <lightning-button
-                        label="Cerrar"
-                        onclick={handleCloseModal}
-                    ></lightning-button>
-                </div>
+                <button class="fullscreen-close-btn" onclick={handleCloseFullscreen} title="Cerrar (ESC)">
+                    <lightning-icon icon-name="utility:close" size="small" alternative-text="Cerrar"></lightning-icon>
+                </button>
             </div>
-        </section>
-        <div class="slds-backdrop slds-backdrop_open"></div>
+
+            <!-- Vídeo -->
+            <div class="fullscreen-video-wrapper">
+                <iframe
+                    src={fullscreenVideoUrl}
+                    title={fullscreenCameraName}
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    class="fullscreen-iframe"
+                ></iframe>
+            </div>
+        </div>
     </template>
 </template>

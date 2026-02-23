@@ -3,10 +3,18 @@ import { refreshApex } from '@salesforce/apex';
 import getCamaras from '@salesforce/apex/HouseMapController.getCamaras';
 import PLANO_CASA from '@salesforce/resourceUrl/Plano_Casa_1';
 
+// ── Vídeos de reserva (se usan cuando la cámara no tiene Video_Url__c) ──
+const FALLBACK_VIDEOS = [
+    'https://www.youtube.com/embed/ByED80IKdIU?autoplay=1&mute=1&controls=0&loop=1&playlist=ByED80IKdIU',
+    'https://www.youtube.com/embed/wOFnJViMKqo?autoplay=1&mute=1&controls=0&loop=1&playlist=wOFnJViMKqo',
+    'https://www.youtube.com/embed/AdUw5RdyZxI?autoplay=1&mute=1&controls=0&loop=1&playlist=AdUw5RdyZxI',
+    'https://www.youtube.com/embed/WDin4yjkhKE?autoplay=1&mute=1&controls=0&loop=1&playlist=WDin4yjkhKE'
+];
+
 /**
  * @description LWC interactivo que muestra un plano de la casa con las cámaras
- *              de seguridad posicionadas. Al hacer clic se abre un modal con el
- *              stream de vídeo en vivo.
+ *              de seguridad posicionadas. Al hacer clic en un pin se abre la
+ *              retransmisión de vídeo a pantalla completa.
  */
 export default class HouseSecurityMap extends LightningElement {
 
@@ -16,9 +24,9 @@ export default class HouseSecurityMap extends LightningElement {
     // ── State ──
     @track cameras = [];
     @track selectedCamera = null;
-    @track isModalOpen = false;
-    @track modalVideoUrl = '';
-    @track modalCameraName = '';
+    @track isFullscreen = false;
+    @track fullscreenVideoUrl = '';
+    @track fullscreenCameraName = '';
     @track currentDateTime = '';
     @track isLoading = true;
 
@@ -65,12 +73,19 @@ export default class HouseSecurityMap extends LightningElement {
         this._intervalId = setInterval(() => {
             this._updateDateTime();
         }, 1000);
+
+        // Cerrar pantalla completa con ESC
+        this._boundHandleKeyDown = this._handleKeyDown.bind(this);
+        // eslint-disable-next-line @lwc/lwc/no-document-query
+        document.addEventListener('keydown', this._boundHandleKeyDown);
     }
 
     disconnectedCallback() {
         if (this._intervalId) {
             clearInterval(this._intervalId);
         }
+        // eslint-disable-next-line @lwc/lwc/no-document-query
+        document.removeEventListener('keydown', this._boundHandleKeyDown);
     }
 
     // ═══════════════════════════════════════════
@@ -109,22 +124,22 @@ export default class HouseSecurityMap extends LightningElement {
                 'cam-list-item' +
                 (c.Id === camId ? ' cam-list-item--selected' : '')
         }));
+
+        // Abrir directamente a pantalla completa
+        this._openFullscreen(cam);
     }
 
-    /** Abre el modal con el vídeo de la cámara seleccionada */
-    handleOpenModal() {
+    /** Abre la vista fullscreen con el vídeo de la cámara */
+    handleOpenFullscreen() {
         if (!this.selectedCamera) return;
-
-        this.modalCameraName = this.selectedCamera.Name;
-        this.modalVideoUrl = this.selectedCamera.Video_Url__c || '';
-        this.isModalOpen = true;
+        this._openFullscreen(this.selectedCamera);
     }
 
-    /** Cierra el modal y limpia el src del iframe para detener el vídeo */
-    handleCloseModal() {
-        this.isModalOpen = false;
-        this.modalVideoUrl = '';
-        this.modalCameraName = '';
+    /** Cierra la vista fullscreen y limpia el src para detener el vídeo */
+    handleCloseFullscreen() {
+        this.isFullscreen = false;
+        this.fullscreenVideoUrl = '';
+        this.fullscreenCameraName = '';
     }
 
     /** Deselecciona la cámara del panel lateral */
@@ -144,6 +159,23 @@ export default class HouseSecurityMap extends LightningElement {
     // ═══════════════════════════════════════════
     //  PRIVATE HELPERS
     // ═══════════════════════════════════════════
+
+    /** Abre la vista fullscreen; usa fallback si no hay URL */
+    _openFullscreen(cam) {
+        const idx = this.cameras.findIndex((c) => c.Id === cam.Id);
+        const fallback = FALLBACK_VIDEOS[idx % FALLBACK_VIDEOS.length];
+
+        this.fullscreenCameraName = cam.Name;
+        this.fullscreenVideoUrl   = cam.Video_Url__c || fallback;
+        this.isFullscreen          = true;
+    }
+
+    /** Cierra fullscreen con la tecla ESC */
+    _handleKeyDown(event) {
+        if (event.key === 'Escape' && this.isFullscreen) {
+            this.handleCloseFullscreen();
+        }
+    }
 
     _updateDateTime() {
         const now = new Date();
