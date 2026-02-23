@@ -19,7 +19,7 @@ List<Camara__c> cameras = new List<Camara__c>{
         Posicion_X__c = 30,
         Posicion_Y__c = 60,
         Activa__c     = true,
-        Video_Url__c  = 'https://www.youtube.com/embed/ByED80IKdIU?autoplay=1&mute=1&controls=0&loop=1&playlist=ByED80IKdIU'
+        Video_Url__c  = 'https://www.youtube.com/embed/mKCieTImjvU?autoplay=1&mute=1&controls=0&loop=1&playlist=mKCieTImjvU'
     ),
     new Camara__c(
         Name          = 'Jardín',
@@ -27,7 +27,7 @@ List<Camara__c> cameras = new List<Camara__c>{
         Posicion_X__c = 10,
         Posicion_Y__c = 40,
         Activa__c     = true,
-        Video_Url__c  = 'https://www.youtube.com/embed/wOFnJViMKqo?autoplay=1&mute=1&controls=0&loop=1&playlist=wOFnJViMKqo'
+        Video_Url__c  = 'https://www.youtube.com/embed/fO9e9jnhYK8?autoplay=1&mute=1&controls=0&loop=1&playlist=fO9e9jnhYK8'
     ),
     new Camara__c(
         Name          = 'Cocina',
@@ -35,7 +35,7 @@ List<Camara__c> cameras = new List<Camara__c>{
         Posicion_X__c = 50,
         Posicion_Y__c = 20,
         Activa__c     = true,
-        Video_Url__c  = 'https://www.youtube.com/embed/AdUw5RdyZxI?autoplay=1&mute=1&controls=0&loop=1&playlist=AdUw5RdyZxI'
+        Video_Url__c  = 'https://www.youtube.com/embed/rnXIjl_Rzy4?autoplay=1&mute=1&controls=0&loop=1&playlist=rnXIjl_Rzy4'
     ),
     new Camara__c(
         Name          = 'Entrada',
@@ -43,7 +43,7 @@ List<Camara__c> cameras = new List<Camara__c>{
         Posicion_X__c = 80,
         Posicion_Y__c = 80,
         Activa__c     = true,
-        Video_Url__c  = 'https://www.youtube.com/embed/WDin4yjkhKE?autoplay=1&mute=1&controls=0&loop=1&playlist=WDin4yjkhKE'
+        Video_Url__c  = 'https://www.youtube.com/embed/UUhTr19MH0k?autoplay=1&mute=1&controls=0&loop=1&playlist=UUhTr19MH0k'
     )
 };
 

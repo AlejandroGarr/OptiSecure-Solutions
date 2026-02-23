@@ -5,10 +5,10 @@ import PLANO_CASA from '@salesforce/resourceUrl/Plano_Casa_1';
 
 // ── Vídeos de reserva (se usan cuando la cámara no tiene Video_Url__c) ──
 const FALLBACK_VIDEOS = [
-    'https://www.youtube.com/embed/ByED80IKdIU?autoplay=1&mute=1&controls=0&loop=1&playlist=ByED80IKdIU',
-    'https://www.youtube.com/embed/wOFnJViMKqo?autoplay=1&mute=1&controls=0&loop=1&playlist=wOFnJViMKqo',
-    'https://www.youtube.com/embed/AdUw5RdyZxI?autoplay=1&mute=1&controls=0&loop=1&playlist=AdUw5RdyZxI',
-    'https://www.youtube.com/embed/WDin4yjkhKE?autoplay=1&mute=1&controls=0&loop=1&playlist=WDin4yjkhKE'
+    'https://www.youtube.com/embed/mKCieTImjvU?autoplay=1&mute=1&controls=0&loop=1&playlist=mKCieTImjvU',
+    'https://www.youtube.com/embed/fO9e9jnhYK8?autoplay=1&mute=1&controls=0&loop=1&playlist=fO9e9jnhYK8',
+    'https://www.youtube.com/embed/rnXIjl_Rzy4?autoplay=1&mute=1&controls=0&loop=1&playlist=rnXIjl_Rzy4',
+    'https://www.youtube.com/embed/UUhTr19MH0k?autoplay=1&mute=1&controls=0&loop=1&playlist=UUhTr19MH0k'
 ];
 
 /**
