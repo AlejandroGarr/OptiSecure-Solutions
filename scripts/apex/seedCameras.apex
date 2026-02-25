@@ -1,3 +1,10 @@
+/**
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 02-25-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
 // ═══════════════════════════════════════════════════════════
 //  DATA SEEDING — Camara__c (Cámaras de Seguridad)
 //  Ejecutar como Anonymous Apex en Developer Console
@@ -16,32 +23,32 @@ List<Camara__c> cameras = new List<Camara__c>{
     new Camara__c(
         Name          = 'Salón',
         Zone__c       = 'Salón',
-        Posicion_X__c = 30,
-        Posicion_Y__c = 60,
+        Posicion_X__c = 23,
+        Posicion_Y__c = 75,
         Activa__c     = true,
         Video_Url__c  = 'https://www.youtube.com/embed/mKCieTImjvU?autoplay=1&mute=1&controls=0&loop=1&playlist=mKCieTImjvU'
     ),
     new Camara__c(
         Name          = 'Jardín',
         Zone__c       = 'Jardín',
-        Posicion_X__c = 10,
-        Posicion_Y__c = 40,
+        Posicion_X__c = 5,
+        Posicion_Y__c = 50,
         Activa__c     = true,
         Video_Url__c  = 'https://www.youtube.com/embed/fO9e9jnhYK8?autoplay=1&mute=1&controls=0&loop=1&playlist=fO9e9jnhYK8'
     ),
     new Camara__c(
         Name          = 'Cocina',
         Zone__c       = 'Cocina',
-        Posicion_X__c = 50,
-        Posicion_Y__c = 20,
+        Posicion_X__c = 51,
+        Posicion_Y__c = 15,
         Activa__c     = true,
         Video_Url__c  = 'https://www.youtube.com/embed/rnXIjl_Rzy4?autoplay=1&mute=1&controls=0&loop=1&playlist=rnXIjl_Rzy4'
     ),
     new Camara__c(
         Name          = 'Entrada',
         Zone__c       = 'Entrada',
-        Posicion_X__c = 80,
-        Posicion_Y__c = 80,
+        Posicion_X__c = 90,
+        Posicion_Y__c = 75,
         Activa__c     = true,
         Video_Url__c  = 'https://www.youtube.com/embed/UUhTr19MH0k?autoplay=1&mute=1&controls=0&loop=1&playlist=UUhTr19MH0k'
     )

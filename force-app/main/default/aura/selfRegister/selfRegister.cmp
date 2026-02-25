@@ -27,48 +27,144 @@
     <aura:handler event="c:setExpId" action="{!c.setExpId}"/>    
     <aura:dependency resource="c:setExpId" type="EVENT"/>   
     
-    <div>
-            <aura:renderIf isTrue="{!v.showError}">
-                <div id="error">
-                    <ui:outputRichText value="{!v.errorMessage}"/>
-                </div>
-            </aura:renderIf>
-            <div id="sfdc_username_container" class="sfdc">
-                <span id="sfdc_user" class="login-icon" data-icon="a"></span>
-                <ui:inputText value="" aura:id="firstname" placeholder="{!v.firstnameLabel}" keyup="{!c.onKeyUp}" class="input sfdc_usernameinput sfdc"/>
-            </div>
+    <!-- ═══════════════════════════════════════════════════
+         OPTISECURE SOLUTIONS — Registro
+    ═══════════════════════════════════════════════════ -->
+    <div class="os-register-wrapper">
 
-            <div id="sfdc_nickname_container" class="sfdc">
-                <span id="sfdc_user" class="login-icon" data-icon="a"></span>
-                <ui:inputText value="" aura:id="lastname" placeholder="{!v.lastnameLabel}" keyup="{!c.onKeyUp}" class="input sfdc_usernameinput sfdc"/>
-            </div>
-
-            <div id="sfdc_email_container" class="sfdc">
-                <span id="sfdc_user" class="login-icon" data-icon="k"></span>
-                <ui:inputText value="" aura:id="email" placeholder="{!v.emailLabel}" keyup="{!c.onKeyUp}" class="input sfdc_usernameinput sfdc"/>
-            </div>
-            
-            <aura:iteration aura:id="extraFields" items="{!v.extraFields}" var="curField" indexVar="index">
-                <div id="sfdc_extrafield_container" class="sfdc">
-                    <span id="sfdc_user" class="login-icon" data-icon="a"></span>
-                    <ui:inputText value="{!curField.value}" aura:id="{!curField.fieldPath}" placeholder="{!curField.label}" keyup="{!c.onKeyUp}" class="input sfdc_extrafieldinput sfdc"/>
+        <!-- Panel izquierdo: Branding -->
+        <div class="os-brand-panel">
+            <div class="os-brand-bg"></div>
+            <div class="os-brand-content">
+                <div class="os-shield-icon">
+                    <lightning:icon iconName="utility:shield" size="large" alternativeText="Security" class="os-shield-lightning"/>
                 </div>
-            </aura:iteration>
-
-            <aura:renderIf isTrue="{!v.includePasswordField}">
-                <div id="sfdc_password_container" class="sfdc">
-                    <span id="sfdc_lock" class="login-icon sfdc" data-icon="c"></span>
-                    <ui:inputSecret value="" aura:id="password" placeholder="{!v.passwordLabel}" keyup="{!c.onKeyUp}" class="input sfdc_passwordinput sfdc"/>
+                <h1 class="os-brand-title">OptiSecure</h1>
+                <p class="os-brand-subtitle">Solutions</p>
+                <div class="os-brand-divider"></div>
+                <p class="os-brand-tagline">Únete a la Red de Seguridad</p>
+                <div class="os-brand-steps">
+                    <div class="os-step">
+                        <span class="os-step-num">1</span>
+                        <span class="os-step-text">Crea tu cuenta</span>
+                    </div>
+                    <div class="os-step-connector"></div>
+                    <div class="os-step">
+                        <span class="os-step-num">2</span>
+                        <span class="os-step-text">Configura tu hogar</span>
+                    </div>
+                    <div class="os-step-connector"></div>
+                    <div class="os-step">
+                        <span class="os-step-num">3</span>
+                        <span class="os-step-text">Activa la protección</span>
+                    </div>
                 </div>
-    
-                <div id="sfdc_confirm_password_container" class="sfdc">
-                    <span id="sfdc_lock" class="login-icon sfdc" data-icon="c"></span>
-                    <ui:inputSecret value="" aura:id="confirmPassword" placeholder="{!v.confirmPasswordLabel}" keyup="{!c.onKeyUp}" class="input sfdc_passwordinput sfdc"/>
-                </div>
-            </aura:renderIf>
-
-            <div class="sfdc">
-                <ui:button aura:id="submitButton" label="{!v.submitButtonLabel}" press="{!c.handleSelfRegister}" class="sfdc_button"/>
             </div>
+            <!-- Decoraciones animadas -->
+            <div class="os-circle os-circle-1"></div>
+            <div class="os-circle os-circle-2"></div>
+            <div class="os-hex os-hex-1"></div>
+            <div class="os-hex os-hex-2"></div>
+        </div>
+
+        <!-- Panel derecho: Formulario -->
+        <div class="os-form-panel">
+            <div class="os-form-container">
+                <div class="os-form-header">
+                    <div class="os-user-icon">
+                        <lightning:icon iconName="utility:adduser" size="medium" alternativeText="Register" class="os-user-lightning"/>
+                    </div>
+                    <h2 class="os-form-title">Crear Cuenta</h2>
+                    <p class="os-form-desc">Regístrate para proteger tu hogar</p>
+                </div>
+
+                <!-- Error -->
+                <aura:renderIf isTrue="{!v.showError}">
+                    <div class="os-error">
+                        <span class="os-error-icon">&#9888;</span>
+                        <ui:outputRichText value="{!v.errorMessage}"/>
+                    </div>
+                </aura:renderIf>
+
+                <!-- Nombre y Apellidos (fila) -->
+                <div class="os-input-row">
+                    <div class="os-input-group">
+                        <label class="os-input-label">Nombre</label>
+                        <div class="os-input-wrapper">
+                            <span class="os-input-icon">
+                                <lightning:icon iconName="utility:user" size="xx-small" alternativeText="Name" class="os-icon-dim"/>
+                            </span>
+                            <ui:inputText value="" aura:id="firstname" placeholder="{!v.firstnameLabel}" keyup="{!c.onKeyUp}" class="os-input"/>
+                        </div>
+                    </div>
+                    <div class="os-input-group">
+                        <label class="os-input-label">Apellidos</label>
+                        <div class="os-input-wrapper">
+                            <span class="os-input-icon">
+                                <lightning:icon iconName="utility:user" size="xx-small" alternativeText="Name" class="os-icon-dim"/>
+                            </span>
+                            <ui:inputText value="" aura:id="lastname" placeholder="{!v.lastnameLabel}" keyup="{!c.onKeyUp}" class="os-input"/>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="os-input-group">
+                    <label class="os-input-label">Email</label>
+                    <div class="os-input-wrapper">
+                        <span class="os-input-icon">
+                            <lightning:icon iconName="utility:email" size="xx-small" alternativeText="Email" class="os-icon-dim"/>
+                        </span>
+                        <ui:inputText value="" aura:id="email" placeholder="{!v.emailLabel}" keyup="{!c.onKeyUp}" class="os-input"/>
+                    </div>
+                </div>
+
+                <!-- Extra fields -->
+                <aura:iteration aura:id="extraFields" items="{!v.extraFields}" var="curField" indexVar="index">
+                    <div class="os-input-group">
+                        <label class="os-input-label">{!curField.label}</label>
+                        <div class="os-input-wrapper">
+                            <span class="os-input-icon">
+                                <lightning:icon iconName="utility:page" size="xx-small" alternativeText="Field" class="os-icon-dim"/>
+                            </span>
+                            <ui:inputText value="{!curField.value}" aura:id="{!curField.fieldPath}" placeholder="{!curField.label}" keyup="{!c.onKeyUp}" class="os-input"/>
+                        </div>
+                    </div>
+                </aura:iteration>
+
+                <!-- Password fields -->
+                <aura:renderIf isTrue="{!v.includePasswordField}">
+                    <div class="os-input-row">
+                        <div class="os-input-group">
+                            <label class="os-input-label">Contraseña</label>
+                            <div class="os-input-wrapper">
+                                <span class="os-input-icon">
+                                    <lightning:icon iconName="utility:lock" size="xx-small" alternativeText="Password" class="os-icon-dim"/>
+                                </span>
+                                <ui:inputSecret value="" aura:id="password" placeholder="{!v.passwordLabel}" keyup="{!c.onKeyUp}" class="os-input"/>
+                            </div>
+                        </div>
+                        <div class="os-input-group">
+                            <label class="os-input-label">Confirmar</label>
+                            <div class="os-input-wrapper">
+                                <span class="os-input-icon">
+                                    <lightning:icon iconName="utility:lock" size="xx-small" alternativeText="Confirm" class="os-icon-dim"/>
+                                </span>
+                                <ui:inputSecret value="" aura:id="confirmPassword" placeholder="{!v.confirmPasswordLabel}" keyup="{!c.onKeyUp}" class="os-input"/>
+                            </div>
+                        </div>
+                    </div>
+                </aura:renderIf>
+
+                <!-- Submit button -->
+                <ui:button aura:id="submitButton" label="{!v.submitButtonLabel}" press="{!c.handleSelfRegister}" class="os-btn-register"/>
+
+                <!-- Footer branding -->
+                <div class="os-form-footer">
+                    <span class="os-footer-shield">&#128737;</span>
+                    <span>Protegido por OptiSecure Solutions</span>
+                </div>
+            </div>
+        </div>
     </div>
 </aura:component>
