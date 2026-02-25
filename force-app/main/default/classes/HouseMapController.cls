@@ -70,7 +70,7 @@ public with sharing class HouseMapController {
             Posicion_Y__c = posY,
             Video_Url__c  = videoUrl,
             Activa__c     = true,
-            Zone__c       = 'Personalizada'
+            Zone__c       = 'Salón'
         );
         insert cam;
         return cam;
