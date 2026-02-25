@@ -34,4 +34,59 @@ public with sharing class HouseMapController {
             );
         }
     }
+
+    /**
+     * @description Comprueba si el usuario actual tiene perfil System Administrator.
+     * @return      True si el usuario es System Administrator, false en caso contrario.
+     */
+    @AuraEnabled(cacheable=true)
+    public static Boolean isSystemAdmin() {
+        try {
+            Profile p = [
+                SELECT Name
+                FROM   Profile
+                WHERE  Id = :UserInfo.getProfileId()
+                LIMIT  1
+            ];
+            return p.Name == 'System Administrator' || p.Name == 'Administrador del sistema';
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * @description Guarda la posición de una chincheta (cámara) creada por drag & drop.
+     * @param       name     Nombre de la cámara
+     * @param       posX     Posición X en porcentaje
+     * @param       posY     Posición Y en porcentaje
+     * @param       videoUrl URL del vídeo de YouTube
+     * @return      La cámara creada
+     */
+    @AuraEnabled
+    public static Camara__c saveDraggedCamera(String name, Decimal posX, Decimal posY, String videoUrl) {
+        Camara__c cam = new Camara__c(
+            Name          = name,
+            Posicion_X__c = posX,
+            Posicion_Y__c = posY,
+            Video_Url__c  = videoUrl,
+            Activa__c     = true,
+            Zone__c       = 'Personalizada'
+        );
+        insert cam;
+        return cam;
+    }
+
+    /**
+     * @description Actualiza la posición de una cámara existente.
+     * @param       camId  Id de la cámara
+     * @param       posX   Nueva posición X en porcentaje
+     * @param       posY   Nueva posición Y en porcentaje
+     */
+    @AuraEnabled
+    public static void updateCameraPosition(Id camId, Decimal posX, Decimal posY) {
+        Camara__c cam = [SELECT Id FROM Camara__c WHERE Id = :camId LIMIT 1];
+        cam.Posicion_X__c = posX;
+        cam.Posicion_Y__c = posY;
+        update cam;
+    }
 }

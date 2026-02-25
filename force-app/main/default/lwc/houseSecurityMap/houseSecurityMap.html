@@ -2,12 +2,16 @@
     <!-- ═══════════════════════════════════════════════════════
          HOUSE SECURITY MAP — OptiSecure Solutions
          Layout CSS Grid: Mapa (75%) | Sidebar (25%) | Footer
+         Drag & Drop de chinchetas solo para System Administrator
     ═══════════════════════════════════════════════════════════ -->
     <div class="house-security-map">
 
         <!-- ─── MAPA PRINCIPAL (grid-area: map) ─── -->
         <div class="grid-area-map">
-            <div class="map-container">
+            <div class={mapContainerClass}
+                 ondragover={handleDragOver}
+                 ondragleave={handleDragLeave}
+                 ondrop={handleDrop}>
                 <!-- Imagen de fondo del plano -->
                 <img src={floorPlanUrl} alt="Plano de la casa" class="floor-plan-img" />
 
@@ -20,6 +24,8 @@
                         title={cam.Name}
                         onclick={handleCameraClick}
                         data-id={cam.Id}
+                        draggable={isAdmin}
+                        ondragstart={handleExistingCameraDragStart}
                     >
                         <lightning-icon
                             icon-name="utility:video"
@@ -29,6 +35,40 @@
                         ></lightning-icon>
                         <span class="camera-pin-pulse"></span>
                     </button>
+                </template>
+
+                <!-- Chinchetas soltadas (drag & drop — admin) -->
+                <template lwc:if={hasDroppedPins}>
+                    <template for:each={droppedPins} for:item="pin">
+                        <div
+                            key={pin.id}
+                            class="dropped-pin"
+                            style={pin.positionStyle}
+                            draggable="true"
+                            ondragstart={handleDroppedPinDragStart}
+                            onclick={handleDroppedPinClick}
+                            data-pin-id={pin.id}
+                            title={pin.name}
+                        >
+                            <img src={pin.thumbnailUrl} alt={pin.name} class="dropped-pin-thumb" />
+                            <span class="dropped-pin-label">{pin.name}</span>
+                            <button
+                                class="dropped-pin-remove"
+                                onclick={handleRemoveDroppedPin}
+                                data-pin-id={pin.id}
+                                title="Eliminar"
+                            >✕</button>
+                            <span class="camera-pin-pulse dropped-pin-pulse"></span>
+                        </div>
+                    </template>
+                </template>
+
+                <!-- Indicador visual de zona de drop -->
+                <template lwc:if={isDragOver}>
+                    <div class="drop-zone-indicator">
+                        <lightning-icon icon-name="utility:download" size="large" class="drop-zone-icon"></lightning-icon>
+                        <span class="drop-zone-text">Soltar cámara aquí</span>
+                    </div>
                 </template>
 
                 <!-- Badge de cámaras activas -->
@@ -84,6 +124,66 @@
                     </div>
                 </template>
             </div>
+
+            <!-- ─── ZONA DRAG & DROP — Solo admins ─── -->
+            <template lwc:if={isAdmin}>
+                <div class="drag-tray">
+                    <div class="drag-tray-header">
+                        <lightning-icon icon-name="utility:drag_and_drop" size="x-small" class="drag-tray-icon"></lightning-icon>
+                        <h3 class="drag-tray-title">Chinchetas</h3>
+                        <lightning-button-icon
+                            icon-name="utility:add"
+                            alternative-text="Añadir chincheta"
+                            size="small"
+                            onclick={handleAddPin}
+                            class="drag-tray-add-btn"
+                        ></lightning-button-icon>
+                    </div>
+                    <p class="drag-tray-hint">Arrastra y suelta sobre el mapa</p>
+
+                    <div class="drag-tray-list">
+                        <template lwc:if={hasDraggablePins}>
+                            <template for:each={draggablePins} for:item="pin">
+                                <div
+                                    key={pin.id}
+                                    class="drag-pin-card"
+                                    draggable="true"
+                                    ondragstart={handleDragStart}
+                                    data-pin-id={pin.id}
+                                >
+                                    <img src={pin.thumbnailUrl} alt={pin.name} class="drag-pin-thumb" />
+                                    <div class="drag-pin-info">
+                                        <span class="drag-pin-name">{pin.name}</span>
+                                        <span class="drag-pin-video-label">YouTube Video</span>
+                                    </div>
+                                    <lightning-button-icon
+                                        icon-name="utility:close"
+                                        alternative-text="Eliminar"
+                                        size="xx-small"
+                                        onclick={handleRemoveTrayPin}
+                                        data-pin-id={pin.id}
+                                        class="drag-pin-close"
+                                    ></lightning-button-icon>
+                                </div>
+                            </template>
+                        </template>
+                        <template lwc:else>
+                            <p class="drag-tray-empty">Sin chinchetas. Pulsa + para añadir.</p>
+                        </template>
+                    </div>
+
+                    <!-- Botón Guardar chinchetas soltadas -->
+                    <template lwc:if={hasDroppedPins}>
+                        <lightning-button
+                            label="Guardar chinchetas"
+                            variant="brand"
+                            icon-name="utility:save"
+                            onclick={handleSaveDroppedPins}
+                            class="slds-m-top_small drag-tray-save-btn"
+                        ></lightning-button>
+                    </template>
+                </div>
+            </template>
 
             <!-- Detalle de cámara seleccionada -->
             <template lwc:if={selectedCamera}>

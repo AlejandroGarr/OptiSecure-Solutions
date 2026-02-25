@@ -454,3 +454,244 @@
         max-height: 40vh;
     }
 }
+
+/* ═══════════════════════════════════════════════════════
+   DRAG & DROP — Bandeja de chinchetas (solo admins)
+═══════════════════════════════════════════════════════ */
+
+/* Feedback visual al arrastrar sobre el mapa */
+.map-container--dragover {
+    outline: 3px dashed var(--color-accent);
+    outline-offset: -3px;
+    background: rgba(59, 130, 246, 0.06);
+}
+
+/* Indicador central de drop */
+.drop-zone-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 14, 26, 0.55);
+    backdrop-filter: blur(4px);
+    z-index: 20;
+    pointer-events: none;
+    animation: fade-in 0.15s ease;
+}
+
+.drop-zone-icon {
+    --sds-c-icon-color-foreground-default: var(--color-accent);
+    margin-bottom: 0.5rem;
+}
+
+.drop-zone-text {
+    color: var(--color-accent);
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* ── Bandeja lateral ── */
+.drag-tray {
+    border-top: 1px solid var(--color-border);
+    padding: 0.75rem 1rem;
+    background: rgba(10, 14, 26, 0.6);
+}
+
+.drag-tray-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.1rem;
+}
+
+.drag-tray-icon {
+    --sds-c-icon-color-foreground-default: #f59e0b;
+    flex-shrink: 0;
+}
+
+.drag-tray-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0;
+    color: #f59e0b;
+    flex: 1;
+}
+
+.drag-tray-add-btn {
+    --sds-c-button-icon-color-foreground: #f59e0b;
+}
+
+.drag-tray-hint {
+    font-size: 0.65rem;
+    color: var(--color-text-dim);
+    margin: 0 0 0.5rem;
+}
+
+.drag-tray-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.drag-tray-empty {
+    font-size: 0.7rem;
+    color: var(--color-text-dim);
+    text-align: center;
+    margin: 0.5rem 0;
+}
+
+.drag-tray-save-btn {
+    width: 100%;
+}
+
+/* ── Tarjeta de chincheta en la bandeja ── */
+.drag-pin-card {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: rgba(245, 158, 11, 0.08);
+    cursor: grab;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    user-select: none;
+}
+
+.drag-pin-card:hover {
+    background: rgba(245, 158, 11, 0.15);
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+    transform: translateY(-1px);
+}
+
+.drag-pin-card:active {
+    cursor: grabbing;
+    transform: scale(0.97);
+}
+
+.drag-pin-thumb {
+    width: 48px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+    border: 1px solid var(--color-border);
+}
+
+.drag-pin-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+}
+
+.drag-pin-name {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.drag-pin-video-label {
+    font-size: 0.6rem;
+    color: var(--color-text-dim);
+}
+
+.drag-pin-close {
+    --sds-c-button-icon-color-foreground: var(--color-text-dim);
+    flex-shrink: 0;
+}
+
+/* ── Chincheta soltada en el mapa ── */
+.dropped-pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    overflow: visible;
+    cursor: grab;
+    z-index: 15;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dropped-pin:hover {
+    transform: translate(-50%, -50%) scale(1.15);
+    z-index: 16;
+}
+
+.dropped-pin:active {
+    cursor: grabbing;
+}
+
+.dropped-pin-thumb {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #f59e0b;
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+    pointer-events: none;
+}
+
+.dropped-pin-label {
+    position: absolute;
+    bottom: -1.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: #f59e0b;
+    white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    pointer-events: none;
+}
+
+.dropped-pin-remove {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-danger);
+    color: #fff;
+    border: none;
+    font-size: 0.55rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    z-index: 17;
+    padding: 0;
+}
+
+.dropped-pin:hover .dropped-pin-remove {
+    opacity: 1;
+}
+
+.dropped-pin-pulse {
+    width: 120%;
+    height: 120%;
+    border-color: #f59e0b;
+}
