@@ -64,9 +64,10 @@ public with sharing class CameraIncidentController {
             insert newCase;
             return newCase.Id;
         } catch (Exception e) {
-            throw new AuraHandledException(
-                'Error al crear la incidencia: ' + e.getMessage()
-            );
+            String errorMsg = 'Error al crear la incidencia: ' + e.getMessage();
+            AuraHandledException auraEx = new AuraHandledException(errorMsg);
+            auraEx.setMessage(errorMsg);
+            throw auraEx;
         }
     }
 }

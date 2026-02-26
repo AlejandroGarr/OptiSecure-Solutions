@@ -65,6 +65,7 @@ export default class CameraIncidentReport extends LightningElement {
     handleOpenModal() {
         this.isModalOpen = true;
         this.isSuccess = false;
+        this.isSubmitting = false;
         this.errorMessage = '';
         this._resetForm();
     }
@@ -72,6 +73,7 @@ export default class CameraIncidentReport extends LightningElement {
     handleCloseModal() {
         this.isModalOpen = false;
         this.isSuccess = false;
+        this.isSubmitting = false;
         this.errorMessage = '';
         this._resetForm();
     }
