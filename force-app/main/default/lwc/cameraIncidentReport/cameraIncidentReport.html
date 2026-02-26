@@ -1,0 +1,150 @@
+<template>
+    <!-- ═══════════════════════════════════════════════════════
+         CAMERA INCIDENT REPORT — OptiSecure Solutions
+         Formulario modal para reportar incidencias en cámaras
+    ═══════════════════════════════════════════════════════════ -->
+
+    <!-- Botón de apertura -->
+    <div class="incident-trigger">
+        <lightning-button
+            label="Reportar Incidencia"
+            variant="destructive"
+            icon-name="utility:warning"
+            onclick={handleOpenModal}
+            class="incident-btn"
+        ></lightning-button>
+    </div>
+
+    <!-- Modal del formulario -->
+    <template lwc:if={isModalOpen}>
+        <section class="incident-modal-backdrop" onclick={handleBackdropClick}>
+            <div class="incident-modal" onclick={handleModalClick}>
+
+                <!-- Cabecera -->
+                <header class="incident-modal-header">
+                    <div class="incident-modal-header-left">
+                        <lightning-icon icon-name="utility:warning" size="small" class="header-warning-icon"></lightning-icon>
+                        <h2 class="incident-modal-title">Reportar Incidencia de Cámara</h2>
+                    </div>
+                    <button class="incident-modal-close" onclick={handleCloseModal} title="Cerrar">
+                        <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Cerrar"></lightning-icon>
+                    </button>
+                </header>
+
+                <!-- Cuerpo del formulario -->
+                <div class="incident-modal-body">
+                    <!-- Mensaje de éxito -->
+                    <template lwc:if={isSuccess}>
+                        <div class="incident-success">
+                            <lightning-icon icon-name="utility:success" size="large" class="success-icon"></lightning-icon>
+                            <h3 class="success-title">¡Incidencia registrada!</h3>
+                            <p class="success-message">
+                                Se ha creado el caso correctamente. Nuestro equipo técnico revisará
+                                la cámara lo antes posible.
+                            </p>
+                            <p class="success-case-id">Caso: {createdCaseId}</p>
+                            <lightning-button
+                                label="Cerrar"
+                                variant="neutral"
+                                onclick={handleCloseModal}
+                                class="slds-m-top_medium"
+                            ></lightning-button>
+                        </div>
+                    </template>
+
+                    <!-- Formulario -->
+                    <template lwc:if={showForm}>
+                        <div class="incident-form">
+                            <p class="form-description">
+                                Si una cámara no funciona correctamente, complete este formulario
+                                para que un técnico de OptiSecure la revise.
+                            </p>
+
+                            <!-- Selector de cámara -->
+                            <div class="form-field">
+                                <lightning-combobox
+                                    name="camera"
+                                    label="Cámara afectada"
+                                    placeholder="Seleccione la cámara..."
+                                    options={cameraOptions}
+                                    value={selectedCameraId}
+                                    onchange={handleCameraChange}
+                                    required
+                                    message-when-value-missing="Seleccione una cámara"
+                                ></lightning-combobox>
+                            </div>
+
+                            <!-- Asunto -->
+                            <div class="form-field">
+                                <lightning-input
+                                    type="text"
+                                    label="Asunto"
+                                    value={subject}
+                                    onchange={handleSubjectChange}
+                                    placeholder="Ej: Cámara sin señal de vídeo"
+                                    required
+                                    max-length="255"
+                                    message-when-value-missing="Introduzca un asunto"
+                                ></lightning-input>
+                            </div>
+
+                            <!-- Prioridad -->
+                            <div class="form-field">
+                                <lightning-combobox
+                                    name="priority"
+                                    label="Prioridad"
+                                    placeholder="Seleccione la prioridad..."
+                                    options={priorityOptions}
+                                    value={priority}
+                                    onchange={handlePriorityChange}
+                                    required
+                                    message-when-value-missing="Seleccione una prioridad"
+                                ></lightning-combobox>
+                            </div>
+
+                            <!-- Descripción -->
+                            <div class="form-field">
+                                <lightning-textarea
+                                    label="Descripción del problema"
+                                    value={description}
+                                    onchange={handleDescriptionChange}
+                                    placeholder="Describa con detalle qué está ocurriendo con la cámara..."
+                                    max-length="5000"
+                                    required
+                                    message-when-value-missing="Describa el problema"
+                                ></lightning-textarea>
+                            </div>
+
+                            <!-- Error -->
+                            <template lwc:if={errorMessage}>
+                                <div class="form-error">
+                                    <lightning-icon icon-name="utility:error" size="x-small" class="error-icon"></lightning-icon>
+                                    <span>{errorMessage}</span>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Pie del modal -->
+                <template lwc:if={showForm}>
+                    <footer class="incident-modal-footer">
+                        <lightning-button
+                            label="Cancelar"
+                            variant="neutral"
+                            onclick={handleCloseModal}
+                        ></lightning-button>
+                        <lightning-button
+                            label="Enviar Incidencia"
+                            variant="brand"
+                            icon-name="utility:send"
+                            onclick={handleSubmit}
+                            disabled={isSubmitting}
+                            class="slds-m-left_small"
+                        ></lightning-button>
+                    </footer>
+                </template>
+            </div>
+        </section>
+    </template>
+</template>
