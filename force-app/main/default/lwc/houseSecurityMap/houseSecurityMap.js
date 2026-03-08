@@ -1,5 +1,6 @@
 import { LightningElement, wire, track } from 'lwc';
 import { refreshApex } from '@salesforce/apex';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getCamaras from '@salesforce/apex/HouseMapController.getCamaras';
 import isSystemAdmin from '@salesforce/apex/HouseMapController.isSystemAdmin';
 import saveDraggedCamera from '@salesforce/apex/HouseMapController.saveDraggedCamera';
@@ -403,12 +404,49 @@ export default class HouseSecurityMap extends LightningElement {
         this.draggablePins = pins;
     }
 
-    /** Actualiza la posición de una cámara existente en el servidor */
+    /**
+     * Actualiza la posición de una cámara existente en el servidor.
+     * Implementa Optimistic UI: actualiza visualmente primero y revierte si falla.
+     */
     _updateExistingCameraPosition(camId, posX, posY) {
-        updateCameraPosition({ camId, posX, posY })
-            .then(() => refreshApex(this._wiredCamerasResult))
+        // Guardar posición anterior para poder revertir en caso de error
+        const prevCameras = [...this.cameras];
+
+        // Optimistic UI — actualizar visualmente de inmediato
+        this.cameras = this.cameras.map((c) => {
+            if (c.Id === camId) {
+                return {
+                    ...c,
+                    Posicion_X__c: posX,
+                    Posicion_Y__c: posY,
+                    positionStyle: `top: ${posY.toFixed(1)}%; left: ${posX.toFixed(1)}%;`
+                };
+            }
+            return c;
+        });
+
+        // Llamada Apex con los nombres de parámetro actualizados
+        updateCameraPosition({ cameraId: camId, newX: posX, newY: posY })
+            .then(() => {
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Posición actualizada',
+                        message: 'La cámara se ha reposicionado correctamente.',
+                        variant: 'success'
+                    })
+                );
+                return refreshApex(this._wiredCamerasResult);
+            })
             .catch((err) => {
-                console.error('Error al actualizar posición:', JSON.stringify(err));
+                // Revertir a la posición anterior
+                this.cameras = prevCameras;
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Error al guardar posición',
+                        message: err.body ? err.body.message : err.message,
+                        variant: 'error'
+                    })
+                );
             });
     }
 

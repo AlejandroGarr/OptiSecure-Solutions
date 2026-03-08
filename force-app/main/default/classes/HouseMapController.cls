@@ -78,15 +78,28 @@ public with sharing class HouseMapController {
 
     /**
      * @description Actualiza la posición de una cámara existente.
-     * @param       camId  Id de la cámara
-     * @param       posX   Nueva posición X en porcentaje
-     * @param       posY   Nueva posición Y en porcentaje
+     * @param       cameraId Id de la cámara a reposicionar
+     * @param       newX     Nueva posición X en porcentaje (0-100)
+     * @param       newY     Nueva posición Y en porcentaje (0-100)
+     * @throws      AuraHandledException si la cámara no existe o falla el update.
      */
     @AuraEnabled
-    public static void updateCameraPosition(Id camId, Decimal posX, Decimal posY) {
-        Camara__c cam = [SELECT Id FROM Camara__c WHERE Id = :camId LIMIT 1];
-        cam.Posicion_X__c = posX;
-        cam.Posicion_Y__c = posY;
-        update cam;
+    public static void updateCameraPosition(Id cameraId, Decimal newX, Decimal newY) {
+        try {
+            Camara__c cam = [
+                SELECT Id, Posicion_X__c, Posicion_Y__c
+                FROM   Camara__c
+                WHERE  Id = :cameraId
+                WITH   SECURITY_ENFORCED
+                LIMIT  1
+            ];
+            cam.Posicion_X__c = newX;
+            cam.Posicion_Y__c = newY;
+            update cam;
+        } catch (Exception e) {
+            throw new AuraHandledException(
+                'Error al actualizar la posición de la cámara: ' + e.getMessage()
+            );
+        }
     }
 }

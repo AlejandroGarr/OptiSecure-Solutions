@@ -1,0 +1,140 @@
+<template>
+    <!-- ═══════════════════════════════════════════════════════
+         CUSTOM USER MENU — OptiSecure Solutions
+         Menú de usuario para Experience Cloud con perfil,
+         contratación y cierre de sesión.
+    ═══════════════════════════════════════════════════════════ -->
+
+    <!-- ─── MENÚ DESPLEGABLE ─── -->
+    <lightning-button-menu
+        alternative-text="Menú de usuario"
+        icon-name="utility:user"
+        label="Mi Cuenta"
+        variant="border-filled"
+        onselect={handleMenuSelect}
+        class="user-menu"
+    >
+        <lightning-menu-item
+            label="Perfil"
+            value="profile"
+            icon-name="utility:identity"
+        ></lightning-menu-item>
+
+        <lightning-menu-item
+            label="Contratación de nuevas cámaras"
+            value="contract"
+            icon-name="utility:cart"
+        ></lightning-menu-item>
+
+        <div class="slds-has-divider_top-space" role="separator"></div>
+
+        <lightning-menu-item
+            label="Sign Out"
+            value="logout"
+            icon-name="utility:logout"
+        ></lightning-menu-item>
+    </lightning-button-menu>
+
+    <!-- ─── MODAL DE PERFIL (SLDS) ─── -->
+    <template lwc:if={isProfileModalOpen}>
+        <section
+            role="dialog"
+            tabindex="-1"
+            aria-modal="true"
+            aria-labelledby="modal-heading"
+            class="slds-modal slds-fade-in-open"
+        >
+            <div class="slds-modal__container">
+                <!-- Header -->
+                <div class="slds-modal__header">
+                    <lightning-button-icon
+                        icon-name="utility:close"
+                        alternative-text="Cerrar"
+                        size="large"
+                        variant="bare-inverse"
+                        onclick={handleCloseModal}
+                        class="slds-modal__close"
+                    ></lightning-button-icon>
+                    <h1 id="modal-heading" class="slds-modal__title slds-hyphenate">
+                        <lightning-icon
+                            icon-name="utility:identity"
+                            size="small"
+                            class="slds-m-right_x-small"
+                        ></lightning-icon>
+                        Mi Perfil
+                    </h1>
+                </div>
+
+                <!-- Body -->
+                <div class="slds-modal__content slds-p-around_large">
+                    <template lwc:if={profileData}>
+                        <dl class="slds-dl_horizontal">
+                            <dt class="slds-dl_horizontal__label slds-text-color_weak">
+                                <lightning-icon
+                                    icon-name="utility:user"
+                                    size="xx-small"
+                                    class="slds-m-right_xx-small"
+                                ></lightning-icon>
+                                Nombre
+                            </dt>
+                            <dd class="slds-dl_horizontal__detail">{profileData.name}</dd>
+
+                            <dt class="slds-dl_horizontal__label slds-text-color_weak">
+                                <lightning-icon
+                                    icon-name="utility:email"
+                                    size="xx-small"
+                                    class="slds-m-right_xx-small"
+                                ></lightning-icon>
+                                Correo electrónico
+                            </dt>
+                            <dd class="slds-dl_horizontal__detail">{profileData.email}</dd>
+
+                            <dt class="slds-dl_horizontal__label slds-text-color_weak">
+                                <lightning-icon
+                                    icon-name="utility:video"
+                                    size="xx-small"
+                                    class="slds-m-right_xx-small"
+                                ></lightning-icon>
+                                Cámaras contratadas
+                            </dt>
+                            <dd class="slds-dl_horizontal__detail">{profileData.totalCameras}</dd>
+                        </dl>
+                    </template>
+
+                    <template lwc:elseif={profileError}>
+                        <div class="slds-text-color_error slds-text-align_center">
+                            <lightning-icon
+                                icon-name="utility:error"
+                                variant="error"
+                                size="small"
+                                class="slds-m-right_x-small"
+                            ></lightning-icon>
+                            Error al cargar los datos del perfil.
+                        </div>
+                    </template>
+
+                    <template lwc:else>
+                        <div class="slds-align_absolute-center slds-p-around_large">
+                            <lightning-spinner
+                                alternative-text="Cargando perfil..."
+                                size="small"
+                            ></lightning-spinner>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Footer -->
+                <div class="slds-modal__footer">
+                    <lightning-button
+                        label="Cerrar"
+                        variant="neutral"
+                        onclick={handleCloseModal}
+                    ></lightning-button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Backdrop -->
+        <div class="slds-backdrop slds-backdrop_open" onclick={handleCloseModal}></div>
+    </template>
+</template>
