@@ -5,6 +5,7 @@ import getCamaras from '@salesforce/apex/HouseMapController.getCamaras';
 import isSystemAdmin from '@salesforce/apex/HouseMapController.isSystemAdmin';
 import saveDraggedCamera from '@salesforce/apex/HouseMapController.saveDraggedCamera';
 import updateCameraPosition from '@salesforce/apex/HouseMapController.updateCameraPosition';
+import deleteCamera from '@salesforce/apex/HouseMapController.deleteCamera';
 import PLANO_CASA from '@salesforce/resourceUrl/Plano_Casa_1';
 
 // ── Vídeos de reserva (se usan cuando la cámara no tiene Video_Url__c) ──
@@ -67,6 +68,12 @@ export default class HouseSecurityMap extends LightningElement {
     @track _isDraggingExisting = false; // Si se está reposicionando un pin ya existente
     @track _draggingExistingId = null;  // Id del pin existente que se reposiciona
 
+    // ── Menú contextual (clic derecho) ──
+    @track contextMenuVisible = false;
+    @track contextMenuX = 0;
+    @track contextMenuY = 0;
+    @track _contextMenuCameraId = null;
+
     // Referencia al resultado de wire para refreshApex
     _wiredCamerasResult;
 
@@ -125,10 +132,13 @@ export default class HouseSecurityMap extends LightningElement {
             this._updateDateTime();
         }, 1000);
 
-        // Cerrar pantalla completa con ESC
+        // Cerrar pantalla completa con ESC y cerrar menú contextual al hacer clic
         this._boundHandleKeyDown = this._handleKeyDown.bind(this);
+        this._boundCloseContextMenu = this._closeContextMenu.bind(this);
         // eslint-disable-next-line @lwc/lwc/no-document-query
         document.addEventListener('keydown', this._boundHandleKeyDown);
+        // eslint-disable-next-line @lwc/lwc/no-document-query
+        document.addEventListener('click', this._boundCloseContextMenu);
     }
 
     disconnectedCallback() {
@@ -137,6 +147,8 @@ export default class HouseSecurityMap extends LightningElement {
         }
         // eslint-disable-next-line @lwc/lwc/no-document-query
         document.removeEventListener('keydown', this._boundHandleKeyDown);
+        // eslint-disable-next-line @lwc/lwc/no-document-query
+        document.removeEventListener('click', this._boundCloseContextMenu);
     }
 
     // ═══════════════════════════════════════════
@@ -166,6 +178,16 @@ export default class HouseSecurityMap extends LightningElement {
     /** Clase CSS del contenedor del mapa con feedback de arrastre */
     get mapContainerClass() {
         return 'map-container' + (this.isDragOver ? ' map-container--dragover' : '');
+    }
+
+    /** Estilo inline para posicionar el menú contextual */
+    get contextMenuStyle() {
+        return `top: ${this.contextMenuY}px; left: ${this.contextMenuX}px;`;
+    }
+
+    /** Devuelve "true" o "false" como string para el atributo draggable del HTML */
+    get draggableAttr() {
+        return this.isAdmin ? 'true' : 'false';
     }
 
     // ═══════════════════════════════════════════
@@ -223,6 +245,64 @@ export default class HouseSecurityMap extends LightningElement {
     }
 
     // ═══════════════════════════════════════════
+    //  MENÚ CONTEXTUAL — Clic derecho (solo admin)
+    // ═══════════════════════════════════════════
+
+    /** Clic derecho en un pin de cámara existente → menú contextual */
+    handleCameraContextMenu(event) {
+        if (!this.isAdmin) return;
+        event.preventDefault();
+        event.stopPropagation();
+
+        const camId = event.currentTarget.dataset.id;
+        this._contextMenuCameraId = camId;
+
+        // Posicionar el menú relativo al componente host
+        const hostRect = this.template.querySelector('.house-security-map').getBoundingClientRect();
+        this.contextMenuX = event.clientX - hostRect.left;
+        this.contextMenuY = event.clientY - hostRect.top;
+        this.contextMenuVisible = true;
+    }
+
+    /** Eliminar cámara seleccionada en el menú contextual */
+    handleDeleteCamera() {
+        if (!this._contextMenuCameraId) return;
+        const camId = this._contextMenuCameraId;
+        this.contextMenuVisible = false;
+
+        // Optimistic UI — quitar visualmente
+        const prevCameras = [...this.cameras];
+        this.cameras = this.cameras.filter((c) => c.Id !== camId);
+
+        if (this.selectedCamera && this.selectedCamera.Id === camId) {
+            this.selectedCamera = null;
+        }
+
+        deleteCamera({ cameraId: camId })
+            .then(() => {
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Cámara eliminada',
+                        message: 'La cámara se ha eliminado correctamente.',
+                        variant: 'success'
+                    })
+                );
+                return refreshApex(this._wiredCamerasResult);
+            })
+            .catch((err) => {
+                // Revertir
+                this.cameras = prevCameras;
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Error al eliminar',
+                        message: err.body ? err.body.message : err.message,
+                        variant: 'error'
+                    })
+                );
+            });
+    }
+
+    // ═══════════════════════════════════════════
     //  DRAG & DROP — Solo para administradores
     // ═══════════════════════════════════════════
 
@@ -247,6 +327,7 @@ export default class HouseSecurityMap extends LightningElement {
 
     /** Inicio del arrastre de un pin de cámara existente de la BBDD */
     handleExistingCameraDragStart(event) {
+        if (!this.isAdmin) return;
         event.stopPropagation();
         const camId = event.currentTarget.dataset.id;
         this._draggedPinId = camId;
@@ -258,6 +339,7 @@ export default class HouseSecurityMap extends LightningElement {
 
     /** DragOver sobre el mapa — necesario para permitir el drop */
     handleDragOver(event) {
+        if (!this.isAdmin) return;
         event.preventDefault();
         event.dataTransfer.dropEffect = 'move';
         this.isDragOver = true;
@@ -270,6 +352,7 @@ export default class HouseSecurityMap extends LightningElement {
 
     /** Drop sobre el mapa */
     handleDrop(event) {
+        if (!this.isAdmin) return;
         event.preventDefault();
         this.isDragOver = false;
 
@@ -460,10 +543,21 @@ export default class HouseSecurityMap extends LightningElement {
         this.isFullscreen          = true;
     }
 
-    /** Cierra fullscreen con la tecla ESC */
+    /** Cierra fullscreen con ESC / cierra menú contextual con ESC */
     _handleKeyDown(event) {
-        if (event.key === 'Escape' && this.isFullscreen) {
-            this.handleCloseFullscreen();
+        if (event.key === 'Escape') {
+            if (this.contextMenuVisible) {
+                this.contextMenuVisible = false;
+            } else if (this.isFullscreen) {
+                this.handleCloseFullscreen();
+            }
+        }
+    }
+
+    /** Cierra el menú contextual al hacer clic en cualquier lugar */
+    _closeContextMenu() {
+        if (this.contextMenuVisible) {
+            this.contextMenuVisible = false;
         }
     }
 

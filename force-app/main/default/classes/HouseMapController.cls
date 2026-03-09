@@ -77,6 +77,29 @@ public with sharing class HouseMapController {
     }
 
     /**
+     * @description Elimina una cámara existente (desactiva).
+     * @param       cameraId Id de la cámara a eliminar
+     * @throws      AuraHandledException si la cámara no existe o falla el delete.
+     */
+    @AuraEnabled
+    public static void deleteCamera(Id cameraId) {
+        try {
+            Camara__c cam = [
+                SELECT Id
+                FROM   Camara__c
+                WHERE  Id = :cameraId
+                WITH   SECURITY_ENFORCED
+                LIMIT  1
+            ];
+            delete cam;
+        } catch (Exception e) {
+            throw new AuraHandledException(
+                'Error al eliminar la cámara: ' + e.getMessage()
+            );
+        }
+    }
+
+    /**
      * @description Actualiza la posición de una cámara existente.
      * @param       cameraId Id de la cámara a reposicionar
      * @param       newX     Nueva posición X en porcentaje (0-100)

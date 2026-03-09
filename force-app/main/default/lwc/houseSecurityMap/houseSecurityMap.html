@@ -23,8 +23,9 @@
                         style={cam.positionStyle}
                         title={cam.Name}
                         onclick={handleCameraClick}
+                        oncontextmenu={handleCameraContextMenu}
                         data-id={cam.Id}
-                        draggable={isAdmin}
+                        draggable={draggableAttr}
                         ondragstart={handleExistingCameraDragStart}
                     >
                         <lightning-icon
@@ -77,6 +78,16 @@
                     <lightning-icon icon-name="utility:connected_apps" size="xx-small"></lightning-icon>
                     <span class="slds-m-left_xx-small">{cameraCount} cámaras activas</span>
                 </div>
+
+                <!-- Menú contextual (clic derecho) — solo admin -->
+                <template lwc:if={contextMenuVisible}>
+                    <div class="context-menu" style={contextMenuStyle} onclick={handleDeleteCamera}>
+                        <div class="context-menu-item context-menu-item--danger">
+                            <lightning-icon icon-name="utility:delete" size="xx-small" class="context-menu-icon"></lightning-icon>
+                            <span>Eliminar cámara</span>
+                        </div>
+                    </div>
+                </template>
             </div>
         </div>
 
