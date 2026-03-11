@@ -1,0 +1,358 @@
+/* ═══════════════════════════════════════════════════════
+   VOICE ASSISTANT — CSS
+   Asistente de voz con IA — OptiSecure Solutions
+═══════════════════════════════════════════════════════ */
+
+:host {
+    --color-bg:          #0a0e1a;
+    --color-surface:     #111827;
+    --color-border:      #1e293b;
+    --color-accent:      #3b82f6;
+    --color-accent-dim:  rgba(59, 130, 246, 0.15);
+    --color-text:        #e2e8f0;
+    --color-text-dim:    #94a3b8;
+    --color-danger:      #ef4444;
+    --color-danger-dim:  rgba(239, 68, 68, 0.15);
+    --color-success:     #22c55e;
+    --color-success-dim: rgba(34, 197, 94, 0.15);
+    --color-purple:      #8b5cf6;
+    --color-purple-dim:  rgba(139, 92, 246, 0.15);
+    --radius:            0.5rem;
+}
+
+/* ── Botón trigger (en el footer) ── */
+.voice-trigger {
+    display: inline-block;
+}
+
+.mic-btn {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--color-purple);
+    background: var(--color-purple-dim);
+    color: var(--color-purple);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.mic-btn:hover {
+    background: rgba(139, 92, 246, 0.3);
+    transform: scale(1.1);
+    box-shadow: 0 0 16px rgba(139, 92, 246, 0.4);
+}
+
+.mic-btn--active {
+    border-color: var(--color-danger);
+    background: var(--color-danger-dim);
+    color: var(--color-danger);
+    animation: micPulse 1.5s infinite;
+}
+
+.mic-btn--active:hover {
+    background: rgba(239, 68, 68, 0.3);
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.4);
+}
+
+.mic-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.mic-icon-lg {
+    width: 32px;
+    height: 32px;
+}
+
+.mic-pulse {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 50%;
+    border: 2px solid var(--color-purple);
+    animation: pulseRing 2s infinite;
+    pointer-events: none;
+}
+
+.mic-btn--active .mic-pulse {
+    border-color: var(--color-danger);
+}
+
+/* ── Backdrop del modal ── */
+.voice-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeIn 0.2s ease;
+}
+
+/* ── Modal ── */
+.voice-modal {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    width: 90%;
+    max-width: 520px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.25s ease;
+}
+
+/* ── Cabecera ── */
+.voice-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-purple-dim);
+}
+
+.voice-modal-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.header-mic-icon {
+    width: 22px;
+    height: 22px;
+    color: var(--color-purple);
+}
+
+.voice-modal-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.voice-modal-close {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.375rem;
+    border-radius: 0.25rem;
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+}
+
+.voice-modal-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Cuerpo ── */
+.voice-modal-body {
+    padding: 1.25rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* ── Formulario ── */
+.form-description {
+    color: var(--color-text-dim);
+    font-size: 0.85rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+}
+
+.form-description em {
+    color: var(--color-purple);
+    font-style: italic;
+}
+
+.form-field {
+    margin-bottom: 1rem;
+}
+
+/* ── Micrófono central (dentro del modal) ── */
+.mic-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1.25rem 0;
+}
+
+.modal-mic-btn {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid var(--color-purple);
+    background: var(--color-purple-dim);
+    color: var(--color-purple);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.modal-mic-btn:hover {
+    background: rgba(139, 92, 246, 0.3);
+    transform: scale(1.08);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+}
+
+.modal-mic-btn--active {
+    border-color: var(--color-danger);
+    background: var(--color-danger-dim);
+    color: var(--color-danger);
+    animation: micPulse 1.5s infinite;
+}
+
+.modal-mic-btn--active:hover {
+    background: rgba(239, 68, 68, 0.3);
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+}
+
+.modal-mic-btn .mic-pulse {
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+}
+
+.listening-label {
+    color: var(--color-danger);
+    font-size: 0.85rem;
+    font-weight: 600;
+    animation: fadeIn 0.3s ease;
+}
+
+/* ── Procesando ── */
+.processing-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--color-accent-dim);
+    border: 1px solid var(--color-accent);
+    border-radius: 0.375rem;
+    margin-top: 0.75rem;
+}
+
+.processing-label {
+    color: var(--color-accent);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* ── Error ── */
+.form-error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--color-danger-dim);
+    border: 1px solid var(--color-danger);
+    border-radius: 0.375rem;
+    color: var(--color-danger);
+    font-size: 0.85rem;
+    margin-top: 0.75rem;
+}
+
+.error-icon {
+    --sds-c-icon-color-foreground-default: var(--color-danger);
+    flex-shrink: 0;
+}
+
+/* ── Éxito ── */
+.voice-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.success-icon {
+    --sds-c-icon-color-foreground-default: var(--color-success);
+    margin-bottom: 1rem;
+}
+
+.success-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-success);
+    margin: 0 0 0.75rem 0;
+}
+
+.success-message {
+    color: var(--color-text-dim);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    max-width: 380px;
+    margin: 0 0 0.5rem 0;
+}
+
+.success-record-id {
+    color: var(--color-text);
+    font-size: 0.8rem;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    background: rgba(139, 92, 246, 0.1);
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+/* ── Pie del modal ── */
+.voice-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.875rem 1.25rem;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg);
+}
+
+/* ── Animaciones ── */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes pulseRing {
+    0%   { transform: scale(1);   opacity: 1; }
+    100% { transform: scale(1.6); opacity: 0; }
+}
+
+@keyframes micPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    50%      { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.4; }
+}

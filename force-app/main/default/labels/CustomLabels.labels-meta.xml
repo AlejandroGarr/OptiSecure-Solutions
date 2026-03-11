@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Gemini_API_Key</fullName>
+        <language>es</language>
+        <protected>true</protected>
+        <shortDescription>Google Gemini API Key</shortDescription>
+        <value>AIzaSyDOeszW4FP3ZgqdKnjpoPBA6YU2WPIKzwM</value>
+    </labels>
+</CustomLabels>

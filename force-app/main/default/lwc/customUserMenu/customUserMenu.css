@@ -1,0 +1,588 @@
+/* ═══════════════════════════════════════════════════════
+   CUSTOM USER MENU — Profile Modal Styles
+   OptiSecure Solutions — Dark Security Theme
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── MODAL CONTAINER ─── */
+.profile-modal-container {
+    max-width: 900px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    background: #1a1d2e;
+    padding: 0;
+    margin: 0 auto;
+}
+
+/* ─── HEADER CON GRADIENTE ─── */
+.profile-modal-header {
+    position: relative;
+    background: linear-gradient(135deg, #0f1923 0%, #1b2a4a 50%, #0d3b66 100%);
+    padding: 1rem 2rem 0.85rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.profile-modal-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 20% 50%, rgba(0, 188, 212, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(33, 150, 243, 0.1) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.profile-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-size: 1.5rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 10;
+    line-height: 1;
+}
+
+.profile-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+/* ─── AVATAR ─── */
+.profile-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00bcd4, #2196f3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.5rem;
+    box-shadow:
+        0 0 0 4px rgba(0, 188, 212, 0.25),
+        0 8px 24px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 1;
+}
+
+.profile-avatar-text {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.profile-name {
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 0 0.1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.profile-email {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.82rem;
+    margin: 0 0 0.4rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* ─── BODY ─── */
+.profile-modal-body {
+    padding: 1rem;
+    background: #1a1d2e;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.profile-modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.profile-modal-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.profile-modal-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+}
+
+/* ─── FILA DE ESTADÍSTICAS ─── */
+.profile-stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.profile-stat-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 0.6rem 0.75rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.profile-stat-card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.stat-icon-wrap {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.35rem;
+}
+
+.stat-icon-blue {
+    background: rgba(33, 150, 243, 0.15);
+    --sds-c-icon-color-foreground-default: #2196f3;
+}
+
+.stat-icon-green {
+    background: rgba(76, 175, 80, 0.15);
+    --sds-c-icon-color-foreground-default: #4caf50;
+}
+
+.stat-icon-red {
+    background: rgba(244, 67, 54, 0.15);
+    --sds-c-icon-color-foreground-default: #f44336;
+}
+
+.stat-icon-purple {
+    background: rgba(156, 39, 176, 0.15);
+    --sds-c-icon-color-foreground-default: #9c27b0;
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 0.25rem;
+}
+
+/* ─── BARRA DE PROGRESO CÁMARAS ─── */
+.camera-progress-section {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 0.45rem 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.progress-title {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.progress-percent {
+    color: #00bcd4;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.progress-track {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00bcd4, #2196f3);
+    border-radius: 4px;
+    transition: width 0.8s ease;
+    min-width: 0;
+}
+
+/* ─── GRID DE TARJETAS ─── */
+.profile-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.65rem;
+}
+
+.profile-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.profile-card:hover {
+    border-color: rgba(0, 188, 212, 0.25);
+    box-shadow: 0 4px 16px rgba(0, 188, 212, 0.08);
+}
+
+.profile-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.02);
+    --sds-c-icon-color-foreground-default: #00bcd4;
+}
+
+.profile-card-header h2 {
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin: 0;
+}
+
+.profile-card-body {
+    padding: 0.4rem 1rem;
+}
+
+.profile-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.profile-field:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.field-label {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.field-value {
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: right;
+    max-width: 60%;
+    word-break: break-word;
+}
+
+.field-mono {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+/* ─── BADGES ─── */
+.profile-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.badge-platinum {
+    background: linear-gradient(135deg, rgba(200, 200, 220, 0.2), rgba(180, 180, 200, 0.1));
+    color: #e0e0e8;
+    border: 1px solid rgba(200, 200, 220, 0.3);
+    text-shadow: 0 0 8px rgba(200, 200, 220, 0.3);
+}
+
+.badge-gold {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 152, 0, 0.1));
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    text-shadow: 0 0 8px rgba(255, 193, 7, 0.2);
+}
+
+.badge-silver {
+    background: linear-gradient(135deg, rgba(158, 158, 158, 0.2), rgba(189, 189, 189, 0.1));
+    color: #bdbdbd;
+    border: 1px solid rgba(189, 189, 189, 0.3);
+}
+
+.badge-bronze {
+    background: linear-gradient(135deg, rgba(205, 127, 50, 0.2), rgba(176, 109, 42, 0.1));
+    color: #cd7f32;
+    border: 1px solid rgba(205, 127, 50, 0.3);
+}
+
+.badge-active {
+    background: rgba(76, 175, 80, 0.15);
+    color: #4caf50;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.badge-inactive {
+    background: rgba(244, 67, 54, 0.15);
+    color: #f44336;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.badge-priority-high {
+    background: rgba(244, 67, 54, 0.15);
+    color: #f44336;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.badge-priority-medium {
+    background: rgba(255, 152, 0, 0.15);
+    color: #ff9800;
+    border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.badge-priority-low {
+    background: rgba(158, 158, 158, 0.15);
+    color: #9e9e9e;
+    border: 1px solid rgba(158, 158, 158, 0.3);
+}
+
+.badge-default {
+    background: rgba(158, 158, 158, 0.1);
+    color: #9e9e9e;
+    border: 1px solid rgba(158, 158, 158, 0.2);
+}
+
+/* ─── FOOTER ─── */
+.profile-modal-footer {
+    padding: 0.6rem 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* ─── LISTA DE CÁMARAS ─── */
+.camera-list-card {
+    grid-column: 1 / -1;
+    margin-top: 0.25rem;
+}
+
+.camera-list-body {
+    max-height: 180px;
+    overflow-y: auto;
+    padding: 0.4rem 0;
+}
+
+.camera-list-body::-webkit-scrollbar {
+    width: 4px;
+}
+
+.camera-list-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 2px;
+}
+
+.camera-list-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.45rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background 0.15s ease;
+}
+
+.camera-list-row:last-child {
+    border-bottom: none;
+}
+
+.camera-list-row:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.camera-list-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.cam-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.cam-dot-active {
+    background: #4caf50;
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.5);
+}
+
+.cam-dot-inactive {
+    background: #f44336;
+    box-shadow: 0 0 6px rgba(244, 67, 54, 0.4);
+}
+
+.camera-list-name {
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.camera-list-zone {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.72rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+.camera-list-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+}
+
+.camera-list-status {
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.camera-delete-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(244, 67, 54, 0.25);
+    background: rgba(244, 67, 54, 0.08);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    --sds-c-icon-color-foreground-default: #f44336;
+}
+
+.camera-delete-btn:hover {
+    background: rgba(244, 67, 54, 0.2);
+    border-color: rgba(244, 67, 54, 0.5);
+    transform: scale(1.1);
+}
+
+.camera-delete-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.camera-delete-btn lightning-icon {
+    pointer-events: none;
+}
+
+/* ─── ESTADOS ERROR / LOADING ─── */
+.profile-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 3rem 2rem;
+    color: #f44336;
+}
+
+.profile-error p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.95rem;
+}
+
+.profile-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 3rem 2rem;
+}
+
+.profile-loading p {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+    .profile-stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .profile-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-modal-container {
+        max-width: 95vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-stats-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    .profile-modal-header {
+        padding: 2rem 1.5rem 1.5rem;
+    }
+
+    .profile-avatar {
+        width: 72px;
+        height: 72px;
+    }
+
+    .profile-avatar-text {
+        font-size: 1.5rem;
+    }
+
+    .profile-name {
+        font-size: 1.25rem;
+    }
+}

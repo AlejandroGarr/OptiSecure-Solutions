@@ -35,96 +35,237 @@
         ></lightning-menu-item>
     </lightning-button-menu>
 
-    <!-- ─── MODAL DE PERFIL (SLDS) ─── -->
+    <!-- ─── MODAL DE PERFIL ─── -->
     <template lwc:if={isProfileModalOpen}>
         <section
             role="dialog"
             tabindex="-1"
             aria-modal="true"
             aria-labelledby="modal-heading"
-            class="slds-modal slds-fade-in-open"
+            class="slds-modal slds-fade-in-open slds-modal_large"
         >
-            <div class="slds-modal__container">
-                <!-- Header -->
-                <div class="slds-modal__header">
-                    <lightning-button-icon
-                        icon-name="utility:close"
-                        alternative-text="Cerrar"
-                        size="large"
-                        variant="bare-inverse"
+            <div class="slds-modal__container profile-modal-container">
+                <!-- Header con gradiente -->
+                <div class="profile-modal-header">
+                    <button
+                        class="profile-close-btn"
                         onclick={handleCloseModal}
-                        class="slds-modal__close"
-                    ></lightning-button-icon>
-                    <h1 id="modal-heading" class="slds-modal__title slds-hyphenate">
-                        <lightning-icon
-                            icon-name="utility:identity"
-                            size="small"
-                            class="slds-m-right_x-small"
-                        ></lightning-icon>
-                        Mi Perfil
-                    </h1>
+                        aria-label="Cerrar"
+                    >&times;</button>
+
+                    <template lwc:if={profileData}>
+                        <!-- Avatar con iniciales -->
+                        <div class="profile-avatar">
+                            <span class="profile-avatar-text">{profileData.initials}</span>
+                        </div>
+                        <h1 class="profile-name">{profileData.name}</h1>
+                        <p class="profile-email">{profileData.email}</p>
+                        <template lwc:if={profileData.sla}>
+                            <span class={slaBadgeClass}>{profileData.sla}</span>
+                        </template>
+                    </template>
                 </div>
 
                 <!-- Body -->
-                <div class="slds-modal__content slds-p-around_large">
+                <div class="profile-modal-body">
                     <template lwc:if={profileData}>
-                        <dl class="slds-dl_horizontal">
-                            <dt class="slds-dl_horizontal__label slds-text-color_weak">
-                                <lightning-icon
-                                    icon-name="utility:user"
-                                    size="xx-small"
-                                    class="slds-m-right_xx-small"
-                                ></lightning-icon>
-                                Nombre
-                            </dt>
-                            <dd class="slds-dl_horizontal__detail">{profileData.name}</dd>
 
-                            <dt class="slds-dl_horizontal__label slds-text-color_weak">
-                                <lightning-icon
-                                    icon-name="utility:email"
-                                    size="xx-small"
-                                    class="slds-m-right_xx-small"
-                                ></lightning-icon>
-                                Correo electrónico
-                            </dt>
-                            <dd class="slds-dl_horizontal__detail">{profileData.email}</dd>
+                        <!-- ═══ TARJETAS DE ESTADÍSTICAS ═══ -->
+                        <div class="profile-stats-row">
+                            <div class="profile-stat-card stat-cameras">
+                                <div class="stat-icon-wrap stat-icon-blue">
+                                    <lightning-icon icon-name="utility:video" size="small" alternative-text="Cámaras"></lightning-icon>
+                                </div>
+                                <div class="stat-value">{profileData.totalCameras}</div>
+                                <div class="stat-label">Cámaras totales</div>
+                            </div>
 
-                            <dt class="slds-dl_horizontal__label slds-text-color_weak">
-                                <lightning-icon
-                                    icon-name="utility:video"
-                                    size="xx-small"
-                                    class="slds-m-right_xx-small"
-                                ></lightning-icon>
-                                Cámaras contratadas
-                            </dt>
-                            <dd class="slds-dl_horizontal__detail">{profileData.totalCameras}</dd>
-                        </dl>
+                            <div class="profile-stat-card stat-active">
+                                <div class="stat-icon-wrap stat-icon-green">
+                                    <lightning-icon icon-name="utility:check" size="small" alternative-text="Activas"></lightning-icon>
+                                </div>
+                                <div class="stat-value">{profileData.activeCameras}</div>
+                                <div class="stat-label">Activas</div>
+                            </div>
+
+                            <div class="profile-stat-card stat-inactive">
+                                <div class="stat-icon-wrap stat-icon-red">
+                                    <lightning-icon icon-name="utility:close" size="small" alternative-text="Inactivas"></lightning-icon>
+                                </div>
+                                <div class="stat-value">{profileData.inactiveCameras}</div>
+                                <div class="stat-label">Inactivas</div>
+                            </div>
+                        </div>
+
+                        <!-- Barra de progreso de cámaras activas -->
+                        <div class="camera-progress-section">
+                            <div class="progress-header">
+                                <span class="progress-title">Cámaras operativas</span>
+                                <span class="progress-percent">{cameraPercentage}%</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill" style={cameraBarStyle}></div>
+                            </div>
+                        </div>
+
+                        <!-- ═══ GRID DE TARJETAS ═══ -->
+                        <div class="profile-cards-grid">
+
+                            <!-- TARJETA: Información Personal -->
+                            <div class="profile-card">
+                                <div class="profile-card-header">
+                                    <lightning-icon icon-name="utility:user" size="x-small" alternative-text="Personal"></lightning-icon>
+                                    <h2>Información Personal</h2>
+                                </div>
+                                <div class="profile-card-body">
+                                    <div class="profile-field">
+                                        <span class="field-label">Nombre</span>
+                                        <span class="field-value">{profileData.name}</span>
+                                    </div>
+                                    <div class="profile-field">
+                                        <span class="field-label">Correo electrónico</span>
+                                        <span class="field-value">{profileData.email}</span>
+                                    </div>
+                                    <template lwc:if={profileData.phone}>
+                                        <div class="profile-field">
+                                            <span class="field-label">Teléfono</span>
+                                            <span class="field-value">{profileData.phone}</span>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <!-- TARJETA: Datos de Cuenta -->
+                            <template lwc:if={hasAccountData}>
+                                <div class="profile-card">
+                                    <div class="profile-card-header">
+                                        <lightning-icon icon-name="utility:company" size="x-small" alternative-text="Cuenta"></lightning-icon>
+                                        <h2>Datos de Cuenta</h2>
+                                    </div>
+                                    <div class="profile-card-body">
+                                        <div class="profile-field">
+                                            <span class="field-label">Empresa</span>
+                                            <span class="field-value">{profileData.accountName}</span>
+                                        </div>
+                                        <template lwc:if={profileData.accountPhone}>
+                                            <div class="profile-field">
+                                                <span class="field-label">Teléfono empresa</span>
+                                                <span class="field-value">{profileData.accountPhone}</span>
+                                            </div>
+                                        </template>
+                                        <template lwc:if={profileData.industry}>
+                                            <div class="profile-field">
+                                                <span class="field-label">Industria</span>
+                                                <span class="field-value">{profileData.industry}</span>
+                                            </div>
+                                        </template>
+                                        <div class="profile-field">
+                                            <span class="field-label">Estado</span>
+                                            <span class={activeBadgeClass}>{activeLabel}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- TARJETA: Plan y Servicio -->
+                            <template lwc:if={hasAccountData}>
+                                <div class="profile-card">
+                                    <div class="profile-card-header">
+                                        <lightning-icon icon-name="utility:shield" size="x-small" alternative-text="Plan"></lightning-icon>
+                                        <h2>Plan y Servicio</h2>
+                                    </div>
+                                    <div class="profile-card-body">
+                                        <template lwc:if={profileData.sla}>
+                                            <div class="profile-field">
+                                                <span class="field-label">Plan SLA</span>
+                                                <span class={slaBadgeClass}>{profileData.sla}</span>
+                                            </div>
+                                        </template>
+                                        <template lwc:if={profileData.slaSerialNumber}>
+                                            <div class="profile-field">
+                                                <span class="field-label">N.º Serie SLA</span>
+                                                <span class="field-value field-mono">{profileData.slaSerialNumber}</span>
+                                            </div>
+                                        </template>
+                                        <template lwc:if={profileData.slaExpirationDate}>
+                                            <div class="profile-field">
+                                                <span class="field-label">Vencimiento SLA</span>
+                                                <span class="field-value">{profileData.slaExpirationDate}</span>
+                                            </div>
+                                        </template>
+                                        <div class="profile-field">
+                                            <span class="field-label">Prioridad cliente</span>
+                                            <span class={priorityBadgeClass}>{priorityLabel}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- TARJETA: Dirección -->
+                            <template lwc:if={formattedAddress}>
+                                <div class="profile-card">
+                                    <div class="profile-card-header">
+                                        <lightning-icon icon-name="utility:location" size="x-small" alternative-text="Dirección"></lightning-icon>
+                                        <h2>Dirección de Facturación</h2>
+                                    </div>
+                                    <div class="profile-card-body">
+                                        <div class="profile-field">
+                                            <span class="field-label">Dirección completa</span>
+                                            <span class="field-value">{formattedAddress}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                        </div>
+
+                        <!-- ═══ LISTA DE CÁMARAS (admin puede eliminar) ═══ -->
+                        <template lwc:if={hasCameras}>
+                            <div class="profile-card camera-list-card">
+                                <div class="profile-card-header">
+                                    <lightning-icon icon-name="utility:video" size="x-small" alternative-text="Cámaras"></lightning-icon>
+                                    <h2>Mis Cámaras</h2>
+                                </div>
+                                <div class="camera-list-body">
+                                    <template for:each={cameraList} for:item="cam">
+                                        <div key={cam.id} class="camera-list-row">
+                                            <div class="camera-list-info">
+                                                <span class={cam.statusClass}></span>
+                                                <span class="camera-list-name">{cam.name}</span>
+                                                <template lwc:if={cam.zone}>
+                                                    <span class="camera-list-zone">{cam.zone}</span>
+                                                </template>
+                                            </div>
+                                            <div class="camera-list-actions">
+                                                <span class="camera-list-status">{cam.statusLabel}</span>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+
                     </template>
 
+                    <!-- Error -->
                     <template lwc:elseif={profileError}>
-                        <div class="slds-text-color_error slds-text-align_center">
-                            <lightning-icon
-                                icon-name="utility:error"
-                                variant="error"
-                                size="small"
-                                class="slds-m-right_x-small"
-                            ></lightning-icon>
-                            Error al cargar los datos del perfil.
+                        <div class="profile-error">
+                            <lightning-icon icon-name="utility:error" variant="error" size="medium" alternative-text="Error"></lightning-icon>
+                            <p>No se pudieron cargar los datos del perfil.</p>
                         </div>
                     </template>
 
+                    <!-- Loading -->
                     <template lwc:else>
-                        <div class="slds-align_absolute-center slds-p-around_large">
-                            <lightning-spinner
-                                alternative-text="Cargando perfil..."
-                                size="small"
-                            ></lightning-spinner>
+                        <div class="profile-loading">
+                            <lightning-spinner alternative-text="Cargando perfil..." size="medium"></lightning-spinner>
+                            <p>Cargando tu perfil...</p>
                         </div>
                     </template>
                 </div>
 
                 <!-- Footer -->
-                <div class="slds-modal__footer">
+                <div class="profile-modal-footer">
                     <lightning-button
                         label="Cerrar"
                         variant="neutral"

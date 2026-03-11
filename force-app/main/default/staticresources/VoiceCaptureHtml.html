@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voice Capture</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    .mic-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+    .mic-btn {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        border: 2px solid #8b5cf6;
+        background: rgba(139, 92, 246, 0.15);
+        color: #8b5cf6;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+    .mic-btn:hover {
+        background: rgba(139, 92, 246, 0.3);
+        transform: scale(1.1);
+        box-shadow: 0 0 16px rgba(139, 92, 246, 0.4);
+    }
+    .mic-btn.active {
+        border-color: #ef4444;
+        background: rgba(239, 68, 68, 0.15);
+        color: #ef4444;
+        animation: micPulse 1.5s infinite;
+    }
+    .mic-btn.active:hover {
+        background: rgba(239, 68, 68, 0.3);
+    }
+    .mic-btn svg { width: 32px; height: 32px; }
+    .pulse-ring {
+        position: absolute;
+        top: -6px; left: -6px; right: -6px; bottom: -6px;
+        border-radius: 50%;
+        border: 2px solid #ef4444;
+        animation: pulseRing 2s infinite;
+        pointer-events: none;
+    }
+    .status {
+        font-size: 14px;
+        color: #94a3b8;
+        min-height: 20px;
+    }
+    .status.listening { color: #ef4444; font-weight: 600; animation: blink 1s infinite; }
+    .status.error { color: #ef4444; }
+    .status.ready { color: #22c55e; }
+
+    @keyframes micPulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+        50%      { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+    }
+    @keyframes pulseRing {
+        0%   { transform: scale(1);   opacity: 1; }
+        100% { transform: scale(1.6); opacity: 0; }
+    }
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50%      { opacity: 0.4; }
+    }
+</style>
+</head>
+<body>
+<div class="mic-area">
+    <button id="micBtn" class="mic-btn" title="Pulsa para hablar">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+    </button>
+    <div id="status" class="status">Pulsa el micrófono para hablar</div>
+</div>
+
+<script>
+(function() {
+    const micBtn  = document.getElementById('micBtn');
+    const statusEl = document.getElementById('status');
+    let recognition = null;
+    let isListening = false;
+
+    // Verificar soporte
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        statusEl.textContent = 'Tu navegador no soporta reconocimiento de voz.';
+        statusEl.className = 'status error';
+        micBtn.disabled = true;
+        sendToParent('error', { message: 'SpeechRecognition no soportado' });
+        return;
+    }
+
+    // Notificar al padre que estamos listos
+    sendToParent('ready', {});
+
+    micBtn.addEventListener('click', function() {
+        if (isListening) {
+            stopListening();
+        } else {
+            startListening();
+        }
+    });
+
+    // Escuchar comandos del padre (LWC)
+    window.addEventListener('message', function(event) {
+        if (!event.data || !event.data.type) return;
+        if (event.data.type === 'start') {
+            startListening();
+        } else if (event.data.type === 'stop') {
+            stopListening();
+        }
+    });
+
+    function startListening() {
+        // Pedir permiso de micrófono (esto fuerza el popup del navegador)
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function(stream) {
+                // Cerrar el stream, solo necesitamos el permiso
+                stream.getTracks().forEach(function(t) { t.stop(); });
+                initRecognition();
+            })
+            .catch(function(err) {
+                var msg = 'Error al acceder al micrófono.';
+                if (err.name === 'NotAllowedError') {
+                    msg = 'Permiso de micrófono denegado. Haz clic en el candado de la barra de direcciones.';
+                } else if (err.name === 'NotFoundError') {
+                    msg = 'No se encontró micrófono.';
+                }
+                statusEl.textContent = msg;
+                statusEl.className = 'status error';
+                sendToParent('error', { message: msg });
+            });
+    }
+
+    function initRecognition() {
+        recognition = new SpeechRecognition();
+        recognition.lang = 'es-ES';
+        recognition.interimResults = true;
+        recognition.continuous = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.onstart = function() {
+            isListening = true;
+            micBtn.classList.add('active');
+            // Añadir anillo de pulso
+            if (!micBtn.querySelector('.pulse-ring')) {
+                var ring = document.createElement('span');
+                ring.className = 'pulse-ring';
+                micBtn.appendChild(ring);
+            }
+            statusEl.textContent = 'Escuchando...';
+            statusEl.className = 'status listening';
+            sendToParent('listening', {});
+        };
+
+        recognition.onresult = function(event) {
+            var finalTranscript = '';
+            var interimTranscript = '';
+            for (var i = event.resultIndex; i < event.results.length; i++) {
+                if (event.results[i].isFinal) {
+                    finalTranscript += event.results[i][0].transcript;
+                } else {
+                    interimTranscript += event.results[i][0].transcript;
+                }
+            }
+            var transcript = finalTranscript || interimTranscript;
+            statusEl.textContent = transcript;
+            statusEl.className = 'status';
+            sendToParent('transcript', { text: transcript, isFinal: !!finalTranscript });
+        };
+
+        recognition.onerror = function(event) {
+            isListening = false;
+            micBtn.classList.remove('active');
+            removePulseRing();
+            var msg = 'Error: ' + event.error;
+            if (event.error === 'no-speech') msg = 'No se detectó voz. Inténtalo de nuevo.';
+            if (event.error === 'not-allowed') msg = 'Micrófono denegado.';
+            statusEl.textContent = msg;
+            statusEl.className = 'status error';
+            sendToParent('error', { message: msg });
+        };
+
+        recognition.onend = function() {
+            isListening = false;
+            micBtn.classList.remove('active');
+            removePulseRing();
+            if (statusEl.className === 'status listening') {
+                statusEl.textContent = 'Pulsa el micrófono para hablar';
+                statusEl.className = 'status';
+            }
+            sendToParent('ended', {});
+        };
+
+        recognition.start();
+    }
+
+    function stopListening() {
+        if (recognition) {
+            recognition.stop();
+            recognition = null;
+        }
+        isListening = false;
+        micBtn.classList.remove('active');
+        removePulseRing();
+        statusEl.textContent = 'Pulsa el micrófono para hablar';
+        statusEl.className = 'status';
+    }
+
+    function removePulseRing() {
+        var ring = micBtn.querySelector('.pulse-ring');
+        if (ring) ring.remove();
+    }
+
+    function sendToParent(type, data) {
+        if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ source: 'voiceCapture', type: type, data: data }, '*');
+        }
+    }
+})();
+</script>
+</body>
+</html>

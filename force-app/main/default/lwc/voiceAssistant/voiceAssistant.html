@@ -1,0 +1,130 @@
+<template>
+    <!-- ═══════════════════════════════════════════════════════
+         VOICE ASSISTANT — OptiSecure Solutions
+         Asistente de voz con Web Speech API + IA (LLM)
+    ═══════════════════════════════════════════════════════════ -->
+
+    <!-- Botón de micrófono (trigger) -->
+    <div class="voice-trigger">
+        <button class={micButtonClass} title={micButtonTitle} onclick={handleOpenModal}>
+            <svg class="mic-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+            </svg>
+            <span class="mic-pulse"></span>
+        </button>
+    </div>
+
+    <!-- Modal del asistente de voz -->
+    <template lwc:if={isModalOpen}>
+        <section class="voice-modal-backdrop" onclick={handleBackdropClick}>
+            <div class="voice-modal" onclick={handleModalClick}>
+
+                <!-- Cabecera -->
+                <header class="voice-modal-header">
+                    <div class="voice-modal-header-left">
+                        <svg class="header-mic-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                            <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                        </svg>
+                        <h2 class="voice-modal-title">Asistente de Voz IA</h2>
+                    </div>
+                    <button class="voice-modal-close" onclick={handleCloseModal} title="Cerrar">
+                        <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Cerrar"></lightning-icon>
+                    </button>
+                </header>
+
+                <!-- Cuerpo -->
+                <div class="voice-modal-body">
+                    <!-- Estado de éxito -->
+                    <template lwc:if={isSuccess}>
+                        <div class="voice-success">
+                            <lightning-icon icon-name="utility:success" size="large" class="success-icon"></lightning-icon>
+                            <h3 class="success-title">¡Comando ejecutado!</h3>
+                            <p class="success-message">{aiResponse.mensaje}</p>
+                            <template lwc:if={aiResponse.recordId}>
+                                <p class="success-record-id">ID: {aiResponse.recordId}</p>
+                            </template>
+                            <lightning-button
+                                label="Cerrar"
+                                variant="neutral"
+                                onclick={handleCloseModal}
+                                class="slds-m-top_medium"
+                            ></lightning-button>
+                        </div>
+                    </template>
+
+                    <!-- Formulario / Interacción -->
+                    <template lwc:if={showForm}>
+                        <div class="voice-form">
+                            <p class="form-description">
+                                Pulsa el micrófono y di lo que quieres hacer. Por ejemplo:
+                                <em>"Abre un caso de soporte porque el router no funciona"</em>
+                            </p>
+
+                            <!-- Micrófono central -->
+                            <div class="mic-container">
+                                <button class={modalMicClass} onclick={handleToggleListening} title={micButtonTitle}>
+                                    <svg class="mic-icon-lg" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                                        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                                    </svg>
+                                    <span class="mic-pulse"></span>
+                                </button>
+                                <template lwc:if={isListening}>
+                                    <span class="listening-label">Escuchando...</span>
+                                </template>
+                            </div>
+
+                            <!-- Transcripción editable -->
+                            <div class="form-field">
+                                <lightning-textarea
+                                    label="Transcripción"
+                                    value={transcript}
+                                    onchange={handleTranscriptChange}
+                                    placeholder="Aquí aparecerá lo que digas, o escribe tu comando manualmente…"
+                                    max-length="2000"
+                                ></lightning-textarea>
+                            </div>
+
+                            <!-- Procesando -->
+                            <template lwc:if={isProcessing}>
+                                <div class="processing-container">
+                                    <lightning-spinner alternative-text="Procesando..." size="small"></lightning-spinner>
+                                    <span class="processing-label">Procesando con IA...</span>
+                                </div>
+                            </template>
+
+                            <!-- Error -->
+                            <template lwc:if={errorMessage}>
+                                <div class="form-error">
+                                    <lightning-icon icon-name="utility:error" size="x-small" class="error-icon"></lightning-icon>
+                                    <span>{errorMessage}</span>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Footer -->
+                <template lwc:if={showForm}>
+                    <footer class="voice-modal-footer">
+                        <lightning-button
+                            label="Cancelar"
+                            variant="neutral"
+                            onclick={handleCloseModal}
+                        ></lightning-button>
+                        <lightning-button
+                            label="Enviar Comando"
+                            variant="brand"
+                            icon-name="utility:send"
+                            onclick={handleSendCommand}
+                            disabled={isSendDisabled}
+                            class="slds-m-left_small"
+                        ></lightning-button>
+                    </footer>
+                </template>
+            </div>
+        </section>
+    </template>
+</template>
