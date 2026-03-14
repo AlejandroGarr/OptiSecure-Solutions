@@ -51,6 +51,15 @@ public with sharing class CameraIncidentController {
                 LIMIT  1
             ];
 
+            // Obtener ContactId y AccountId del usuario actual
+            User currentUser = [
+                SELECT ContactId, Contact.AccountId
+                FROM   User
+                WHERE  Id = :UserInfo.getUserId()
+                WITH   SECURITY_ENFORCED
+                LIMIT  1
+            ];
+
             Case newCase = new Case(
                 Subject     = subject,
                 Description = 'Cámara: ' + cam.Name + '\n'
@@ -59,7 +68,9 @@ public with sharing class CameraIncidentController {
                 Priority    = priority,
                 Status      = 'New',
                 Origin      = 'Web',
-                Type        = 'Mechanical'
+                Type        = 'Mechanical',
+                ContactId   = currentUser.ContactId,
+                AccountId   = currentUser.ContactId != null ? currentUser.Contact.AccountId : null
             );
             insert newCase;
             return newCase.Id;

@@ -1,0 +1,473 @@
+/* ═══════════════════════════════════════════════════════
+   CASE VIEWER — CSS
+   Visor de casos + chat para Experience Cloud
+   Dark Security Theme — OptiSecure Solutions
+═══════════════════════════════════════════════════════ */
+
+:host {
+    --color-bg:          #0a0e1a;
+    --color-surface:     #111827;
+    --color-surface-alt: #1a1f2e;
+    --color-border:      #1e293b;
+    --color-accent:      #3b82f6;
+    --color-accent-dim:  rgba(59, 130, 246, 0.15);
+    --color-text:        #e2e8f0;
+    --color-text-dim:    #94a3b8;
+    --color-success:     #22c55e;
+    --color-warning:     #f59e0b;
+    --color-danger:      #ef4444;
+    --radius:            0.5rem;
+}
+
+/* ── Botón de apertura ── */
+.case-trigger {
+    display: inline-block;
+}
+
+/* ── Backdrop ── */
+.case-modal-backdrop {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: cv-fadeIn 0.2s ease;
+}
+
+/* ── Modal ── */
+.case-modal {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    width: 92%;
+    max-width: 640px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    animation: cv-slideUp 0.25s ease;
+}
+
+/* ═══ CABECERA ═══ */
+.case-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.875rem 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-accent-dim);
+}
+
+.case-modal-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.case-modal-header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.header-case-icon {
+    --sds-c-icon-color-foreground-default: var(--color-accent);
+}
+
+.case-modal-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.back-btn {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    transition: background 0.15s;
+}
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.case-count-badge {
+    background: var(--color-accent);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 5rem;
+    min-width: 1.25rem;
+    text-align: center;
+}
+
+.case-modal-close {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.375rem;
+    border-radius: 0.25rem;
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+}
+.case-modal-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ═══ CUERPO ═══ */
+.case-modal-body {
+    padding: 0;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* ── Lista de casos ── */
+.case-list {
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.case-card {
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.875rem 1rem;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+}
+.case-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-1px);
+}
+
+.case-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.375rem;
+}
+
+.case-card-number {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    font-family: 'SFMono-Regular', Consolas, monospace;
+}
+
+.case-card-subject {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.case-card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.case-card-date {
+    font-size: 0.7rem;
+    color: var(--color-text-dim);
+}
+
+/* ── Badges ── */
+.priority-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.15rem 0.5rem;
+    border-radius: 5rem;
+}
+.priority-high   { background: rgba(239, 68, 68, 0.15); color: var(--color-danger); }
+.priority-medium { background: rgba(245, 158, 11, 0.15); color: var(--color-warning); }
+.priority-low    { background: rgba(34, 197, 94, 0.15); color: var(--color-success); }
+
+.status-badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 5rem;
+    background: rgba(148, 163, 184, 0.15);
+    color: var(--color-text-dim);
+}
+.status-new             { background: var(--color-accent-dim); color: var(--color-accent); }
+.status-working,
+.status-in-progress,
+.status-escalated       { background: rgba(245, 158, 11, 0.15); color: var(--color-warning); }
+.status-closed          { background: rgba(34, 197, 94, 0.15); color: var(--color-success); }
+
+/* ── Empty state ── */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 3rem 1rem;
+}
+.empty-icon {
+    --sds-c-icon-color-foreground-default: var(--color-text-dim);
+    margin-bottom: 1rem;
+}
+.empty-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0 0 0.5rem;
+}
+.empty-subtitle {
+    font-size: 0.85rem;
+    color: var(--color-text-dim);
+    margin: 0;
+}
+
+/* ═══ DETALLE ═══ */
+.case-detail {
+    padding: 1rem 1.25rem;
+}
+
+.detail-header-info {
+    margin-bottom: 0.75rem;
+}
+.detail-subject {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0 0 0.5rem;
+    line-height: 1.4;
+}
+.detail-badges {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.detail-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 0.75rem;
+}
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.78rem;
+    color: var(--color-text-dim);
+}
+.meta-icon {
+    --sds-c-icon-color-foreground-default: var(--color-text-dim);
+}
+
+.detail-description {
+    margin-bottom: 1rem;
+}
+.section-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+.section-icon {
+    --sds-c-icon-color-foreground-default: var(--color-accent);
+}
+.description-text {
+    font-size: 0.85rem;
+    color: var(--color-text-dim);
+    line-height: 1.6;
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* ═══ CHAT ═══ */
+.chat-section {
+    border-top: 1px solid var(--color-border);
+    padding-top: 0.75rem;
+}
+
+.chat-messages {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.75rem;
+    min-height: 120px;
+    max-height: 250px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.chat-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80px;
+}
+
+.chat-empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80px;
+    color: var(--color-text-dim);
+    font-size: 0.8rem;
+    font-style: italic;
+}
+
+/* ── Burbujas del chat ── */
+.chat-bubble {
+    max-width: 80%;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius);
+    word-break: break-word;
+}
+.chat-bubble-mine {
+    background: var(--color-accent-dim);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    align-self: flex-end;
+}
+.chat-bubble-other {
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    align-self: flex-start;
+}
+
+.bubble-author {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    display: block;
+    margin-bottom: 0.15rem;
+}
+.chat-bubble-other .bubble-author {
+    color: var(--color-warning);
+}
+
+.bubble-body {
+    font-size: 0.82rem;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+
+.bubble-time {
+    font-size: 0.6rem;
+    color: var(--color-text-dim);
+    display: block;
+    text-align: right;
+    margin-top: 0.25rem;
+}
+
+/* ── Error del chat ── */
+.chat-error {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--color-danger);
+    border-radius: 0.25rem;
+    color: var(--color-danger);
+    font-size: 0.78rem;
+    margin-top: 0.5rem;
+}
+.error-icon {
+    --sds-c-icon-color-foreground-default: var(--color-danger);
+    flex-shrink: 0;
+}
+
+/* ── Input del chat ── */
+.chat-input-area {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.625rem;
+    align-items: flex-end;
+}
+
+.chat-input {
+    flex: 1;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.5rem 0.75rem;
+    color: var(--color-text);
+    font-size: 0.82rem;
+    font-family: inherit;
+    resize: none;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.chat-input:focus {
+    border-color: var(--color-accent);
+}
+.chat-input::placeholder {
+    color: var(--color-text-dim);
+}
+
+.chat-send-btn {
+    background: var(--color-accent);
+    border: none;
+    border-radius: var(--radius);
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    flex-shrink: 0;
+}
+.chat-send-btn:hover:not(:disabled) {
+    transform: scale(1.05);
+}
+.chat-send-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+.chat-send-btn lightning-icon {
+    --sds-c-icon-color-foreground-default: #fff;
+    pointer-events: none;
+}
+
+/* ═══ ANIMACIONES ═══ */
+@keyframes cv-fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes cv-slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

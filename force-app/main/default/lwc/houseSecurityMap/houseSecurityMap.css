@@ -56,7 +56,7 @@
 .floor-plan-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: fill;
     display: block;
     opacity: 0.85;
 }
@@ -476,23 +476,363 @@
 }
 
 /* ═══ RESPONSIVE ═══ */
-@media (max-width: 768px) {
+
+/*
+ * Estrategia: En tablet/móvil el layout pasa a 1 columna.
+ * La imagen del plano se muestra completa (width:100%, height:auto)
+ * y el contenedor se ajusta a su tamaño exacto, así los pins
+ * con porcentajes quedan perfectos.
+ * El sidebar va horizontal debajo.
+ */
+
+@media (max-width: 1024px) {
     .house-security-map {
-        grid-template-columns: 1fr;
-        grid-template-rows: 60vh auto auto;
-        grid-template-areas:
-            "map"
-            "sidebar"
-            "footer";
+        display: flex;
+        flex-direction: column;
         height: auto;
+        min-height: unset;
+        overflow: visible;
+        border-radius: 0;
     }
 
     .grid-area-map {
+        position: relative;
         border-right: none;
+        border-bottom: 1px solid var(--color-border);
+        overflow: hidden;
+        width: 100%;
+        flex-shrink: 0;
     }
 
+    /* Contenedor toma el tamaño natural de la imagen */
+    .map-container,
+    .map-container--dragover {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 75%; /* aspect-ratio 4:3 */
+        overflow: hidden;
+    }
+
+    /* Imagen llena el contenedor con padding-bottom trick */
+    .floor-plan-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+        display: block;
+    }
+
+    /* ── Sidebar — cámaras en lista vertical, solo nombre ── */
     .grid-area-sidebar {
-        max-height: 40vh;
+        max-height: none;
+        overflow: visible;
+        flex-shrink: 0;
+    }
+
+    .sidebar-list {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        overflow-x: hidden;
+        overflow-y: auto;
+        max-height: 30vh;
+    }
+
+    .cam-list-item {
+        flex: none;
+        width: 100%;
+        border-bottom: 1px solid var(--color-border);
+        border-right: none;
+        padding: 0.6rem 1rem;
+    }
+
+    .cam-list-item:last-child {
+        border-bottom: none;
+    }
+
+    /* Ocultar icono y badge, solo mostrar nombre */
+    .cam-list-icon {
+        display: none;
+    }
+
+    .cam-list-zone {
+        display: none;
+    }
+
+    .badge-online {
+        display: none;
+    }
+
+    .cam-list-name {
+        font-size: 0.82rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .sidebar-detail {
+        width: 100%;
+    }
+
+    /* Drag tray horizontal */
+    .drag-tray-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        max-height: none;
+    }
+
+    .drag-pin-card {
+        flex: 0 0 auto;
+    }
+
+    .grid-area-footer {
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+}
+
+/* ─── MOBILE (≤ 768px) ─── */
+@media (max-width: 768px) {
+    .footer-datetime {
+        display: none;
+    }
+
+    .camera-pin {
+        width: 1.75rem;
+        height: 1.75rem;
+    }
+
+    .dropped-pin {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    .map-badge {
+        font-size: 0.6rem;
+        padding: 0.25rem 0.55rem;
+    }
+
+    .sidebar-header {
+        padding: 0.6rem 0.75rem;
+    }
+
+    .sidebar-title {
+        font-size: 0.78rem;
+    }
+
+    .cam-list-name {
+        font-size: 0.72rem;
+    }
+
+    .cam-list-zone {
+        font-size: 0.58rem;
+    }
+
+    .badge-online {
+        font-size: 0.55rem;
+    }
+
+    .detail-title {
+        font-size: 0.8rem;
+    }
+
+    .detail-grid {
+        font-size: 0.68rem;
+    }
+
+    .grid-area-footer {
+        padding: 0.35rem 0.65rem;
+        font-size: 0.6rem;
+    }
+
+    .footer-right {
+        gap: 0.4rem;
+    }
+
+    .fullscreen-topbar {
+        padding: 0.4rem 0.65rem;
+    }
+
+    .fullscreen-cam-name {
+        font-size: 0.85rem;
+    }
+
+    .fullscreen-close-btn {
+        width: 2.25rem;
+        height: 2.25rem;
+    }
+}
+
+/* ─── SMALL MOBILE (≤ 480px) ─── */
+@media (max-width: 480px) {
+    .camera-pin {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    .dropped-pin {
+        width: 2.2rem;
+        height: 2.2rem;
+    }
+
+    .map-badge {
+        font-size: 0.55rem;
+        padding: 0.2rem 0.45rem;
+        top: 0.4rem;
+        left: 0.4rem;
+    }
+
+    .cam-list-item {
+        padding: 0.4rem 0.6rem;
+    }
+
+    .cam-list-name {
+        font-size: 0.68rem;
+    }
+
+    .badge-online {
+        font-size: 0.48rem;
+    }
+
+    .sidebar-detail {
+        padding: 0.5rem;
+    }
+
+    .detail-title {
+        font-size: 0.75rem;
+    }
+
+    .detail-grid {
+        font-size: 0.62rem;
+        gap: 0.15rem 0.5rem;
+    }
+
+    .grid-area-footer {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.55rem;
+    }
+
+    .drag-tray {
+        padding: 0.5rem 0.6rem;
+    }
+
+    .drag-pin-thumb {
+        width: 38px;
+        height: 26px;
+    }
+
+    .drag-pin-name {
+        font-size: 0.64rem;
+    }
+
+    .fullscreen-topbar {
+        padding: 0.3rem 0.5rem;
+    }
+
+    .fullscreen-cam-name {
+        font-size: 0.75rem;
+    }
+
+    .fullscreen-live-badge {
+        font-size: 0.58rem;
+        padding: 0.18rem 0.45rem;
+    }
+
+    .fullscreen-close-btn {
+        width: 2rem;
+        height: 2rem;
+    }
+}
+
+/* ─── TOUCH ─── */
+@media (hover: none) and (pointer: coarse) {
+    .camera-pin {
+        min-width: 36px;
+        min-height: 36px;
+    }
+
+    .camera-pin:hover {
+        transform: translate(-50%, -50%);
+        background: rgba(59, 130, 246, 0.2);
+        box-shadow: none;
+    }
+
+    .cam-list-item {
+        min-height: 44px;
+    }
+
+    .cam-list-item:hover {
+        background: transparent;
+    }
+
+    .fullscreen-close-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .fullscreen-close-btn:hover {
+        transform: none;
+    }
+
+    .context-menu-item {
+        min-height: 44px;
+        padding: 0.65rem 1rem;
+    }
+
+    .dropped-pin-remove {
+        opacity: 1;
+        width: 20px;
+        height: 20px;
+        font-size: 0.6rem;
+    }
+}
+
+/* ─── LANDSCAPE MOBILE ─── */
+@media (max-height: 500px) and (orientation: landscape) {
+    .house-security-map {
+        grid-template-columns: 2fr 1fr;
+        grid-template-rows: 1fr auto;
+        grid-template-areas:
+            "map     sidebar"
+            "footer  footer";
+        height: 100vh;
+    }
+
+    .grid-area-map {
+        border-right: 1px solid var(--color-border);
+    }
+
+    .map-container,
+    .map-container--dragover {
+        width: 100%;
+        height: 100%;
+    }
+
+    .floor-plan-img {
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+    }
+
+    .sidebar-list {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .cam-list-item {
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .grid-area-footer {
+        padding: 0.25rem 0.65rem;
+        font-size: 0.58rem;
     }
 }
 

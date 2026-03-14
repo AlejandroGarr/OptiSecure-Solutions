@@ -1,0 +1,69 @@
+<template>
+    <!-- ═══════════════════════════════════════════════════════
+         CASE CHAT PANEL — CRM Component
+         Panel de chat en la ficha de Caso para el admin
+    ═══════════════════════════════════════════════════════════ -->
+    <lightning-card title="Chat con Cliente" icon-name="utility:chat">
+        <div slot="actions">
+            <lightning-button-icon
+                icon-name="utility:refresh"
+                alternative-text="Refrescar"
+                onclick={handleRefresh}
+            ></lightning-button-icon>
+        </div>
+
+        <div class="chat-container">
+            <!-- Mensajes -->
+            <div class="chat-messages">
+                <template lwc:if={isLoading}>
+                    <div class="chat-loading">
+                        <lightning-spinner size="small" alternative-text="Cargando..."></lightning-spinner>
+                    </div>
+                </template>
+                <template lwc:else>
+                    <template lwc:if={hasChatMessages}>
+                        <template for:each={chatMessages} for:item="msg">
+                            <div key={msg.id} class={msg.bubbleClass}>
+                                <span class="bubble-author">{msg.createdByName}</span>
+                                <p class="bubble-body">{msg.body}</p>
+                                <span class="bubble-time">{msg.createdDate}</span>
+                            </div>
+                        </template>
+                    </template>
+                    <template lwc:else>
+                        <div class="chat-empty">
+                            <p>No hay mensajes aún. Envía el primer mensaje al cliente.</p>
+                        </div>
+                    </template>
+                </template>
+            </div>
+
+            <!-- Error -->
+            <template lwc:if={errorMessage}>
+                <div class="chat-error slds-text-color_error slds-m-top_x-small">
+                    {errorMessage}
+                </div>
+            </template>
+
+            <!-- Input -->
+            <div class="chat-input-area">
+                <textarea
+                    class="chat-input slds-textarea"
+                    placeholder="Escribe un mensaje al cliente..."
+                    value={newMessage}
+                    onchange={handleMessageChange}
+                    onkeypress={handleKeyPress}
+                    rows="2"
+                ></textarea>
+                <lightning-button
+                    label="Enviar"
+                    variant="brand"
+                    icon-name="utility:send"
+                    onclick={handleSendMessage}
+                    disabled={isSendDisabled}
+                    class="slds-m-left_x-small"
+                ></lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>
