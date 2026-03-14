@@ -12,6 +12,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
 import getUserProfileData from '@salesforce/apex/UserMenuController.getUserProfileData';
 import deleteCamera from '@salesforce/apex/UserMenuController.deleteCamera';
+import createSolicitudCamara from '@salesforce/apex/UserMenuController.createSolicitudCamara';
 
 // URL de logout estándar de Salesforce con redirección al sitio público
 const LOGOUT_URL = '/secur/logout.jsp?retUrl=https://www.optisecure-solutions.com';
@@ -24,6 +25,13 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
     @track isProfileModalOpen = false;
     @track isDeleting = false;
     _wiredProfileResult;
+
+    // ── Contract modal state ──
+    @track isContractModalOpen = false;
+    @track contractRows = [
+        { id: '1', label: 'Cámara 1', name: '', location: '', showRemove: false }
+    ];
+    _contractCounter = 1;
 
     // ═══════════════════════════════════════════
     //  WIRE — Datos de perfil del usuario actual
@@ -142,13 +150,11 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
                 break;
 
             case 'contract':
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Contratación',
-                        message: 'Redirigiendo a contratación de nuevas cámaras...',
-                        variant: 'info'
-                    })
-                );
+                this._contractCounter = 1;
+                this.contractRows = [
+                    { id: '1', label: 'Cámara 1', name: '', location: '', showRemove: false }
+                ];
+                this.isContractModalOpen = true;
                 break;
 
             case 'logout':
@@ -163,6 +169,108 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
     /** Cierra el modal de perfil */
     handleCloseModal() {
         this.isProfileModalOpen = false;
+    }
+
+    // ═══════════════════════════════════════════
+    //  CONTRATACIÓN — Lógica del formulario
+    // ═══════════════════════════════════════════
+
+    get canAddMoreRows() {
+        return this.contractRows.length < 5;
+    }
+
+    get isMaxRows() {
+        return this.contractRows.length >= 5;
+    }
+
+    get isContractSubmitDisabled() {
+        return this.contractRows.some(r => !r.name.trim() || !r.location.trim());
+    }
+
+    handleCloseContractModal() {
+        this.isContractModalOpen = false;
+    }
+
+    handleContractFieldChange(event) {
+        const rowId = event.target.dataset.rowId;
+        const field = event.target.dataset.field;
+        const value = event.detail.value;
+        this.contractRows = this.contractRows.map(row =>
+            row.id === rowId ? { ...row, [field]: value } : row
+        );
+    }
+
+    handleAddContractRow() {
+        if (this.contractRows.length >= 5) return;
+        this._contractCounter++;
+        const newId = String(this._contractCounter);
+        this.contractRows = [
+            ...this.contractRows,
+            {
+                id: newId,
+                label: `Cámara ${this.contractRows.length + 1}`,
+                name: '',
+                location: '',
+                showRemove: true
+            }
+        ];
+    }
+
+    handleRemoveContractRow(event) {
+        const rowId = event.currentTarget.dataset.rowId;
+        this.contractRows = this.contractRows
+            .filter(r => r.id !== rowId)
+            .map((r, idx) => ({
+                ...r,
+                label: `Cámara ${idx + 1}`,
+                showRemove: idx > 0
+            }));
+    }
+
+    @track isSubmittingContract = false;
+
+    handleSubmitContract() {
+        const hasEmpty = this.contractRows.some(r => !r.name.trim() || !r.location.trim());
+        if (hasEmpty) {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Campos incompletos',
+                    message: 'Rellena el nombre y lugar de todas las cámaras.',
+                    variant: 'warning'
+                })
+            );
+            return;
+        }
+
+        this.isSubmittingContract = true;
+        const camerasPayload = this.contractRows.map(r => ({
+            name: r.name.trim(),
+            location: r.location.trim()
+        }));
+
+        createSolicitudCamara({ camerasJson: JSON.stringify(camerasPayload) })
+            .then(() => {
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Solicitud enviada',
+                        message: `Se ha registrado la solicitud de ${camerasPayload.length} cámara(s). Nos pondremos en contacto contigo.`,
+                        variant: 'success'
+                    })
+                );
+                this.isContractModalOpen = false;
+            })
+            .catch(error => {
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Error',
+                        message: error.body ? error.body.message : 'Error al enviar la solicitud.',
+                        variant: 'error'
+                    })
+                );
+            })
+            .finally(() => {
+                this.isSubmittingContract = false;
+            });
     }
 
     /** Elimina una cámara (solo admin) */

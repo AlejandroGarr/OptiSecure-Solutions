@@ -176,6 +176,59 @@ public with sharing class UserMenuController {
     }
 
     /**
+     * @description Crea una solicitud de contratación de nuevas cámaras.
+     * @param camerasJson JSON con array de objetos {name, location}.
+     * @return Id del registro Solicitud_Camara__c creado.
+     */
+    @AuraEnabled
+    public static Id createSolicitudCamara(String camerasJson) {
+        try {
+            Id currentUserId = UserInfo.getUserId();
+
+            User u = [
+                SELECT Name, Email, Phone, ContactId
+                FROM   User
+                WHERE  Id = :currentUserId
+                WITH   SECURITY_ENFORCED
+                LIMIT  1
+            ];
+
+            Solicitud_Camara__c sol = new Solicitud_Camara__c();
+            sol.Nombre_Solicitante__c = u.Name;
+            sol.Email_Solicitante__c  = u.Email;
+            sol.Telefono_Solicitante__c = u.Phone;
+            sol.Detalle_Camaras__c    = camerasJson;
+            sol.Estado__c             = 'Pendiente';
+            sol.Fecha_Solicitud__c    = Datetime.now();
+
+            // Contar cámaras del JSON
+            List<Object> camerasList = (List<Object>) JSON.deserializeUntyped(camerasJson);
+            sol.Numero_Camaras__c = camerasList.size();
+
+            // Vincular a la cuenta si el usuario tiene Contact
+            if (u.ContactId != null) {
+                List<Contact> contacts = [
+                    SELECT AccountId
+                    FROM   Contact
+                    WHERE  Id = :u.ContactId
+                    WITH   SECURITY_ENFORCED
+                    LIMIT  1
+                ];
+                if (!contacts.isEmpty() && contacts[0].AccountId != null) {
+                    sol.Cuenta__c = contacts[0].AccountId;
+                }
+            }
+
+            insert sol;
+            return sol.Id;
+        } catch (Exception e) {
+            throw new AuraHandledException(
+                'Error al crear la solicitud: ' + e.getMessage()
+            );
+        }
+    }
+
+    /**
      * @description Comprueba si el usuario actual es System Administrator.
      */
     private static Boolean checkIsAdmin() {

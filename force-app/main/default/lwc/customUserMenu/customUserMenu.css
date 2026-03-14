@@ -549,6 +549,201 @@
 }
 
 /* ═══════════════════════════════════════════════════════
+   CONTRACT MODAL — Formulario de contratación de cámaras
+   ═══════════════════════════════════════════════════════ */
+
+.contract-modal-container {
+    max-width: 640px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    background: #1a1d2e;
+    padding: 0;
+    margin: 0 auto;
+}
+
+.contract-modal-header {
+    position: relative;
+    background: linear-gradient(135deg, #0f1923 0%, #1b2a4a 50%, #0d3b66 100%);
+    padding: 1.25rem 2rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.contract-header-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00bcd4, #2196f3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.6rem;
+    --sds-c-icon-color-foreground-default: #fff;
+}
+
+.contract-title {
+    color: #ffffff;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 0 0 0.2rem;
+}
+
+.contract-subtitle {
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+.contract-modal-body {
+    padding: 1.25rem 1.5rem;
+    background: #1a1d2e;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* ─── Fila de cámara ─── */
+.contract-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.contract-row:last-of-type {
+    border-bottom: none;
+}
+
+.contract-row-number {
+    color: #00bcd4;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    padding-bottom: 0.55rem;
+    flex-shrink: 0;
+}
+
+.contract-row-fields {
+    display: flex;
+    gap: 0.75rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.contract-input {
+    flex: 1;
+    min-width: 0;
+    --slds-c-input-color-background: rgba(255, 255, 255, 0.06);
+    --sds-c-input-color-background: rgba(255, 255, 255, 0.06);
+    --slds-c-input-color-border: rgba(255, 255, 255, 0.12);
+    --sds-c-input-color-border: rgba(255, 255, 255, 0.12);
+    --slds-c-input-text-color: #e2e8f0;
+    --sds-c-input-text-color: #e2e8f0;
+    --slds-c-input-label-text-color: rgba(255, 255, 255, 0.6);
+    --sds-c-input-label-text-color: rgba(255, 255, 255, 0.6);
+}
+
+.contract-remove-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+    background: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    margin-bottom: 0.3rem;
+}
+
+.contract-remove-btn:hover {
+    background: rgba(244, 67, 54, 0.25);
+    border-color: rgba(244, 67, 54, 0.5);
+    transform: scale(1.1);
+}
+
+/* ─── Botón añadir ─── */
+.contract-add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.65rem;
+    margin-top: 0.5rem;
+    border: 2px dashed rgba(0, 188, 212, 0.3);
+    border-radius: 10px;
+    background: rgba(0, 188, 212, 0.05);
+    color: #00bcd4;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    --sds-c-icon-color-foreground-default: #00bcd4;
+}
+
+.contract-add-btn:hover {
+    background: rgba(0, 188, 212, 0.12);
+    border-color: rgba(0, 188, 212, 0.5);
+}
+
+.contract-max-msg {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.78rem;
+    margin-top: 0.75rem;
+    font-style: italic;
+}
+
+/* ─── Footer ─── */
+.contract-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ─── Responsive contrato ─── */
+@media (max-width: 640px) {
+    .contract-modal-container {
+        max-width: 100vw;
+        border-radius: 10px;
+    }
+
+    .contract-modal-header {
+        padding: 1rem 1.25rem 0.85rem;
+    }
+
+    .contract-modal-body {
+        padding: 1rem;
+    }
+
+    .contract-row {
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+
+    .contract-row-fields {
+        flex-direction: column;
+        gap: 0.4rem;
+        width: 100%;
+    }
+
+    .contract-modal-footer {
+        padding: 0.65rem 1rem;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════
    RESPONSIVE — Tablet & Mobile (Experience Cloud)
    Breakpoints:
      • Tablet  : 768px – 1024px
