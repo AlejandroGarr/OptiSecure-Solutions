@@ -10,14 +10,10 @@
     <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
     <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
     <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
-    <label>prueba2</label>
+    <label>OptiSecure</label>
     <navType>Standard</navType>
-    <tabs>Cuenta__c</tabs>
-    <tabs>Oportunidad__c</tabs>
-    <tabs>Factura__c</tabs>
-    <tabs>Contacto__c</tabs>
-    <tabs>Pais</tabs>
     <tabs>standard-Account</tabs>
+    <tabs>Solicitud_Camara__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>prueba2_UtilityBar</utilityBar>
 </CustomApplication>
