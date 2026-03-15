@@ -4,6 +4,10 @@
    ═══════════════════════════════════════════════════════ */
 
 /* ─── MODAL CONTAINER ─── */
+.slds-modal__container {
+    height: auto;
+}
+
 .profile-modal-container {
     max-width: 900px;
     border-radius: 16px;
