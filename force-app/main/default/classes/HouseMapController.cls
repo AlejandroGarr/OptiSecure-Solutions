@@ -8,14 +8,31 @@
 public with sharing class HouseMapController {
 
     /**
-     * @description Obtiene todas las cámaras activas (Is_Active__c = true).
-     * @return      Lista de Camara__c con Id, Name, Video_Url__c,
-     *              Position_X__c, Position_Y__c y Zone__c.
+     * @description Obtiene cámaras activas, filtrando por contacto si se indica.
+     * @param       contactId Id del contacto (null = todas las activas).
+     * @return      Lista de Camara__c con campos principales y contacto.
      * @throws      AuraHandledException si ocurre un error en la consulta.
      */
-    @AuraEnabled(cacheable=true)
-    public static List<Camara__c> getCamaras() {
+    @AuraEnabled(cacheable=false)
+    public static List<Camara__c> getCamaras(Id contactId) {
         try {
+            if (contactId != null) {
+                return [
+                    SELECT Id,
+                           Name,
+                           Video_Url__c,
+                           Posicion_X__c,
+                           Posicion_Y__c,
+                           Zone__c,
+                           Contacto__c,
+                           Contacto__r.Name
+                    FROM   Camara__c
+                    WHERE  Activa__c = TRUE
+                    AND    Contacto__c = :contactId
+                    WITH   SECURITY_ENFORCED
+                    ORDER BY Name ASC
+                ];
+            }
             return [
                 SELECT Id,
                        Name,

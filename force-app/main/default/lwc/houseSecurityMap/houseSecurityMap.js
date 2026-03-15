@@ -1,5 +1,4 @@
-import { LightningElement, wire, track } from 'lwc';
-import { refreshApex } from '@salesforce/apex';
+import { LightningElement, api, wire, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getCamaras from '@salesforce/apex/HouseMapController.getCamaras';
 import isSystemAdmin from '@salesforce/apex/HouseMapController.isSystemAdmin';
@@ -50,6 +49,17 @@ export default class HouseSecurityMap extends LightningElement {
     // ── Static Resource ──
     floorPlanUrl = PLANO_CASA;
 
+    // ── Public API — contactId recibido del padre (null = sin filtro) ──
+    _contactId = null;
+    @api
+    get contactId() {
+        return this._contactId;
+    }
+    set contactId(value) {
+        this._contactId = value || null;
+        this.loadCameras();
+    }
+
     // ── State ──
     @track cameras = [];
     @track selectedCamera = null;
@@ -57,7 +67,7 @@ export default class HouseSecurityMap extends LightningElement {
     @track fullscreenVideoUrl = '';
     @track fullscreenCameraName = '';
     @track currentDateTime = '';
-    @track isLoading = true;
+    @track isLoading = false;
 
     // ── Admin / Drag & Drop ──
     @track isAdmin = false;
@@ -74,7 +84,7 @@ export default class HouseSecurityMap extends LightningElement {
     @track contextMenuY = 0;
     @track _contextMenuCameraId = null;
 
-    // Referencia al resultado de wire para refreshApex
+    // Referencia no usada (legacy)
     _wiredCamerasResult;
 
     // Timer
@@ -84,30 +94,30 @@ export default class HouseSecurityMap extends LightningElement {
     _pinCounter = 0;
 
     // ═══════════════════════════════════════════
-    //  WIRE — Carga de cámaras activas desde Apex
+    //  CARGA DE CÁMARAS — Llamada imperativa a Apex
     // ═══════════════════════════════════════════
 
-    @wire(getCamaras)
-    wiredCamaras(result) {
-        this._wiredCamerasResult = result;
-        const { data, error } = result;
-
-        if (data) {
-            this.cameras = data.map((cam) => ({
-                ...cam,
-                positionStyle: `top: ${cam.Posicion_Y__c}%; left: ${cam.Posicion_X__c}%;`,
-                listItemClass:
-                    'cam-list-item' +
-                    (this.selectedCamera && this.selectedCamera.Id === cam.Id
-                        ? ' cam-list-item--selected'
-                        : '')
-            }));
-            this.isLoading = false;
-        } else if (error) {
-            this.cameras = [];
-            this.isLoading = false;
-            console.error('Error al cargar cámaras:', JSON.stringify(error));
-        }
+    loadCameras() {
+        this.isLoading = true;
+        getCamaras({ contactId: this._contactId })
+            .then((data) => {
+                this.cameras = data.map((cam) => ({
+                    ...cam,
+                    positionStyle: `top: ${cam.Posicion_Y__c}%; left: ${cam.Posicion_X__c}%;`,
+                    listItemClass:
+                        'cam-list-item' +
+                        (this.selectedCamera && this.selectedCamera.Id === cam.Id
+                            ? ' cam-list-item--selected'
+                            : '')
+                }));
+            })
+            .catch((error) => {
+                this.cameras = [];
+                console.error('Error al cargar cámaras:', JSON.stringify(error));
+            })
+            .finally(() => {
+                this.isLoading = false;
+            });
     }
 
     @wire(isSystemAdmin)
@@ -131,6 +141,9 @@ export default class HouseSecurityMap extends LightningElement {
         this._intervalId = setInterval(() => {
             this._updateDateTime();
         }, 1000);
+
+        // Carga inicial de cámaras
+        this.loadCameras();
 
         // Cerrar pantalla completa con ESC y cerrar menú contextual al hacer clic
         this._boundHandleKeyDown = this._handleKeyDown.bind(this);
@@ -239,9 +252,9 @@ export default class HouseSecurityMap extends LightningElement {
         }));
     }
 
-    /** Refresca los datos del wire */
+    /** Refresca los datos de cámaras */
     handleRefresh() {
-        return refreshApex(this._wiredCamerasResult);
+        this.loadCameras();
     }
 
     // ═══════════════════════════════════════════
@@ -287,7 +300,7 @@ export default class HouseSecurityMap extends LightningElement {
                         variant: 'success'
                     })
                 );
-                return refreshApex(this._wiredCamerasResult);
+                return this.loadCameras();
             })
             .catch((err) => {
                 // Revertir
@@ -430,7 +443,7 @@ export default class HouseSecurityMap extends LightningElement {
         Promise.all(promises)
             .then(() => {
                 this.droppedPins = [];
-                return refreshApex(this._wiredCamerasResult);
+                return this.loadCameras();
             })
             .catch((err) => {
                 console.error('Error al guardar chinchetas:', JSON.stringify(err));
@@ -518,7 +531,7 @@ export default class HouseSecurityMap extends LightningElement {
                         variant: 'success'
                     })
                 );
-                return refreshApex(this._wiredCamerasResult);
+                return this.loadCameras();
             })
             .catch((err) => {
                 // Revertir a la posición anterior

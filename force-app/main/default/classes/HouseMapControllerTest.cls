@@ -50,7 +50,7 @@ private class HouseMapControllerTest {
     @isTest
     static void testGetCameras() {
         Test.startTest();
-        List<Camara__c> resultado = HouseMapController.getCamaras();
+        List<Camara__c> resultado = HouseMapController.getCamaras(null);
         Test.stopTest();
 
         System.assertEquals(2, resultado.size(),
