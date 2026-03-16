@@ -61,100 +61,111 @@ public without sharing class UserMenuController {
      * @return      UserProfileData con toda la información del perfil.
      * @throws      AuraHandledException si ocurre un error en la consulta.
      */
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static UserProfileData getUserProfileData() {
-        try {
-            Id currentUserId = UserInfo.getUserId();
+        Id currentUserId = UserInfo.getUserId();
+        UserProfileData profile = new UserProfileData();
 
+        // 1. Datos básicos del usuario — siempre disponible
+        try {
             User u = [
                 SELECT Name, Email, Phone, ContactId
                 FROM   User
                 WHERE  Id = :currentUserId
                 LIMIT  1
             ];
+            profile.name     = u.Name;
+            profile.email    = u.Email;
+            profile.phone    = u.Phone;
+            profile.initials = buildInitials(u.Name);
 
-            UserProfileData profile = new UserProfileData();
-            profile.name            = u.Name;
-            profile.email           = u.Email;
-            profile.phone           = u.Phone;
-            profile.initials        = buildInitials(u.Name);
-
-            // Obtener Account a través del Contact (Experience Cloud)
+            // 2. Datos de la cuenta a través del Contact
             if (u.ContactId != null) {
-                List<Contact> contacts = [
-                    SELECT AccountId
-                    FROM   Contact
-                    WHERE  Id = :u.ContactId
-                    LIMIT  1
-                ];
-                if (!contacts.isEmpty() && contacts[0].AccountId != null) {
-                    Account acc = [
-                        SELECT Name, Phone, Industry, Active__c,
-                               SLA__c, SLAExpirationDate__c, SLASerialNumber__c,
-                               CustomerPriority__c, NumberofLocations__c,
-                               BillingStreet, BillingCity, BillingState,
-                               BillingPostalCode, BillingCountry
-                        FROM   Account
-                        WHERE  Id = :contacts[0].AccountId
+                try {
+                    Contact con = [
+                        SELECT AccountId, Account.Name, Account.Phone, Account.Industry,
+                               Account.Active__c, Account.SLA__c, Account.SLAExpirationDate__c,
+                               Account.SLASerialNumber__c, Account.CustomerPriority__c,
+                               Account.NumberofLocations__c, Account.BillingStreet,
+                               Account.BillingCity, Account.BillingState,
+                               Account.BillingPostalCode, Account.BillingCountry
+                        FROM   Contact
+                        WHERE  Id = :u.ContactId
                         LIMIT  1
                     ];
-                    profile.accountName      = acc.Name;
-                    profile.accountPhone     = acc.Phone;
-                    profile.industry         = acc.Industry;
-                    profile.active           = acc.Active__c;
-                    profile.sla              = acc.SLA__c;
-                    profile.slaExpirationDate = acc.SLAExpirationDate__c != null
-                        ? acc.SLAExpirationDate__c.format() : null;
-                    profile.slaSerialNumber  = acc.SLASerialNumber__c;
-                    profile.customerPriority = acc.CustomerPriority__c;
-                    profile.numberOfLocations = acc.NumberofLocations__c != null
-                        ? acc.NumberofLocations__c.intValue() : 0;
-                    profile.billingStreet     = acc.BillingStreet;
-                    profile.billingCity       = acc.BillingCity;
-                    profile.billingState      = acc.BillingState;
-                    profile.billingPostalCode = acc.BillingPostalCode;
-                    profile.billingCountry    = acc.BillingCountry;
+                    if (con.AccountId != null) {
+                        profile.accountName       = con.Account.Name;
+                        profile.accountPhone      = con.Account.Phone;
+                        profile.industry          = con.Account.Industry;
+                        profile.active            = con.Account.Active__c;
+                        profile.sla               = con.Account.SLA__c;
+                        profile.slaExpirationDate = con.Account.SLAExpirationDate__c != null
+                            ? con.Account.SLAExpirationDate__c.format() : null;
+                        profile.slaSerialNumber   = con.Account.SLASerialNumber__c;
+                        profile.customerPriority  = con.Account.CustomerPriority__c;
+                        profile.numberOfLocations = con.Account.NumberofLocations__c != null
+                            ? con.Account.NumberofLocations__c.intValue() : 0;
+                        profile.billingStreet     = con.Account.BillingStreet;
+                        profile.billingCity       = con.Account.BillingCity;
+                        profile.billingState      = con.Account.BillingState;
+                        profile.billingPostalCode = con.Account.BillingPostalCode;
+                        profile.billingCountry    = con.Account.BillingCountry;
+                    }
+                } catch (Exception accErr) {
+                    System.debug('Error al obtener datos de cuenta: ' + accErr.getMessage());
                 }
             }
 
-            // Conteo y lista de cámaras
-            List<Camara__c> cameraList;
-            if (u.ContactId != null) {
-                cameraList = [
-                    SELECT Id, Name, Zone__c, Activa__c
-                    FROM   Camara__c
-                    WHERE  Contacto__c = :u.ContactId
-                    ORDER BY Name
-                ];
-            } else {
-                cameraList = [
-                    SELECT Id, Name, Zone__c, Activa__c
-                    FROM   Camara__c
-                    WHERE  OwnerId = :currentUserId
-                    ORDER BY Name
-                ];
+            // 3. Cámaras
+            try {
+                List<Camara__c> cameraList;
+                if (u.ContactId != null) {
+                    cameraList = [
+                        SELECT Id, Name, Zone__c, Activa__c
+                        FROM   Camara__c
+                        WHERE  Contacto__c = :u.ContactId
+                        ORDER BY Name
+                    ];
+                } else {
+                    cameraList = [
+                        SELECT Id, Name, Zone__c, Activa__c
+                        FROM   Camara__c
+                        WHERE  OwnerId = :currentUserId
+                        ORDER BY Name
+                    ];
+                }
+                profile.cameras = new List<CameraData>();
+                Integer cameraActive = 0;
+                for (Camara__c cam : cameraList) {
+                    profile.cameras.add(new CameraData(cam));
+                    if (cam.Activa__c) cameraActive++;
+                }
+                profile.totalCameras    = cameraList.size();
+                profile.activeCameras   = cameraActive;
+                profile.inactiveCameras = cameraList.size() - cameraActive;
+            } catch (Exception camErr) {
+                System.debug('Error al obtener cámaras: ' + camErr.getMessage());
+                profile.cameras         = new List<CameraData>();
+                profile.totalCameras    = 0;
+                profile.activeCameras   = 0;
+                profile.inactiveCameras = 0;
             }
 
-            profile.cameras = new List<CameraData>();
-            Integer cameraActive = 0;
-            for (Camara__c cam : cameraList) {
-                profile.cameras.add(new CameraData(cam));
-                if (cam.Activa__c) cameraActive++;
-            }
-
-            profile.totalCameras    = cameraList.size();
-            profile.activeCameras   = cameraActive;
-            profile.inactiveCameras = cameraList.size() - cameraActive;
-
-            // Admin check
-            profile.isAdmin = checkIsAdmin();
-
-            return profile;
         } catch (Exception e) {
-            throw new AuraHandledException(
-                'Error al obtener datos del perfil: ' + e.getMessage()
-            );
+            // Si ni siquiera el User se pudo consultar, datos mínimos de UserInfo
+            profile.name     = UserInfo.getName();
+            profile.email    = UserInfo.getUserEmail();
+            profile.initials = buildInitials(UserInfo.getName());
+            profile.cameras         = new List<CameraData>();
+            profile.totalCameras    = 0;
+            profile.activeCameras   = 0;
+            profile.inactiveCameras = 0;
         }
+
+        // Admin check — nunca falla gracias a su propio try-catch
+        profile.isAdmin = checkIsAdmin();
+
+        return profile;
     }
 
     /**

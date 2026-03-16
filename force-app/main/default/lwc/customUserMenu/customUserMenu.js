@@ -6,10 +6,10 @@
  * @author      OptiSecure Solutions
  * @date        2026-03-06
  */
-import { LightningElement, wire, track } from 'lwc';
+import { LightningElement, track } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { refreshApex } from '@salesforce/apex';
+
 import getUserProfileData from '@salesforce/apex/UserMenuController.getUserProfileData';
 import deleteCamera from '@salesforce/apex/UserMenuController.deleteCamera';
 import renameCamera from '@salesforce/apex/UserMenuController.renameCamera';
@@ -28,7 +28,7 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
     @track editingCameraId = null;
     @track editingCameraName = '';
     @track isRenaming = false;
-    _wiredProfileResult;
+    @track isLoadingProfile = false;
 
     // ── Contract modal state ──
     @track isContractModalOpen = false;
@@ -38,21 +38,29 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
     _contractCounter = 1;
 
     // ═══════════════════════════════════════════
-    //  WIRE — Datos de perfil del usuario actual
+    //  LIFECYCLE
     // ═══════════════════════════════════════════
 
-    @wire(getUserProfileData)
-    wiredProfile(result) {
-        this._wiredProfileResult = result;
-        const { data, error } = result;
-        if (data) {
-            this.profileData  = data;
-            this.profileError = null;
-        } else if (error) {
-            this.profileData  = null;
-            this.profileError = error;
-            console.error('Error al cargar perfil:', JSON.stringify(error));
-        }
+    connectedCallback() {
+        this.loadProfile();
+    }
+
+    /** Carga los datos de perfil de forma imperativa (sin caché). */
+    loadProfile() {
+        this.isLoadingProfile = true;
+        getUserProfileData()
+            .then((data) => {
+                this.profileData  = data;
+                this.profileError = null;
+            })
+            .catch((error) => {
+                this.profileData  = null;
+                this.profileError = error;
+                console.error('Error al cargar perfil:', JSON.stringify(error));
+            })
+            .finally(() => {
+                this.isLoadingProfile = false;
+            });
     }
 
     // ═══════════════════════════════════════════
@@ -301,7 +309,7 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
                         variant: 'success'
                     })
                 );
-                return refreshApex(this._wiredProfileResult);
+                this.loadProfile();
             })
             .catch(error => {
                 this.dispatchEvent(
@@ -348,7 +356,7 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
                 );
                 this.editingCameraId = null;
                 this.editingCameraName = '';
-                return refreshApex(this._wiredProfileResult);
+                this.loadProfile();
             })
             .catch(error => {
                 this.dispatchEvent(

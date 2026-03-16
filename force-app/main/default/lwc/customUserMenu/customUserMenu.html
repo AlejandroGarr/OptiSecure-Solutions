@@ -20,12 +20,6 @@
             icon-name="utility:identity"
         ></lightning-menu-item>
 
-        <lightning-menu-item
-            label="Contratación de nuevas cámaras"
-            value="contract"
-            icon-name="utility:cart"
-        ></lightning-menu-item>
-
         <div class="slds-has-divider_top-space" role="separator"></div>
 
         <lightning-menu-item
@@ -317,102 +311,5 @@
 
         <!-- Backdrop -->
         <div class="slds-backdrop slds-backdrop_open" onclick={handleCloseModal}></div>
-    </template>
-
-    <!-- ─── MODAL DE CONTRATACIÓN ─── -->
-    <template lwc:if={isContractModalOpen}>
-        <section
-            role="dialog"
-            tabindex="-1"
-            aria-modal="true"
-            aria-labelledby="contract-heading"
-            class="slds-modal slds-fade-in-open"
-        >
-            <div class="slds-modal__container contract-modal-container">
-                <!-- Header -->
-                <div class="contract-modal-header">
-                    <button
-                        class="profile-close-btn"
-                        onclick={handleCloseContractModal}
-                        aria-label="Cerrar"
-                    >&times;</button>
-                    <div class="contract-header-icon">
-                        <lightning-icon icon-name="utility:cart" size="medium" alternative-text="Contratar"></lightning-icon>
-                    </div>
-                    <h1 id="contract-heading" class="contract-title">Contratación de Cámaras</h1>
-                    <p class="contract-subtitle">Añade hasta 5 cámaras nuevas a tu plan</p>
-                </div>
-
-                <!-- Body -->
-                <div class="contract-modal-body">
-                    <template for:each={contractRows} for:item="row">
-                        <div key={row.id} class="contract-row">
-                            <span class="contract-row-number">{row.label}</span>
-                            <div class="contract-row-fields">
-                                <lightning-input
-                                    type="text"
-                                    label="Nombre de la cámara"
-                                    placeholder="Ej: Cámara principal"
-                                    value={row.name}
-                                    data-row-id={row.id}
-                                    data-field="name"
-                                    onchange={handleContractFieldChange}
-                                    class="contract-input"
-                                    required
-                                ></lightning-input>
-                                <lightning-input
-                                    type="text"
-                                    label="Lugar / Ubicación"
-                                    placeholder="Ej: Cocina"
-                                    value={row.location}
-                                    data-row-id={row.id}
-                                    data-field="location"
-                                    onchange={handleContractFieldChange}
-                                    class="contract-input"
-                                    required
-                                ></lightning-input>
-                            </div>
-                            <template lwc:if={row.showRemove}>
-                                <button
-                                    class="contract-remove-btn"
-                                    onclick={handleRemoveContractRow}
-                                    data-row-id={row.id}
-                                    title="Eliminar fila"
-                                >✕</button>
-                            </template>
-                        </div>
-                    </template>
-
-                    <!-- Botón añadir fila -->
-                    <template lwc:if={canAddMoreRows}>
-                        <button class="contract-add-btn" onclick={handleAddContractRow}>
-                            <lightning-icon icon-name="utility:add" size="xx-small" alternative-text="Añadir"></lightning-icon>
-                            <span>Añadir otra cámara</span>
-                        </button>
-                    </template>
-
-                    <template lwc:if={isMaxRows}>
-                        <p class="contract-max-msg">Has alcanzado el máximo de 5 cámaras por solicitud.</p>
-                    </template>
-                </div>
-
-                <!-- Footer -->
-                <div class="contract-modal-footer">
-                    <lightning-button
-                        label="Cancelar"
-                        variant="neutral"
-                        onclick={handleCloseContractModal}
-                    ></lightning-button>
-                    <lightning-button
-                        label="Enviar solicitud"
-                        variant="brand"
-                        icon-name="utility:check"
-                        onclick={handleSubmitContract}
-                        disabled={isContractSubmitDisabled}
-                    ></lightning-button>
-                </div>
-            </div>
-        </section>
-        <div class="slds-backdrop slds-backdrop_open" onclick={handleCloseContractModal}></div>
     </template>
 </template>

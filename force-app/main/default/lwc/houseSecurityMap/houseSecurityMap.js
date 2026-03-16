@@ -296,6 +296,9 @@ export default class HouseSecurityMap extends LightningElement {
      * selecciona la cámara y actualiza estilos.
      */
     handleCameraClick(event) {
+        // Si se está editando un nombre, no abrir fullscreen
+        if (this.editingCameraId) return;
+
         const camId = event.currentTarget.dataset.id;
         const cam = this.cameras.find((c) => c.Id === camId);
         if (!cam) return;
