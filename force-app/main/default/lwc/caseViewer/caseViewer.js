@@ -189,6 +189,8 @@ export default class CaseViewer extends LightningElement {
                     }
                 ];
                 this.newMessage = '';
+                const ta = this.template.querySelector('.chat-input');
+                if (ta) ta.value = '';
                 this._scrollChatToBottom();
             })
             .catch(err => {
