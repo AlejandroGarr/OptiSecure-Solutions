@@ -258,6 +258,80 @@
     text-overflow: ellipsis;
 }
 
+.cam-list-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex-shrink: 0;
+}
+
+.cam-rename-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+    border: 1px solid rgba(96, 165, 250, 0.25);
+    background: rgba(96, 165, 250, 0.08);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    --sds-c-icon-color-foreground-default: #60a5fa;
+    flex-shrink: 0;
+}
+
+.cam-rename-btn:hover {
+    background: rgba(96, 165, 250, 0.2);
+    border-color: rgba(96, 165, 250, 0.5);
+    transform: scale(1.1);
+}
+
+.cam-rename-confirm-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+    border: 1px solid rgba(76, 175, 80, 0.35);
+    background: rgba(76, 175, 80, 0.12);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    --sds-c-icon-color-foreground-default: #4caf50;
+}
+
+.cam-rename-confirm-btn:hover {
+    background: rgba(76, 175, 80, 0.25);
+}
+
+.cam-rename-confirm-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.cam-rename-cancel-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    --sds-c-icon-color-foreground-default: rgba(255, 255, 255, 0.5);
+}
+
+.cam-rename-cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.cam-rename-input {
+    flex: 1;
+    min-width: 0;
+}
+
 .badge-online {
     --sds-c-badge-color-background: rgba(34, 197, 94, 0.15);
     --sds-c-badge-text-color: #4ade80;
@@ -934,6 +1008,62 @@
 
 .drag-tray-save-btn {
     width: 100%;
+}
+
+/* ── Banner de solicitud aprobada ── */
+.solicitud-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.6rem;
+    margin-bottom: 0.5rem;
+    border-radius: var(--radius);
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.solicitud-banner-icon {
+    --slds-c-icon-color-foreground-default: #10b981;
+    flex-shrink: 0;
+}
+
+.solicitud-banner-text {
+    font-size: 0.72rem;
+    color: #10b981;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+/* ── Mensaje inline de estado (backup para toasts en Experience Cloud) ── */
+.inline-msg {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.35rem;
+    padding: 0.45rem 0.6rem;
+    margin-top: 0.5rem;
+    border-radius: var(--radius);
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.3;
+    word-break: break-word;
+}
+.inline-msg--success {
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: #10b981;
+    --slds-c-icon-color-foreground-default: #10b981;
+}
+.inline-msg--error {
+    background: rgba(220, 38, 38, 0.1);
+    border: 1px solid rgba(220, 38, 38, 0.35);
+    color: #dc2626;
+    --slds-c-icon-color-foreground-default: #dc2626;
+}
+.inline-msg--info {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #3b82f6;
+    --slds-c-icon-color-foreground-default: #3b82f6;
 }
 
 /* ── Tarjeta de chincheta en la bandeja ── */

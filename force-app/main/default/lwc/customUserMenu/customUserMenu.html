@@ -231,13 +231,53 @@
                                         <div key={cam.id} class="camera-list-row">
                                             <div class="camera-list-info">
                                                 <span class={cam.statusClass}></span>
-                                                <span class="camera-list-name">{cam.name}</span>
-                                                <template lwc:if={cam.zone}>
-                                                    <span class="camera-list-zone">{cam.zone}</span>
+                                                <template lwc:if={cam.isEditing}>
+                                                    <lightning-input
+                                                        type="text"
+                                                        value={editingCameraName}
+                                                        class="camera-rename-input"
+                                                        onchange={handleRenameInputChange}
+                                                        label=""
+                                                        variant="label-hidden"
+                                                    ></lightning-input>
+                                                </template>
+                                                <template lwc:else>
+                                                    <span class="camera-list-name">{cam.name}</span>
+                                                    <template lwc:if={cam.zone}>
+                                                        <span class="camera-list-zone">{cam.zone}</span>
+                                                    </template>
                                                 </template>
                                             </div>
                                             <div class="camera-list-actions">
-                                                <span class="camera-list-status">{cam.statusLabel}</span>
+                                                <template lwc:if={cam.isEditing}>
+                                                    <button
+                                                        class="camera-rename-confirm-btn"
+                                                        onclick={handleConfirmRename}
+                                                        disabled={isRenaming}
+                                                        title="Guardar nombre"
+                                                    >
+                                                        <lightning-icon icon-name="utility:check" size="xx-small" alternative-text="Guardar"></lightning-icon>
+                                                    </button>
+                                                    <button
+                                                        class="camera-rename-cancel-btn"
+                                                        onclick={handleCancelRename}
+                                                        title="Cancelar"
+                                                    >
+                                                        <lightning-icon icon-name="utility:close" size="xx-small" alternative-text="Cancelar"></lightning-icon>
+                                                    </button>
+                                                </template>
+                                                <template lwc:else>
+                                                    <span class="camera-list-status">{cam.statusLabel}</span>
+                                                    <button
+                                                        class="camera-rename-btn"
+                                                        onclick={handleStartRename}
+                                                        data-id={cam.id}
+                                                        data-name={cam.name}
+                                                        title="Editar nombre"
+                                                    >
+                                                        <lightning-icon icon-name="utility:edit" size="xx-small" alternative-text="Editar"></lightning-icon>
+                                                    </button>
+                                                </template>
                                             </div>
                                         </div>
                                     </template>

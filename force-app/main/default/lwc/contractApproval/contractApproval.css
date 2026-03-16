@@ -1,0 +1,152 @@
+/* ═══════════════════════════════════════════
+   Contract Approval — Admin Panel Styles
+   ═══════════════════════════════════════════ */
+
+/* ── Grid de solicitudes ── */
+.solicitudes-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* ── Tarjeta de solicitud ── */
+.sol-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background: #fff;
+    transition: box-shadow 0.15s ease;
+}
+
+.sol-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.sol-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+}
+
+.sol-card-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sol-card-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #1e293b;
+}
+
+.sol-card-fecha {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+/* ── Campos ── */
+.sol-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 0.75rem;
+}
+
+.sol-card-field {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+}
+
+.sol-field-icon {
+    --slds-c-icon-color-foreground-default: #94a3b8;
+    flex-shrink: 0;
+}
+
+.sol-field-label {
+    color: #64748b;
+    font-weight: 500;
+}
+
+.sol-field-value {
+    color: #1e293b;
+}
+
+.sol-field-value--highlight {
+    font-weight: 700;
+    color: #f59e0b;
+}
+
+.sol-card-detail {
+    margin-top: 0.25rem;
+    padding: 0.5rem;
+    background: #f8fafc;
+    border-radius: 0.35rem;
+    border: 1px solid #f1f5f9;
+}
+
+.sol-detail-text {
+    font-size: 0.78rem;
+    color: #475569;
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+/* ── Acciones ── */
+.sol-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 0.5rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* ── Badges ── */
+.badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.badge-pending {
+    background: rgba(245, 158, 11, 0.12);
+    color: #f59e0b;
+}
+
+.badge-review {
+    background: rgba(59, 130, 246, 0.12);
+    color: #3b82f6;
+}
+
+/* ── Estado vacío ── */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+.empty-icon {
+    --slds-c-icon-color-foreground-default: #10b981;
+    margin-bottom: 0.75rem;
+}
+
+.empty-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.25rem;
+}
+
+.empty-subtitle {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}

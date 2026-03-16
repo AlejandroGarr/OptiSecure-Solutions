@@ -5,26 +5,39 @@
  * @author      OptiSecure Solutions
  * @date        2026-02-26
  */
-public with sharing class CameraIncidentController {
+public without sharing class CameraIncidentController {
 
     /**
      * @description Obtiene la lista de cámaras activas para el picklist
-     *              del formulario de incidencias.
+     *              del formulario de incidencias, filtradas por el contacto
+     *              del usuario actual (portal users solo ven sus propias cámaras).
      * @return      Lista de mapas con Id y Name de cada cámara activa.
      */
     @AuraEnabled(cacheable=true)
     public static List<Map<String, String>> getCameraOptions() {
+        User currentUser = [SELECT ContactId FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+        List<Camara__c> cameras;
+        if (currentUser.ContactId != null) {
+            cameras = [
+                SELECT Id, Name, Zone__c
+                FROM   Camara__c
+                WHERE  Activa__c = TRUE
+                AND    Contacto__c = :currentUser.ContactId
+                ORDER BY Name ASC
+            ];
+        } else {
+            cameras = [
+                SELECT Id, Name, Zone__c
+                FROM   Camara__c
+                WHERE  Activa__c = TRUE
+                ORDER BY Name ASC
+            ];
+        }
         List<Map<String, String>> options = new List<Map<String, String>>();
-        for (Camara__c cam : [
-            SELECT Id, Name, Zone__c
-            FROM   Camara__c
-            WHERE  Activa__c = TRUE
-            WITH   SECURITY_ENFORCED
-            ORDER BY Name ASC
-        ]) {
+        for (Camara__c cam : cameras) {
             Map<String, String> opt = new Map<String, String>();
             opt.put('value', cam.Id);
-            opt.put('label', cam.Name + ' — ' + cam.Zone__c);
+            opt.put('label', cam.Name + (cam.Zone__c != null ? ' — ' + cam.Zone__c : ''));
             options.add(opt);
         }
         return options;
@@ -47,7 +60,6 @@ public with sharing class CameraIncidentController {
                 SELECT Name, Zone__c
                 FROM   Camara__c
                 WHERE  Id = :cameraId
-                WITH   SECURITY_ENFORCED
                 LIMIT  1
             ];
 
@@ -56,7 +68,6 @@ public with sharing class CameraIncidentController {
                 SELECT ContactId, Contact.AccountId
                 FROM   User
                 WHERE  Id = :UserInfo.getUserId()
-                WITH   SECURITY_ENFORCED
                 LIMIT  1
             ];
 

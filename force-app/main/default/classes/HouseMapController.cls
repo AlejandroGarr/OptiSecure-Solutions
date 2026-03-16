@@ -5,7 +5,7 @@
  * @author      OptiSecure Solutions
  * @date        2026-02-12
  */
-public with sharing class HouseMapController {
+public without sharing class HouseMapController {
 
     /**
      * @description Obtiene cámaras activas, filtrando por contacto si se indica.
@@ -16,11 +16,29 @@ public with sharing class HouseMapController {
     @AuraEnabled(cacheable=false)
     public static List<Camara__c> getCamaras(Id contactId) {
         try {
-            if (contactId != null) {
+            // Detectar si el usuario actual es un usuario de portal/comunidad
+            // (los usuarios de portal tienen ContactId en su User record)
+            User currentUser = [
+                SELECT ContactId
+                FROM   User
+                WHERE  Id = :UserInfo.getUserId()
+                LIMIT  1
+            ];
+
+            // Portal/comunidad: siempre filtrar por su propio ContactId (seguridad server-side)
+            // Admin/interno: respetar el contactId pasado desde el cliente (puede ser null = todos)
+            Id effectiveContactId;
+            if (currentUser.ContactId != null) {
+                effectiveContactId = currentUser.ContactId;
+            } else {
+                effectiveContactId = contactId;
+            }
+
+            if (effectiveContactId != null) {
                 return [
                     SELECT Id,
                            Name,
-                           Video_Url__c,
+                           Video_URL__c,
                            Posicion_X__c,
                            Posicion_Y__c,
                            Zone__c,
@@ -28,21 +46,19 @@ public with sharing class HouseMapController {
                            Contacto__r.Name
                     FROM   Camara__c
                     WHERE  Activa__c = TRUE
-                    AND    Contacto__c = :contactId
-                    WITH   SECURITY_ENFORCED
+                    AND    Contacto__c = :effectiveContactId
                     ORDER BY Name ASC
                 ];
             }
             return [
                 SELECT Id,
                        Name,
-                       Video_Url__c,
+                       Video_URL__c,
                        Posicion_X__c,
                        Posicion_Y__c,
                        Zone__c
                 FROM   Camara__c
                 WHERE  Activa__c = TRUE
-                WITH   SECURITY_ENFORCED
                 ORDER BY Name ASC
             ];
         } catch (Exception e) {
@@ -85,7 +101,7 @@ public with sharing class HouseMapController {
             Name          = name,
             Posicion_X__c = posX,
             Posicion_Y__c = posY,
-            Video_Url__c  = videoUrl,
+            Video_URL__c  = videoUrl,
             Activa__c     = true,
             Zone__c       = 'Salón'
         );

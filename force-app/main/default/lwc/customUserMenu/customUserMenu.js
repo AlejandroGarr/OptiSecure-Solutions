@@ -12,6 +12,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
 import getUserProfileData from '@salesforce/apex/UserMenuController.getUserProfileData';
 import deleteCamera from '@salesforce/apex/UserMenuController.deleteCamera';
+import renameCamera from '@salesforce/apex/UserMenuController.renameCamera';
 import createSolicitudCamara from '@salesforce/apex/UserMenuController.createSolicitudCamara';
 
 // URL de logout estándar de Salesforce con redirección al sitio público
@@ -24,6 +25,9 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
     @track profileError = null;
     @track isProfileModalOpen = false;
     @track isDeleting = false;
+    @track editingCameraId = null;
+    @track editingCameraName = '';
+    @track isRenaming = false;
     _wiredProfileResult;
 
     // ── Contract modal state ──
@@ -72,7 +76,8 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
         return this.profileData.cameras.map(cam => ({
             ...cam,
             statusClass: cam.active ? 'cam-status-dot cam-dot-active' : 'cam-status-dot cam-dot-inactive',
-            statusLabel: cam.active ? 'Activa' : 'Inactiva'
+            statusLabel: cam.active ? 'Activa' : 'Inactiva',
+            isEditing: this.editingCameraId === cam.id
         }));
     }
 
@@ -309,6 +314,53 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
             })
             .finally(() => {
                 this.isDeleting = false;
+            });
+    }
+
+    handleStartRename(event) {
+        event.stopPropagation();
+        this.editingCameraId = event.currentTarget.dataset.id;
+        this.editingCameraName = event.currentTarget.dataset.name;
+    }
+
+    handleRenameInputChange(event) {
+        this.editingCameraName = event.detail.value;
+    }
+
+    handleCancelRename() {
+        this.editingCameraId = null;
+        this.editingCameraName = '';
+    }
+
+    handleConfirmRename() {
+        const newName = this.editingCameraName ? this.editingCameraName.trim() : '';
+        if (!newName) return;
+        const cameraId = this.editingCameraId;
+        this.isRenaming = true;
+        renameCamera({ cameraId, newName })
+            .then(() => {
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Nombre actualizado',
+                        message: `La cámara se ha renombrado a "${newName}".`,
+                        variant: 'success'
+                    })
+                );
+                this.editingCameraId = null;
+                this.editingCameraName = '';
+                return refreshApex(this._wiredProfileResult);
+            })
+            .catch(error => {
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Error',
+                        message: error.body ? error.body.message : 'Error al renombrar la cámara.',
+                        variant: 'error'
+                    })
+                );
+            })
+            .finally(() => {
+                this.isRenaming = false;
             });
     }
 }

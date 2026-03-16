@@ -1,0 +1,122 @@
+<template>
+    <!-- Botón que abre el modal -->
+    <button class="contract-btn" onclick={handleOpenModal} title="Contratar cámaras">
+        <lightning-icon icon-name="utility:add" size="xx-small" class="contract-btn-icon"></lightning-icon>
+        <span class="contract-btn-label">Contratar</span>
+    </button>
+
+    <!-- Modal de contratación -->
+    <template lwc:if={isModalOpen}>
+        <div class="modal-backdrop" onclick={handleCloseModal}>
+            <div class="modal-container" onclick={handleStopPropagation}>
+
+                <!-- Header -->
+                <div class="modal-header">
+                    <div class="modal-header-left">
+                        <lightning-icon icon-name="utility:package" size="small" class="modal-header-icon"></lightning-icon>
+                        <h2 class="modal-title">Contratar Cámaras</h2>
+                    </div>
+                    <button class="modal-close-btn" onclick={handleCloseModal}>
+                        <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+                    </button>
+                </div>
+
+                <!-- Cuerpo -->
+                <div class="modal-body">
+                    <!-- Tab: Nueva solicitud / Mis solicitudes -->
+                    <div class="modal-tabs">
+                        <button class={tabNuevaClass} onclick={handleTabNueva}>Nueva solicitud</button>
+                        <button class={tabListaClass} onclick={handleTabLista}>Mis solicitudes</button>
+                    </div>
+
+                    <!-- Tab: Nueva solicitud -->
+                    <template lwc:if={isTabNueva}>
+                        <div class="form-section">
+                            <div class="form-field">
+                                <label class="form-label" for="numCamaras">Número de cámaras</label>
+                                <lightning-input
+                                    type="number"
+                                    name="numCamaras"
+                                    min="1"
+                                    max="20"
+                                    value={numeroCamaras}
+                                    onchange={handleNumCamarasChange}
+                                    placeholder="¿Cuántas cámaras necesitas?"
+                                    variant="label-hidden"
+                                    class="form-input"
+                                ></lightning-input>
+                            </div>
+                            <div class="form-field">
+                                <label class="form-label" for="detalle">Detalles de la solicitud</label>
+                                <lightning-textarea
+                                    name="detalle"
+                                    value={detalle}
+                                    onchange={handleDetalleChange}
+                                    placeholder="Ej: 2 cámaras para el jardín trasero y 1 para la entrada principal..."
+                                    max-length="5000"
+                                    variant="label-hidden"
+                                    class="form-input"
+                                ></lightning-textarea>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Tab: Mis solicitudes -->
+                    <template lwc:if={isTabLista}>
+                        <template lwc:if={isLoadingSolicitudes}>
+                            <div class="loading-container">
+                                <lightning-spinner alternative-text="Cargando..." size="small"></lightning-spinner>
+                            </div>
+                        </template>
+                        <template lwc:elseif={hasSolicitudes}>
+                            <div class="solicitudes-list">
+                                <template for:each={misSolicitudes} for:item="sol">
+                                    <div key={sol.Id} class="solicitud-card">
+                                        <div class="solicitud-header">
+                                            <span class="solicitud-name">{sol.Name}</span>
+                                            <span class={sol.badgeClass}>{sol.Estado__c}</span>
+                                        </div>
+                                        <div class="solicitud-detail">
+                                            <span class="solicitud-camaras">
+                                                <lightning-icon icon-name="utility:video" size="xx-small" class="solicitud-icon"></lightning-icon>
+                                                {sol.Numero_Camaras__c} cámaras
+                                            </span>
+                                            <span class="solicitud-fecha">{sol.fechaFormateada}</span>
+                                        </div>
+                                        <template lwc:if={sol.Detalle_Camaras__c}>
+                                            <p class="solicitud-desc">{sol.Detalle_Camaras__c}</p>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template lwc:else>
+                            <div class="empty-state">
+                                <lightning-icon icon-name="utility:info" size="small" class="empty-icon"></lightning-icon>
+                                <p>No tienes solicitudes de contratación</p>
+                            </div>
+                        </template>
+                    </template>
+                </div>
+
+                <!-- Footer -->
+                <template lwc:if={isTabNueva}>
+                    <div class="modal-footer">
+                        <lightning-button
+                            label="Cancelar"
+                            onclick={handleCloseModal}
+                            class="slds-m-right_small"
+                        ></lightning-button>
+                        <lightning-button
+                            label="Enviar solicitud"
+                            variant="brand"
+                            icon-name="utility:send"
+                            onclick={handleSubmit}
+                            disabled={isSubmitDisabled}
+                        ></lightning-button>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </template>
+</template>

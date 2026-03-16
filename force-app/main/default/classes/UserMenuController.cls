@@ -5,7 +5,7 @@
  * @author      OptiSecure Solutions
  * @date        2026-03-06
  */
-public with sharing class UserMenuController {
+public without sharing class UserMenuController {
 
     /**
      * Wrapper para devolver datos completos de perfil al LWC.
@@ -70,7 +70,6 @@ public with sharing class UserMenuController {
                 SELECT Name, Email, Phone, ContactId
                 FROM   User
                 WHERE  Id = :currentUserId
-                WITH   SECURITY_ENFORCED
                 LIMIT  1
             ];
 
@@ -86,7 +85,6 @@ public with sharing class UserMenuController {
                     SELECT AccountId
                     FROM   Contact
                     WHERE  Id = :u.ContactId
-                    WITH   SECURITY_ENFORCED
                     LIMIT  1
                 ];
                 if (!contacts.isEmpty() && contacts[0].AccountId != null) {
@@ -98,7 +96,6 @@ public with sharing class UserMenuController {
                                BillingPostalCode, BillingCountry
                         FROM   Account
                         WHERE  Id = :contacts[0].AccountId
-                        WITH   SECURITY_ENFORCED
                         LIMIT  1
                     ];
                     profile.accountName      = acc.Name;
@@ -121,13 +118,22 @@ public with sharing class UserMenuController {
             }
 
             // Conteo y lista de cámaras
-            List<Camara__c> cameraList = [
-                SELECT Id, Name, Zone__c, Activa__c
-                FROM   Camara__c
-                WHERE  OwnerId = :currentUserId
-                WITH   SECURITY_ENFORCED
-                ORDER BY Name
-            ];
+            List<Camara__c> cameraList;
+            if (u.ContactId != null) {
+                cameraList = [
+                    SELECT Id, Name, Zone__c, Activa__c
+                    FROM   Camara__c
+                    WHERE  Contacto__c = :u.ContactId
+                    ORDER BY Name
+                ];
+            } else {
+                cameraList = [
+                    SELECT Id, Name, Zone__c, Activa__c
+                    FROM   Camara__c
+                    WHERE  OwnerId = :currentUserId
+                    ORDER BY Name
+                ];
+            }
 
             profile.cameras = new List<CameraData>();
             Integer cameraActive = 0;
@@ -164,7 +170,6 @@ public with sharing class UserMenuController {
             Camara__c cam = [
                 SELECT Id FROM Camara__c
                 WHERE  Id = :cameraId
-                WITH   SECURITY_ENFORCED
                 LIMIT  1
             ];
             delete cam;
@@ -189,7 +194,6 @@ public with sharing class UserMenuController {
                 SELECT Name, Email, Phone, ContactId
                 FROM   User
                 WHERE  Id = :currentUserId
-                WITH   SECURITY_ENFORCED
                 LIMIT  1
             ];
 
@@ -211,7 +215,6 @@ public with sharing class UserMenuController {
                     SELECT AccountId
                     FROM   Contact
                     WHERE  Id = :u.ContactId
-                    WITH   SECURITY_ENFORCED
                     LIMIT  1
                 ];
                 if (!contacts.isEmpty() && contacts[0].AccountId != null) {
@@ -256,5 +259,39 @@ public with sharing class UserMenuController {
             result += parts[parts.size() - 1].substring(0, 1).toUpperCase();
         }
         return result;
+    }
+
+    /**
+     * @description Renombra una cámara. Solo el propietario puede renombrar sus cámaras.
+     * @param cameraId Id de la cámara.
+     * @param newName  Nuevo nombre.
+     */
+    @AuraEnabled
+    public static void renameCamera(Id cameraId, String newName) {
+        if (String.isBlank(newName)) {
+            AuraHandledException ex = new AuraHandledException('El nombre no puede estar vacío.');
+            ex.setMessage('El nombre no puede estar vacío.');
+            throw ex;
+        }
+        User currentUser = [SELECT ContactId FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+        List<Camara__c> cams;
+        if (currentUser.ContactId != null) {
+            cams = [SELECT Id FROM Camara__c WHERE Id = :cameraId AND Contacto__c = :currentUser.ContactId LIMIT 1];
+        } else {
+            cams = [SELECT Id FROM Camara__c WHERE Id = :cameraId LIMIT 1];
+        }
+        if (cams.isEmpty()) {
+            AuraHandledException ex = new AuraHandledException('No tienes acceso a esta cámara.');
+            ex.setMessage('No tienes acceso a esta cámara.');
+            throw ex;
+        }
+        try {
+            cams[0].Name = newName.trim();
+            update cams[0];
+        } catch (Exception e) {
+            AuraHandledException ex = new AuraHandledException('Error al renombrar: ' + e.getMessage());
+            ex.setMessage('Error al renombrar: ' + e.getMessage());
+            throw ex;
+        }
     }
 }

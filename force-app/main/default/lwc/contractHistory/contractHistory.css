@@ -1,0 +1,166 @@
+/* ═══════════════════════════════════════════
+   Contract History — Historial de solicitudes
+   ═══════════════════════════════════════════ */
+
+/* ── Barra de filtros ── */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.filter-btn {
+    padding: 0.3rem 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 9999px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.filter-btn:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.filter-btn--active {
+    background: #1e3a5f;
+    color: #fff;
+    border-color: #1e3a5f;
+}
+
+.filter-count {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+/* ── Lista ── */
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* ── Fila ── */
+.history-row {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr auto;
+    gap: 0.75rem;
+    align-items: start;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background: #fff;
+    transition: box-shadow 0.15s ease;
+}
+
+.history-row:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+}
+
+/* Columna izquierda */
+.history-row-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.history-name {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #1e293b;
+}
+
+/* Columna central */
+.history-row-mid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.history-field {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.78rem;
+    color: #475569;
+}
+
+.h-icon {
+    --slds-c-icon-color-foreground-default: #94a3b8;
+    flex-shrink: 0;
+}
+
+.history-camaras {
+    font-weight: 600;
+    color: #f59e0b;
+}
+
+/* Columna derecha */
+.history-row-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.1rem;
+}
+
+.history-label {
+    font-size: 0.68rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.history-date {
+    font-size: 0.75rem;
+    color: #475569;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+/* ── Badges ── */
+.badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    width: fit-content;
+}
+
+.badge-pending  { background: rgba(245,158,11,0.12);  color: #f59e0b; }
+.badge-review   { background: rgba(59,130,246,0.12);  color: #3b82f6; }
+.badge-approved { background: rgba(16,185,129,0.12);  color: #10b981; }
+.badge-rejected { background: rgba(239,68,68,0.12);   color: #ef4444; }
+.badge-completed{ background: rgba(100,116,139,0.12); color: #64748b; }
+
+/* ── Estado vacío ── */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+    text-align: center;
+}
+
+.empty-icon {
+    --slds-c-icon-color-foreground-default: #cbd5e1;
+    margin-bottom: 0.75rem;
+}
+
+.empty-text {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}

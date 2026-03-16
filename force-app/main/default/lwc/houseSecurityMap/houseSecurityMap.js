@@ -5,6 +5,11 @@ import isSystemAdmin from '@salesforce/apex/HouseMapController.isSystemAdmin';
 import saveDraggedCamera from '@salesforce/apex/HouseMapController.saveDraggedCamera';
 import updateCameraPosition from '@salesforce/apex/HouseMapController.updateCameraPosition';
 import deleteCamera from '@salesforce/apex/HouseMapController.deleteCamera';
+import renameCamera from '@salesforce/apex/UserMenuController.renameCamera';
+import getSolicitudAprobadaActiva from '@salesforce/apex/ContratacionCamaraController.getSolicitudAprobadaActiva';
+import completarSolicitud from '@salesforce/apex/ContratacionCamaraController.completarSolicitud';
+import saveCamarasContratadas from '@salesforce/apex/ContratacionCamaraController.saveCamarasContratadas';
+import getContactIdUsuarioActual from '@salesforce/apex/ContratacionCamaraController.getContactIdUsuarioActual';
 import PLANO_CASA from '@salesforce/resourceUrl/Plano_Casa_1';
 
 // ── Vídeos de reserva (se usan cuando la cámara no tiene Video_Url__c) ──
@@ -78,6 +83,20 @@ export default class HouseSecurityMap extends LightningElement {
     @track _isDraggingExisting = false; // Si se está reposicionando un pin ya existente
     @track _draggingExistingId = null;  // Id del pin existente que se reposiciona
 
+    // ── Contratación / Solicitud aprobada ──
+    @track hasSolicitudAprobada = false;
+    @track solicitudActiva = null;    // { solicitudId, nombre, numeroCamaras, contactId }
+    @track camarasRestantes = 0;
+    @track isSaving = false;          // Bloquea el botón guardar durante el DML
+    @track inlineMessage = '';        // Mensaje visible inline (por si los toasts no aparecen)
+    @track inlineMessageType = 'info'; // 'success' | 'error' | 'info'
+    _solicitudContactId = null;       // ContactId del portal user con solicitud aprobada
+
+    // ── Renombrar cámara en la sidebar ──
+    @track editingCameraId = null;
+    @track editingCameraName = '';
+    @track isRenaming = false;
+
     // ── Menú contextual (clic derecho) ──
     @track contextMenuVisible = false;
     @track contextMenuX = 0;
@@ -108,12 +127,19 @@ export default class HouseSecurityMap extends LightningElement {
                         'cam-list-item' +
                         (this.selectedCamera && this.selectedCamera.Id === cam.Id
                             ? ' cam-list-item--selected'
-                            : '')
+                            : ''),
+                    isEditing: this.editingCameraId === cam.Id
                 }));
             })
             .catch((error) => {
                 this.cameras = [];
+                const msg = error && error.body ? error.body.message : 'Error al cargar cámaras';
                 console.error('Error al cargar cámaras:', JSON.stringify(error));
+                this.inlineMessage = 'Error al cargar cámaras: ' + msg;
+                this.inlineMessageType = 'error';
+                this.dispatchEvent(
+                    new ShowToastEvent({ title: 'Error al cargar cámaras', message: msg, variant: 'error' })
+                );
             })
             .finally(() => {
                 this.isLoading = false;
@@ -142,10 +168,25 @@ export default class HouseSecurityMap extends LightningElement {
             this._updateDateTime();
         }, 1000);
 
-        // Carga inicial de cámaras
-        this.loadCameras();
+        // Para usuarios de portal: obtener su ContactId y filtrar siempre sus cámaras
+        // Para admins: ContactId = null → ven todas las cámaras
+        getContactIdUsuarioActual()
+            .then((contactId) => {
+                if (contactId) {
+                    this._contactId = contactId;
+                    this._solicitudContactId = contactId;
+                }
+                // Carga inicial de cámaras (ya con el filtro correcto si es portal)
+                this.loadCameras();
+                // Comprobar solicitud aprobada activa (activa drag&drop si procede)
+                this._checkSolicitudAprobada();
+            })
+            .catch(() => {
+                // Si falla (ej. admin sin contacto) cargamos sin filtro
+                this.loadCameras();
+                this._checkSolicitudAprobada();
+            });
 
-        // Cerrar pantalla completa con ESC y cerrar menú contextual al hacer clic
         this._boundHandleKeyDown = this._handleKeyDown.bind(this);
         this._boundCloseContextMenu = this._closeContextMenu.bind(this);
         // eslint-disable-next-line @lwc/lwc/no-document-query
@@ -198,9 +239,52 @@ export default class HouseSecurityMap extends LightningElement {
         return `top: ${this.contextMenuY}px; left: ${this.contextMenuX}px;`;
     }
 
+    /** True si el usuario puede arrastrar chinchetas (admin o solicitud aprobada) */
+    get canDragDrop() {
+        return this.isAdmin || this.hasSolicitudAprobada;
+    }
+
+    /** True si se debe mostrar la bandeja de drag & drop */
+    get showDragTray() {
+        return this.isAdmin || this.hasSolicitudAprobada;
+    }
+
+    /** Solo el admin puede añadir chinchetas ilimitadas; el usuario con ticket no */
+    get showAddPinButton() {
+        return this.isAdmin;
+    }
+
+    /** Label dinámico del botón guardar */
+    get saveButtonLabel() {
+        return this.isSaving ? 'Guardando...' : 'Guardar chinchetas';
+    }
+
+    /** Texto de info para el usuario con solicitud aprobada */
+    get solicitudInfoText() {
+        if (!this.hasSolicitudAprobada) return '';
+        return `Solicitud ${this.solicitudActiva.nombre} — Coloca ${this.camarasRestantes} cámara(s) en el mapa`;
+    }
+
     /** Devuelve "true" o "false" como string para el atributo draggable del HTML */
     get draggableAttr() {
-        return this.isAdmin ? 'true' : 'false';
+        return this.canDragDrop ? 'true' : 'false';
+    }
+
+    /** Clase CSS del mensaje inline según el tipo */
+    get inlineMessageClass() {
+        return `inline-msg inline-msg--${this.inlineMessageType}`;
+    }
+
+    /** True si hay mensaje inline visible */
+    get showInlineMessage() {
+        return !!this.inlineMessage;
+    }
+
+    /** Icono para el mensaje inline */
+    get inlineMessageIcon() {
+        if (this.inlineMessageType === 'error') return 'utility:error';
+        if (this.inlineMessageType === 'success') return 'utility:success';
+        return 'utility:info';
     }
 
     // ═══════════════════════════════════════════
@@ -340,7 +424,7 @@ export default class HouseSecurityMap extends LightningElement {
 
     /** Inicio del arrastre de un pin de cámara existente de la BBDD */
     handleExistingCameraDragStart(event) {
-        if (!this.isAdmin) return;
+        if (!this.canDragDrop) return;
         event.stopPropagation();
         const camId = event.currentTarget.dataset.id;
         this._draggedPinId = camId;
@@ -352,7 +436,7 @@ export default class HouseSecurityMap extends LightningElement {
 
     /** DragOver sobre el mapa — necesario para permitir el drop */
     handleDragOver(event) {
-        if (!this.isAdmin) return;
+        if (!this.canDragDrop) return;
         event.preventDefault();
         event.dataTransfer.dropEffect = 'move';
         this.isDragOver = true;
@@ -365,7 +449,7 @@ export default class HouseSecurityMap extends LightningElement {
 
     /** Drop sobre el mapa */
     handleDrop(event) {
-        if (!this.isAdmin) return;
+        if (!this.canDragDrop) return;
         event.preventDefault();
         this.isDragOver = false;
 
@@ -431,27 +515,102 @@ export default class HouseSecurityMap extends LightningElement {
 
     /** Guarda todas las chinchetas soltadas como cámaras en Salesforce */
     handleSaveDroppedPins() {
-        const promises = this.droppedPins.map((pin) =>
-            saveDraggedCamera({
+        if (this.isSaving || !this.droppedPins.length) return;
+        this.isSaving = true;
+
+        if (this.hasSolicitudAprobada && this.solicitudActiva) {
+            // ── Flujo de contratación: guardar con método específico para portal ──
+            const camarasData = this.droppedPins.map((pin) => ({
                 name: pin.name,
                 posX: parseFloat(pin.posX),
                 posY: parseFloat(pin.posY),
                 videoUrl: pin.embedUrl
-            })
-        );
+            }));
 
-        Promise.all(promises)
-            .then(() => {
-                this.droppedPins = [];
-                return this.loadCameras();
+            saveCamarasContratadas({
+                solicitudId: this.solicitudActiva.solicitudId,
+                camarasJson: JSON.stringify(camarasData)
             })
-            .catch((err) => {
-                console.error('Error al guardar chinchetas:', JSON.stringify(err));
-            });
+                .then(() => {
+                    this.droppedPins = [];
+                    // Mantener _contactId = solicitudContactId para que loadCameras
+                    // muestre las cámaras del portal user al recargar
+                    this._contactId = this._solicitudContactId;
+                    this.hasSolicitudAprobada = false;
+                    this.solicitudActiva = null;
+                    this.camarasRestantes = 0;
+                    this.draggablePins = [];
+                    this.inlineMessage = '¡Cámaras guardadas! Cargando tu mapa...';
+                    this.inlineMessageType = 'success';
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Contratación completada',
+                            message: 'Tus cámaras han sido colocadas correctamente.',
+                            variant: 'success'
+                        })
+                    );
+                    this.loadCameras();
+                })
+                .catch((err) => {
+                    const msg = err && err.body ? err.body.message : (err ? err.message : 'Error desconocido');
+                    this.inlineMessage = 'Error al guardar cámaras: ' + msg;
+                    this.inlineMessageType = 'error';
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Error al guardar cámaras',
+                            message: msg,
+                            variant: 'error',
+                            mode: 'sticky'
+                        })
+                    );
+                })
+                .finally(() => {
+                    this.isSaving = false;
+                });
+
+        } else {
+            // ── Flujo admin: guardar cámaras una a una ──
+            const promises = this.droppedPins.map((pin) =>
+                saveDraggedCamera({
+                    name: pin.name,
+                    posX: parseFloat(pin.posX),
+                    posY: parseFloat(pin.posY),
+                    videoUrl: pin.embedUrl
+                })
+            );
+
+            Promise.all(promises)
+                .then(() => {
+                    this.droppedPins = [];
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Cámaras guardadas',
+                            message: 'Las cámaras se han añadido al mapa correctamente.',
+                            variant: 'success'
+                        })
+                    );
+                    this.loadCameras();
+                })
+                .catch((err) => {
+                    const msg = err && err.body ? err.body.message : (err ? err.message : 'Error desconocido');
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Error al guardar cámaras',
+                            message: msg,
+                            variant: 'error',
+                            mode: 'sticky'
+                        })
+                    );
+                })
+                .finally(() => {
+                    this.isSaving = false;
+                });
+        }
     }
 
-    /** Añade una nueva chincheta a la bandeja */
+    /** Añade una nueva chincheta a la bandeja (solo admin) */
     handleAddPin() {
+        if (!this.isAdmin) return;
         this._pinCounter++;
         const videoId = _randomVideoId();
         this.draggablePins = [
@@ -492,6 +651,44 @@ export default class HouseSecurityMap extends LightningElement {
             pins.push({
                 id: `pin-${this._pinCounter}`,
                 name: `Cámara nueva ${i}`,
+                videoId: videoId,
+                thumbnailUrl: _thumbnailUrl(videoId),
+                embedUrl: _embedUrl(videoId)
+            });
+        }
+        this.draggablePins = pins;
+    }
+
+    /** Comprueba si el usuario portal tiene una solicitud aprobada activa */
+    _checkSolicitudAprobada() {
+        getSolicitudAprobadaActiva()
+            .then((result) => {
+                if (result) {
+                    this.hasSolicitudAprobada = true;
+                    this.solicitudActiva = result;
+                    this.camarasRestantes = result.numeroCamaras;
+                    // Garantizar que _contactId y _solicitudContactId están seteados
+                    if (result.contactId) {
+                        this._contactId = result.contactId;
+                        this._solicitudContactId = result.contactId;
+                    }
+                    this._initSolicitudPins(result.numeroCamaras);
+                }
+            })
+            .catch((err) => {
+                console.error('Error al comprobar solicitud aprobada:', JSON.stringify(err));
+            });
+    }
+
+    /** Inicializa N chinchetas para el usuario con solicitud aprobada */
+    _initSolicitudPins(numCamaras) {
+        const pins = [];
+        for (let i = 1; i <= numCamaras; i++) {
+            this._pinCounter++;
+            const videoId = _randomVideoId();
+            pins.push({
+                id: `pin-${this._pinCounter}`,
+                name: `Cámara contratada ${i}`,
                 videoId: videoId,
                 thumbnailUrl: _thumbnailUrl(videoId),
                 embedUrl: _embedUrl(videoId)
@@ -572,6 +769,68 @@ export default class HouseSecurityMap extends LightningElement {
         if (this.contextMenuVisible) {
             this.contextMenuVisible = false;
         }
+    }
+
+    // ═══════════════════════════════════════════
+    //  RENOMBRAR CÁMARA — Sidebar derecha
+    // ═══════════════════════════════════════════
+
+    handleStartRename(event) {
+        event.stopPropagation();
+        this.editingCameraId   = event.currentTarget.dataset.id;
+        this.editingCameraName = event.currentTarget.dataset.name;
+        this.cameras = this.cameras.map((c) => ({
+            ...c,
+            isEditing: c.Id === this.editingCameraId
+        }));
+    }
+
+    handleRenameInputChange(event) {
+        this.editingCameraName = event.detail.value;
+    }
+
+    handleRenameInputClick(event) {
+        event.stopPropagation();
+    }
+
+    handleCancelRename(event) {
+        event.stopPropagation();
+        this.editingCameraId   = null;
+        this.editingCameraName = '';
+        this.cameras = this.cameras.map((c) => ({ ...c, isEditing: false }));
+    }
+
+    handleConfirmRename(event) {
+        event.stopPropagation();
+        const newName   = (this.editingCameraName || '').trim();
+        const cameraId  = this.editingCameraId;
+        if (!newName || !cameraId) return;
+        this.isRenaming = true;
+        renameCamera({ cameraId, newName })
+            .then(() => {
+                this.editingCameraId   = null;
+                this.editingCameraName = '';
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Nombre actualizado',
+                        message: `La cámara se ha renombrado a "${newName}".`,
+                        variant: 'success'
+                    })
+                );
+                this.loadCameras();
+            })
+            .catch((err) => {
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Error al renombrar',
+                        message: err.body ? err.body.message : 'Error desconocido',
+                        variant: 'error'
+                    })
+                );
+            })
+            .finally(() => {
+                this.isRenaming = false;
+            });
     }
 
     _updateDateTime() {

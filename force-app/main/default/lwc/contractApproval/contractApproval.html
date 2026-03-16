@@ -1,0 +1,87 @@
+<template>
+    <lightning-card title="Solicitudes de Contratación" icon-name="utility:package">
+        <lightning-button-icon
+            slot="actions"
+            icon-name="utility:refresh"
+            alternative-text="Refrescar"
+            onclick={handleRefresh}
+        ></lightning-button-icon>
+
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+
+            <!-- Cargando -->
+            <template lwc:if={isLoading}>
+                <div class="slds-align_absolute-center slds-p-around_large">
+                    <lightning-spinner alternative-text="Cargando..." size="small"></lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Lista de solicitudes -->
+            <template lwc:elseif={hasSolicitudes}>
+                <div class="solicitudes-grid">
+                    <template for:each={solicitudes} for:item="sol">
+                        <div key={sol.Id} class="sol-card">
+                            <div class="sol-card-header">
+                                <div class="sol-card-title-row">
+                                    <span class="sol-card-name">{sol.Name}</span>
+                                    <span class={sol.badgeClass}>{sol.Estado__c}</span>
+                                </div>
+                                <span class="sol-card-fecha">{sol.fechaFormateada}</span>
+                            </div>
+
+                            <div class="sol-card-body">
+                                <div class="sol-card-field">
+                                    <lightning-icon icon-name="utility:user" size="xx-small" class="sol-field-icon"></lightning-icon>
+                                    <span class="sol-field-label">Solicitante:</span>
+                                    <span class="sol-field-value">{sol.solicitante}</span>
+                                </div>
+                                <div class="sol-card-field">
+                                    <lightning-icon icon-name="utility:company" size="xx-small" class="sol-field-icon"></lightning-icon>
+                                    <span class="sol-field-label">Cuenta:</span>
+                                    <span class="sol-field-value">{sol.cuenta}</span>
+                                </div>
+                                <div class="sol-card-field">
+                                    <lightning-icon icon-name="utility:video" size="xx-small" class="sol-field-icon"></lightning-icon>
+                                    <span class="sol-field-label">Cámaras:</span>
+                                    <span class="sol-field-value sol-field-value--highlight">{sol.Numero_Camaras__c}</span>
+                                </div>
+                                <template lwc:if={sol.Detalle_Camaras__c}>
+                                    <div class="sol-card-detail">
+                                        <p class="sol-detail-text">{sol.Detalle_Camaras__c}</p>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <div class="sol-card-actions">
+                                <lightning-button
+                                    label="Aprobar"
+                                    variant="success"
+                                    icon-name="utility:check"
+                                    data-id={sol.Id}
+                                    onclick={handleAprobar}
+                                    class="slds-m-right_x-small"
+                                ></lightning-button>
+                                <lightning-button
+                                    label="Rechazar"
+                                    variant="destructive"
+                                    icon-name="utility:close"
+                                    data-id={sol.Id}
+                                    onclick={handleRechazar}
+                                ></lightning-button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <!-- Vacío -->
+            <template lwc:else>
+                <div class="empty-state">
+                    <lightning-icon icon-name="utility:check" size="large" class="empty-icon"></lightning-icon>
+                    <h3 class="empty-title">Sin solicitudes pendientes</h3>
+                    <p class="empty-subtitle">No hay solicitudes de contratación por revisar.</p>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -120,11 +120,53 @@
                                     class="slds-m-right_x-small cam-list-icon"
                                 ></lightning-icon>
                                 <div class="cam-list-info">
-                                    <span class="cam-list-name">{cam.Name}</span>
-                                    <span class="cam-list-zone">{cam.Zone__c}</span>
+                                    <template lwc:if={cam.isEditing}>
+                                        <lightning-input
+                                            type="text"
+                                            value={editingCameraName}
+                                            variant="label-hidden"
+                                            label=""
+                                            class="cam-rename-input"
+                                            onchange={handleRenameInputChange}
+                                            onclick={handleRenameInputClick}
+                                        ></lightning-input>
+                                    </template>
+                                    <template lwc:else>
+                                        <span class="cam-list-name">{cam.Name}</span>
+                                    </template>
                                 </div>
                             </div>
-                            <lightning-badge label="ONLINE" class="badge-online"></lightning-badge>
+                            <div class="cam-list-actions">
+                                <template lwc:if={cam.isEditing}>
+                                    <button
+                                        class="cam-rename-confirm-btn"
+                                        onclick={handleConfirmRename}
+                                        disabled={isRenaming}
+                                        title="Guardar nombre"
+                                    >
+                                        <lightning-icon icon-name="utility:check" size="xx-small" alternative-text="Guardar"></lightning-icon>
+                                    </button>
+                                    <button
+                                        class="cam-rename-cancel-btn"
+                                        onclick={handleCancelRename}
+                                        title="Cancelar"
+                                    >
+                                        <lightning-icon icon-name="utility:close" size="xx-small" alternative-text="Cancelar"></lightning-icon>
+                                    </button>
+                                </template>
+                                <template lwc:else>
+                                    <lightning-badge label="ONLINE" class="badge-online"></lightning-badge>
+                                    <button
+                                        class="cam-rename-btn"
+                                        onclick={handleStartRename}
+                                        data-id={cam.Id}
+                                        data-name={cam.Name}
+                                        title="Editar nombre"
+                                    >
+                                        <lightning-icon icon-name="utility:edit" size="xx-small" alternative-text="Editar"></lightning-icon>
+                                    </button>
+                                </template>
+                            </div>
                         </div>
                     </template>
                 </template>
@@ -137,19 +179,29 @@
                 </template>
             </div>
 
-            <!-- ─── ZONA DRAG & DROP — Solo admins ─── -->
-            <template lwc:if={isAdmin}>
+            <!-- ─── ZONA DRAG & DROP — Admins / Solicitud aprobada ─── -->
+            <template lwc:if={showDragTray}>
                 <div class="drag-tray">
+                    <!-- Banner de solicitud aprobada (solo usuarios con ticket) -->
+                    <template lwc:if={hasSolicitudAprobada}>
+                        <div class="solicitud-banner">
+                            <lightning-icon icon-name="utility:success" size="xx-small" class="solicitud-banner-icon"></lightning-icon>
+                            <span class="solicitud-banner-text">{solicitudInfoText}</span>
+                        </div>
+                    </template>
+
                     <div class="drag-tray-header">
                         <lightning-icon icon-name="utility:drag_and_drop" size="x-small" class="drag-tray-icon"></lightning-icon>
-                        <h3 class="drag-tray-title">Chinchetas</h3>
-                        <lightning-button-icon
-                            icon-name="utility:add"
-                            alternative-text="Añadir chincheta"
-                            size="small"
-                            onclick={handleAddPin}
-                            class="drag-tray-add-btn"
-                        ></lightning-button-icon>
+                        <h3 class="drag-tray-title">Cámaras</h3>
+                        <template lwc:if={showAddPinButton}>
+                            <lightning-button-icon
+                                icon-name="utility:add"
+                                alternative-text="Añadir chincheta"
+                                size="small"
+                                onclick={handleAddPin}
+                                class="drag-tray-add-btn"
+                            ></lightning-button-icon>
+                        </template>
                     </div>
                     <p class="drag-tray-hint">Arrastra y suelta sobre el mapa</p>
 
@@ -187,12 +239,25 @@
                     <!-- Botón Guardar chinchetas soltadas -->
                     <template lwc:if={hasDroppedPins}>
                         <lightning-button
-                            label="Guardar chinchetas"
+                            label={saveButtonLabel}
                             variant="brand"
                             icon-name="utility:save"
                             onclick={handleSaveDroppedPins}
+                            disabled={isSaving}
                             class="slds-m-top_small drag-tray-save-btn"
                         ></lightning-button>
+                    </template>
+
+                    <!-- Mensaje inline de estado (backup para cuando los toasts no aparecen) -->
+                    <template lwc:if={showInlineMessage}>
+                        <div class={inlineMessageClass}>
+                            <lightning-icon
+                                icon-name={inlineMessageIcon}
+                                size="xx-small"
+                                class="slds-m-right_xx-small"
+                            ></lightning-icon>
+                            <span>{inlineMessage}</span>
+                        </div>
                     </template>
                 </div>
             </template>
@@ -237,6 +302,7 @@
                 <span>OPTISECURE — Mapa de Seguridad Interactivo</span>
             </div>
             <div class="footer-right">
+                <c-camera-contract-request></c-camera-contract-request>
                 <c-case-viewer></c-case-viewer>
                 <c-voice-assistant></c-voice-assistant>
                 <c-camera-incident-report></c-camera-incident-report>
