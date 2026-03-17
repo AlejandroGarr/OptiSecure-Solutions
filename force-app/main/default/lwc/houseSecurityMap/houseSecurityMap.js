@@ -256,7 +256,7 @@ export default class HouseSecurityMap extends LightningElement {
 
     /** Label dinámico del botón guardar */
     get saveButtonLabel() {
-        return this.isSaving ? 'Guardando...' : 'Guardar chinchetas';
+        return this.isSaving ? 'Guardando...' : 'Guardar cámaras';
     }
 
     /** Texto de info para el usuario con solicitud aprobada */
