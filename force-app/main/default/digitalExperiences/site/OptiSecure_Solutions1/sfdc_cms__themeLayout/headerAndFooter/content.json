@@ -35,53 +35,8 @@
         "type" : "region"
       }, {
         "children" : [ {
-          "attributes" : {
-            "height" : 50,
-            "imageInfo" : "{}",
-            "imageOverlayColor" : "rgba(0,0,0,0)",
-            "logoLocation" : "center",
-            "logoWidth" : 75,
-            "menuStyle" : "hamburger",
-            "showLogo" : true
-          },
-          "children" : [ {
-            "children" : [ {
-              "attributes" : {
-                "menuAlignment" : "left",
-                "menuSpacing" : "none",
-                "menuStyle" : "horizontal",
-                "showHomeLink" : true,
-                "textDecoration" : "none",
-                "visibleMenuItemsCount" : 10
-              },
-              "definition" : "community_navigation:multiLevelNavigationWrapper",
-              "id" : "33e3c90b-0293-403e-8eaa-391c68762792",
-              "type" : "component"
-            } ],
-            "id" : "0bd5a5c7-d88d-4dc2-a866-33433b95cb64",
-            "name" : "horizontalNavigation",
-            "title" : "Horizontal Nav Menu",
-            "type" : "region"
-          }, {
-            "children" : [ {
-              "attributes" : {
-                "menuAlignment" : "left",
-                "menuSpacing" : "none",
-                "menuStyle" : "hamburger",
-                "showHomeLink" : true,
-                "textDecoration" : "none",
-                "visibleMenuItemsCount" : 10
-              },
-              "definition" : "community_navigation:multiLevelNavigationWrapper",
-              "id" : "9e0a8ccd-3c16-46ee-813f-03589eac33c0",
-              "type" : "component"
-            } ],
-            "id" : "7232e288-7122-4ca7-bceb-a9c40821b4fa",
-            "name" : "hamburgerNavigation",
-            "title" : "Hamburger Nav Menu",
-            "type" : "region"
-          } ],
-          "definition" : "dxp_content_layout:header",
+          "attributes" : { },
+          "definition" : "c:customUserMenu",
           "id" : "32a98669-e8b4-4098-984f-3ae78374aff4",
           "type" : "component"
         } ],

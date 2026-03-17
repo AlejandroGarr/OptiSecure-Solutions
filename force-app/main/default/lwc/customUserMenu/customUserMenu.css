@@ -4,6 +4,16 @@
    ═══════════════════════════════════════════════════════ */
 
 /* ─── MODAL CONTAINER ─── */
+.slds-modal {
+    z-index: 10000 !important;
+    position: fixed !important;
+}
+
+.slds-backdrop {
+    z-index: 9999 !important;
+    position: fixed !important;
+}
+
 .slds-modal__container {
     height: auto;
 }

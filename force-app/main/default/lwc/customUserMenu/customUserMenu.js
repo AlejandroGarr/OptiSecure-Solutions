@@ -41,8 +41,44 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
     //  LIFECYCLE
     // ═══════════════════════════════════════════
 
+    _globalStyleEl = null;
+
     connectedCallback() {
         this.loadProfile();
+    }
+
+    disconnectedCallback() {
+        this._removeGlobalOverlay();
+    }
+
+    _applyGlobalOverlay() {
+        if (this._globalStyleEl) return;
+        const style = document.createElement('style');
+        style.setAttribute('data-profile-overlay', 'true');
+        style.textContent = `
+            c-custom-user-menu {
+                z-index: 999999 !important;
+                position: relative !important;
+            }
+            c-house-security-map,
+            c-camara,
+            c-web-cam,
+            c-voice-assistant,
+            c-camera-incident-report,
+            c-camera-contract-request {
+                z-index: 0 !important;
+                position: relative !important;
+            }
+        `;
+        document.head.appendChild(style);
+        this._globalStyleEl = style;
+    }
+
+    _removeGlobalOverlay() {
+        if (this._globalStyleEl) {
+            this._globalStyleEl.remove();
+            this._globalStyleEl = null;
+        }
     }
 
     /** Carga los datos de perfil de forma imperativa (sin caché). */
@@ -160,6 +196,7 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
         switch (selected) {
             case 'profile':
                 this.isProfileModalOpen = true;
+                this._applyGlobalOverlay();
                 break;
 
             case 'contract':
@@ -168,6 +205,7 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
                     { id: '1', label: 'Cámara 1', name: '', location: '', showRemove: false }
                 ];
                 this.isContractModalOpen = true;
+                this._applyGlobalOverlay();
                 break;
 
             case 'logout':
@@ -182,6 +220,7 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
     /** Cierra el modal de perfil */
     handleCloseModal() {
         this.isProfileModalOpen = false;
+        this._removeGlobalOverlay();
     }
 
     // ═══════════════════════════════════════════
@@ -202,6 +241,7 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
 
     handleCloseContractModal() {
         this.isContractModalOpen = false;
+        this._removeGlobalOverlay();
     }
 
     handleContractFieldChange(event) {
@@ -271,6 +311,7 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
                     })
                 );
                 this.isContractModalOpen = false;
+                this._removeGlobalOverlay();
             })
             .catch(error => {
                 this.dispatchEvent(
