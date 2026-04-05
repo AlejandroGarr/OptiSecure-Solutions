@@ -14,10 +14,10 @@ import PLANO_CASA from '@salesforce/resourceUrl/Plano_Casa_1';
 
 // ── Vídeos de reserva (se usan cuando la cámara no tiene Video_Url__c) ──
 const FALLBACK_VIDEOS = [
-    'https://www.youtube.com/embed/mKCieTImjvU?autoplay=1&mute=1&controls=0&loop=1&playlist=mKCieTImjvU',
-    'https://www.youtube.com/embed/fO9e9jnhYK8?autoplay=1&mute=1&controls=0&loop=1&playlist=fO9e9jnhYK8',
-    'https://www.youtube.com/embed/rnXIjl_Rzy4?autoplay=1&mute=1&controls=0&loop=1&playlist=rnXIjl_Rzy4',
-    'https://www.youtube.com/embed/UUhTr19MH0k?autoplay=1&mute=1&controls=0&loop=1&playlist=UUhTr19MH0k'
+    'https://leena-menopausal-weepily.ngrok-free.dev/video_feed',
+    'https://leena-menopausal-weepily.ngrok-free.dev/video_feed',
+    'https://leena-menopausal-weepily.ngrok-free.dev/video_feed',
+    'https://leena-menopausal-weepily.ngrok-free.dev/video_feed'
 ];
 
 // ── IDs de vídeos de YouTube aleatorios para thumbnails de chinchetas ──
@@ -37,9 +37,9 @@ function _thumbnailUrl(videoId) {
     return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
 }
 
-/** Genera la URL de embed de YouTube */
+/** Genera la URL de embed del vídeo */
 function _embedUrl(videoId) {
-    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}`;
+    return 'https://leena-menopausal-weepily.ngrok-free.dev/video_feed';
 }
 
 /**

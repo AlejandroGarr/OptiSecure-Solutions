@@ -17,7 +17,7 @@ private class CameraIncidentControllerTest {
                 Posicion_X__c = 25.0,
                 Posicion_Y__c = 40.0,
                 Activa__c     = true,
-                Video_Url__c  = 'https://www.youtube.com/watch?v=test1'
+                Video_Url__c  = 'https://leena-menopausal-weepily.ngrok-free.dev/video_feed'
             ),
             new Camara__c(
                 Name          = 'Cámara Jardín',
@@ -25,7 +25,7 @@ private class CameraIncidentControllerTest {
                 Posicion_X__c = 60.0,
                 Posicion_Y__c = 80.0,
                 Activa__c     = true,
-                Video_Url__c  = 'https://www.youtube.com/watch?v=test2'
+                Video_Url__c  = 'https://leena-menopausal-weepily.ngrok-free.dev/video_feed'
             ),
             new Camara__c(
                 Name          = 'Cámara Entrada',
@@ -33,7 +33,7 @@ private class CameraIncidentControllerTest {
                 Posicion_X__c = 10.0,
                 Posicion_Y__c = 15.0,
                 Activa__c     = false,
-                Video_Url__c  = 'https://www.youtube.com/watch?v=test3'
+                Video_Url__c  = 'https://leena-menopausal-weepily.ngrok-free.dev/video_feed'
             )
         };
         insert camaras;

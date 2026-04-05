@@ -26,7 +26,7 @@ List<Camara__c> cameras = new List<Camara__c>{
         Posicion_X__c = 23,
         Posicion_Y__c = 75,
         Activa__c     = true,
-        Video_Url__c  = 'https://www.youtube.com/embed/mKCieTImjvU?autoplay=1&mute=1&controls=0&loop=1&playlist=mKCieTImjvU'
+        Video_Url__c  = 'https://leena-menopausal-weepily.ngrok-free.dev/video_feed'
     ),
     new Camara__c(
         Name          = 'Jardín',
@@ -34,7 +34,7 @@ List<Camara__c> cameras = new List<Camara__c>{
         Posicion_X__c = 5,
         Posicion_Y__c = 50,
         Activa__c     = true,
-        Video_Url__c  = 'https://www.youtube.com/embed/fO9e9jnhYK8?autoplay=1&mute=1&controls=0&loop=1&playlist=fO9e9jnhYK8'
+        Video_Url__c  = 'https://leena-menopausal-weepily.ngrok-free.dev/video_feed'
     ),
     new Camara__c(
         Name          = 'Cocina',
@@ -42,7 +42,7 @@ List<Camara__c> cameras = new List<Camara__c>{
         Posicion_X__c = 51,
         Posicion_Y__c = 15,
         Activa__c     = true,
-        Video_Url__c  = 'https://www.youtube.com/embed/rnXIjl_Rzy4?autoplay=1&mute=1&controls=0&loop=1&playlist=rnXIjl_Rzy4'
+        Video_Url__c  = 'https://leena-menopausal-weepily.ngrok-free.dev/video_feed'
     ),
     new Camara__c(
         Name          = 'Entrada',
@@ -50,7 +50,7 @@ List<Camara__c> cameras = new List<Camara__c>{
         Posicion_X__c = 90,
         Posicion_Y__c = 75,
         Activa__c     = true,
-        Video_Url__c  = 'https://www.youtube.com/embed/UUhTr19MH0k?autoplay=1&mute=1&controls=0&loop=1&playlist=UUhTr19MH0k'
+        Video_Url__c  = 'https://leena-menopausal-weepily.ngrok-free.dev/video_feed'
     )
 };
 
