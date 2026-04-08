@@ -206,3 +206,15 @@
     --slds-c-input-color-border: var(--color-border);
     --slds-c-input-text-color: var(--color-text);
 }
+
+/* ── Móvil: botón más estrecho ── */
+@media (max-width: 480px) {
+    .incident-trigger {
+        display: block;
+    }
+    .incident-trigger lightning-button {
+        --sds-c-button-sizing-width: 100%;
+        font-size: 0.7rem;
+        max-width: 140px;
+    }
+}

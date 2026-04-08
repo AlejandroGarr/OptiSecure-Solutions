@@ -1,0 +1,329 @@
+/* ═══════════════════════════════════════════════════════
+   SECURITY CLIP VIEWER — CSS
+   Tema oscuro consistente con houseSecurityMap
+═══════════════════════════════════════════════════════ */
+
+:host {
+    display: block;
+    --color-bg:         #0a0e1a;
+    --color-surface:    #111827;
+    --color-card:       #1a2035;
+    --color-border:     #1e293b;
+    --color-accent:     #3b82f6;
+    --color-accent-glow: rgba(59, 130, 246, 0.35);
+    --color-danger:     #ef4444;
+    --color-text:       #e2e8f0;
+    --color-text-dim:   #94a3b8;
+    --color-text-muted: #64748b;
+    --radius:           0.5rem;
+}
+
+/* ── Card override ── */
+lightning-card {
+    --slds-c-card-color-background: var(--color-surface);
+    --slds-c-card-heading-color: var(--color-text);
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.shield-icon {
+    --sds-c-icon-color-foreground-default: var(--color-accent);
+}
+
+/* ── Loading ── */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    gap: 1rem;
+}
+
+.loading-text {
+    color: var(--color-text-dim);
+    font-size: 0.85rem;
+}
+
+/* ── Error ── */
+.error-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: var(--radius);
+    margin: 1rem;
+}
+
+.error-text {
+    color: var(--color-danger);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* ── Clip list ── */
+.clip-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.clip-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.clip-list::-webkit-scrollbar-track {
+    background: var(--color-bg);
+}
+
+.clip-list::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+}
+
+/* ── Clip card ── */
+.clip-card {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.65rem 0.85rem;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.clip-card:hover {
+    border-color: var(--color-accent);
+    background: rgba(59, 130, 246, 0.06);
+    box-shadow: 0 0 12px var(--color-accent-glow);
+}
+
+/* ── Clip preview / thumbnail ── */
+.clip-preview {
+    position: relative;
+    width: 72px;
+    min-width: 72px;
+    height: 48px;
+    border-radius: 0.35rem;
+    overflow: hidden;
+    background: var(--color-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clip-preview-bg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+}
+
+.clip-video-icon {
+    --sds-c-icon-color-foreground-default: var(--color-accent);
+}
+
+.clip-play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    background: rgba(59, 130, 246, 0.85);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.clip-card:hover .clip-play-btn {
+    opacity: 1;
+}
+
+.play-icon {
+    --sds-c-icon-color-foreground-default: #fff;
+}
+
+.clip-duration {
+    position: absolute;
+    bottom: 2px;
+    right: 4px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 1px 4px;
+    border-radius: 2px;
+    line-height: 1.2;
+}
+
+/* ── Clip info ── */
+.clip-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.clip-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.clip-camera {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.7rem;
+    color: var(--color-accent);
+    margin: 0;
+}
+
+.cam-icon {
+    --sds-c-icon-color-foreground-default: var(--color-accent);
+}
+
+.clip-date {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.7rem;
+    color: var(--color-text-dim);
+    margin: 0;
+}
+
+.date-icon {
+    --sds-c-icon-color-foreground-default: var(--color-text-muted);
+}
+
+.clip-size {
+    font-size: 0.65rem;
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+/* ── Clip actions ── */
+.clip-actions {
+    display: flex;
+    align-items: center;
+}
+
+.download-btn {
+    --sds-c-icon-color-foreground-default: var(--color-text-dim);
+    transition: all 0.15s ease;
+}
+
+.download-btn:hover {
+    --sds-c-icon-color-foreground-default: var(--color-accent);
+}
+
+/* ── Empty state ── */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    text-align: center;
+}
+
+.empty-icon-wrapper {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(59, 130, 246, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.empty-icon {
+    --sds-c-icon-color-foreground-default: var(--color-accent);
+}
+
+.empty-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 0.5rem 0;
+}
+
+.empty-subtext {
+    font-size: 0.8rem;
+    color: var(--color-text-dim);
+    margin: 0;
+    max-width: 320px;
+    line-height: 1.5;
+}
+
+/* ── Modal ── */
+.modal-header {
+    background: var(--color-surface) !important;
+    border-bottom: 1px solid var(--color-border) !important;
+}
+
+.modal-title {
+    color: var(--color-text) !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+}
+
+.modal-subtitle {
+    color: var(--color-accent);
+    font-size: 0.8rem;
+    margin: 0.25rem 0 0 0;
+}
+
+.modal-content {
+    background: var(--color-bg) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem !important;
+}
+
+.clip-player {
+    width: 100%;
+    max-height: 70vh;
+    border-radius: var(--radius);
+    background: #000;
+}
+
+.modal-footer {
+    background: var(--color-surface) !important;
+    border-top: 1px solid var(--color-border) !important;
+}
+
+/* ── Refresh button ── */
+.refresh-btn {
+    --sds-c-icon-color-foreground-default: var(--color-text-dim);
+}
+
+.refresh-btn:hover {
+    --sds-c-icon-color-foreground-default: var(--color-accent);
+}

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Contacto__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Contacto propietario de la cámara de seguridad.</description>
     <label>Contacto</label>
-    <type>Lookup</type>
     <referenceTo>Contact</referenceTo>
     <relationshipLabel>Cámaras de Seguridad</relationshipLabel>
     <relationshipName>Camaras_Seguridad</relationshipName>
-    <deleteConstraint>SetNull</deleteConstraint>
     <required>false</required>
-    <description>Contacto propietario de la cámara de seguridad.</description>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
 </CustomField>

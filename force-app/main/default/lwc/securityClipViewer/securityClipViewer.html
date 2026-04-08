@@ -1,0 +1,166 @@
+<template>
+    <!-- ═══════════════════════════════════════════════════════
+         SECURITY CLIP VIEWER — OptiSecure Solutions
+         Muestra los clips grabados automáticamente por detección
+         de personas (YOLOv8) vinculados a las cámaras del usuario.
+    ═══════════════════════════════════════════════════════════ -->
+    <lightning-card icon-name="utility:video">
+        <span slot="title" class="card-title">
+            <lightning-icon icon-name="utility:shield" size="x-small" class="shield-icon"></lightning-icon>
+            Clips de Seguridad
+        </span>
+        <div slot="actions">
+            <lightning-button-icon
+                icon-name="utility:refresh"
+                alternative-text="Refrescar"
+                onclick={handleRefresh}
+                class="refresh-btn">
+            </lightning-button-icon>
+        </div>
+
+        <!-- Loading -->
+        <template lwc:if={isLoading}>
+            <div class="loading-container">
+                <lightning-spinner alternative-text="Cargando clips..." size="medium"></lightning-spinner>
+                <p class="loading-text">Cargando clips de seguridad...</p>
+            </div>
+        </template>
+
+        <!-- Error -->
+        <template lwc:if={error}>
+            <div class="error-container">
+                <lightning-icon icon-name="utility:error" size="small" variant="error"></lightning-icon>
+                <p class="error-text">{error}</p>
+            </div>
+        </template>
+
+        <!-- Clip list -->
+        <template lwc:if={showContent}>
+            <template lwc:if={hasClips}>
+                <div class="clip-list">
+                    <template for:each={formattedClips} for:item="clip">
+                        <div key={clip.contentVersionId}
+                             class="clip-card"
+                             onclick={handleClipClick}
+                             data-id={clip.contentVersionId}>
+
+                            <!-- Thumbnail / Preview -->
+                            <div class="clip-preview">
+                                <div class="clip-preview-bg">
+                                    <lightning-icon
+                                        icon-name="utility:video"
+                                        size="large"
+                                        class="clip-video-icon">
+                                    </lightning-icon>
+                                </div>
+                                <div class="clip-play-btn">
+                                    <lightning-icon
+                                        icon-name="utility:right"
+                                        size="small"
+                                        class="play-icon">
+                                    </lightning-icon>
+                                </div>
+                                <span class="clip-duration">8s</span>
+                            </div>
+
+                            <!-- Info -->
+                            <div class="clip-info">
+                                <p class="clip-title" title={clip.title}>{clip.title}</p>
+                                <template lwc:if={clip.cameraName}>
+                                    <p class="clip-camera">
+                                        <lightning-icon
+                                            icon-name="utility:checkin"
+                                            size="xx-small"
+                                            class="cam-icon">
+                                        </lightning-icon>
+                                        {clip.cameraName}
+                                    </p>
+                                </template>
+                                <p class="clip-date">
+                                    <lightning-icon
+                                        icon-name="utility:clock"
+                                        size="xx-small"
+                                        class="date-icon">
+                                    </lightning-icon>
+                                    {clip.formattedDate}
+                                </p>
+                                <p class="clip-size">{clip.formattedSize}</p>
+                            </div>
+
+                            <!-- Acciones -->
+                            <div class="clip-actions">
+                                <lightning-button-icon
+                                    icon-name="utility:download"
+                                    alternative-text="Descargar clip"
+                                    onclick={handleDownload}
+                                    data-url={clip.downloadUrl}
+                                    variant="bare"
+                                    size="small"
+                                    class="download-btn">
+                                </lightning-button-icon>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <!-- Empty state -->
+            <template lwc:else>
+                <div class="empty-state">
+                    <div class="empty-icon-wrapper">
+                        <lightning-icon
+                            icon-name="utility:shield"
+                            size="large"
+                            class="empty-icon">
+                        </lightning-icon>
+                    </div>
+                    <p class="empty-text">No hay clips de seguridad grabados</p>
+                    <p class="empty-subtext">
+                        Los clips se graban automáticamente cuando el sistema
+                        de IA (YOLOv8) detecta una persona en la cámara.
+                    </p>
+                </div>
+            </template>
+        </template>
+    </lightning-card>
+
+    <!-- ═══ MODAL: Reproductor de vídeo ═══ -->
+    <template lwc:if={showPlayer}>
+        <section class="slds-modal slds-fade-in-open slds-modal_large"
+                 role="dialog"
+                 aria-modal="true"
+                 aria-label="Reproductor de clip">
+            <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        onclick={handleClosePlayer}>
+                    <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                    <span class="slds-assistive-text">Cerrar</span>
+                </button>
+                <div class="slds-modal__header modal-header">
+                    <h2 class="slds-modal__title modal-title">{selectedClip.title}</h2>
+                    <template lwc:if={selectedClip.cameraName}>
+                        <p class="modal-subtitle">{selectedClip.cameraName}</p>
+                    </template>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium modal-content">
+                    <video controls autoplay class="clip-player" key={selectedClipUrl}>
+                        <source src={selectedClipUrl} type="video/mp4" />
+                        Tu navegador no soporta la reproducción de vídeo.
+                    </video>
+                </div>
+                <div class="slds-modal__footer modal-footer">
+                    <a href={selectedClipUrl}
+                       download
+                       class="slds-button slds-button_neutral">
+                        <lightning-icon icon-name="utility:download" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
+                        Descargar clip
+                    </a>
+                    <button class="slds-button slds-button_brand" onclick={handleClosePlayer}>
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" onclick={handleClosePlayer}></div>
+    </template>
+</template>

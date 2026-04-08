@@ -471,3 +471,15 @@
         transform: translateY(0) scale(1);
     }
 }
+
+/* ── Móvil: botón más estrecho ── */
+@media (max-width: 480px) {
+    .case-trigger {
+        display: block;
+    }
+    .case-trigger lightning-button {
+        --sds-c-button-sizing-width: 100%;
+        font-size: 0.7rem;
+        max-width: 140px;
+    }
+}

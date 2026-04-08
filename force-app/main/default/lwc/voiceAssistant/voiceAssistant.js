@@ -15,6 +15,8 @@ export default class VoiceAssistant extends LightningElement {
 
     _recognition = null;
     _micStream = null;
+    _silenceTimer = null;
+    _SILENCE_TIMEOUT = 3000;
 
     // ═══════════════════════════════════════════
     //  GETTERS
@@ -119,6 +121,7 @@ export default class VoiceAssistant extends LightningElement {
                     finalTranscript += event.results[i][0].transcript;
                 }
                 this.transcript = finalTranscript;
+                this._resetSilenceTimer();
             };
 
             this._recognition.onerror = (event) => {
@@ -143,12 +146,30 @@ export default class VoiceAssistant extends LightningElement {
     }
 
     _stopListening() {
+        this._clearSilenceTimer();
         if (this._recognition) {
             try { this._recognition.stop(); } catch (_e) { /* ignore */ }
             this._recognition = null;
         }
         this._releaseMic();
         this.isListening = false;
+    }
+
+    _resetSilenceTimer() {
+        this._clearSilenceTimer();
+        this._silenceTimer = setTimeout(() => {
+            if (this.isListening && this.hasTranscript) {
+                this._stopListening();
+                this.handleSendCommand();
+            }
+        }, this._SILENCE_TIMEOUT);
+    }
+
+    _clearSilenceTimer() {
+        if (this._silenceTimer) {
+            clearTimeout(this._silenceTimer);
+            this._silenceTimer = null;
+        }
     }
 
     _releaseMic() {
