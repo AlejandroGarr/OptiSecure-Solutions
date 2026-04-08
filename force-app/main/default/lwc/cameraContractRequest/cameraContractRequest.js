@@ -2,6 +2,7 @@ import { LightningElement, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import crearSolicitud from '@salesforce/apex/ContratacionCamaraController.crearSolicitud';
 import getMisSolicitudes from '@salesforce/apex/ContratacionCamaraController.getMisSolicitudes';
+import deleteSolicitud from '@salesforce/apex/ContratacionCamaraController.deleteSolicitud';
 
 const BADGE_MAP = {
     'Pendiente':   'badge badge-pending',
@@ -88,6 +89,26 @@ export default class CameraContractRequest extends LightningElement {
             .catch((err) => {
                 this.dispatchEvent(new ShowToastEvent({
                     title: 'Error al enviar',
+                    message: err.body ? err.body.message : err.message,
+                    variant: 'error'
+                }));
+            });
+    }
+
+    handleDeleteSolicitud(event) {
+        const solId = event.currentTarget.dataset.id;
+        deleteSolicitud({ solicitudId: solId })
+            .then(() => {
+                this.misSolicitudes = this.misSolicitudes.filter(s => s.Id !== solId);
+                this.dispatchEvent(new ShowToastEvent({
+                    title: 'Eliminada',
+                    message: 'La solicitud ha sido eliminada.',
+                    variant: 'success'
+                }));
+            })
+            .catch((err) => {
+                this.dispatchEvent(new ShowToastEvent({
+                    title: 'Error al eliminar',
                     message: err.body ? err.body.message : err.message,
                     variant: 'error'
                 }));

@@ -80,6 +80,18 @@ public with sharing class ContratacionCamaraController {
         ];
     }
 
+    @AuraEnabled
+    public static void deleteSolicitud(Id solicitudId) {
+        List<Solicitud_Camara__c> sols = [
+            SELECT Id FROM Solicitud_Camara__c
+            WHERE  Id = :solicitudId
+            LIMIT  1
+        ];
+        if (!sols.isEmpty()) {
+            delete sols;
+        }
+    }
+
     /**
      * @description Obtiene todas las solicitudes pendientes (para el admin).
      * @return      Lista de solicitudes con estado Pendiente o En Revision.

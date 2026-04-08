@@ -74,7 +74,18 @@
                                     <div key={sol.Id} class="solicitud-card">
                                         <div class="solicitud-header">
                                             <span class="solicitud-name">{sol.Name}</span>
-                                            <span class={sol.badgeClass}>{sol.Estado__c}</span>
+                                            <div class="solicitud-header-right">
+                                                <span class={sol.badgeClass}>{sol.Estado__c}</span>
+                                                <lightning-button-icon
+                                                    icon-name="utility:delete"
+                                                    alternative-text="Eliminar"
+                                                    variant="bare"
+                                                    size="small"
+                                                    data-id={sol.Id}
+                                                    onclick={handleDeleteSolicitud}
+                                                    class="delete-solicitud-btn">
+                                                </lightning-button-icon>
+                                            </div>
                                         </div>
                                         <div class="solicitud-detail">
                                             <span class="solicitud-camaras">

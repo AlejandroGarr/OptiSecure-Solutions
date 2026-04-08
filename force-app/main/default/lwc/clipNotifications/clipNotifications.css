@@ -165,6 +165,17 @@ lightning-card {
 
 .alert-action {
     margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.delete-alert-btn {
+    --sds-c-icon-color-foreground-default: var(--color-text-muted);
+    transition: color 0.2s;
+}
+.delete-alert-btn:hover {
+    --sds-c-icon-color-foreground-default: var(--color-danger);
 }
 
 /* ── Clip link button ── */

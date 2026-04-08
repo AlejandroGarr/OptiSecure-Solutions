@@ -57,6 +57,15 @@
                                         <lightning-icon icon-name="utility:play" size="xx-small" class="play-icon"></lightning-icon>
                                         Ver clip de seguridad
                                     </button>
+                                    <lightning-button-icon
+                                        icon-name="utility:delete"
+                                        alternative-text="Eliminar"
+                                        variant="bare"
+                                        size="small"
+                                        data-id={alert.taskId}
+                                        onclick={handleDeleteOne}
+                                        class="delete-alert-btn">
+                                    </lightning-button-icon>
                                 </div>
                             </div>
                         </div>
@@ -104,9 +113,6 @@
                 </div>
                 <div class="slds-modal__footer modal-footer">
                     <button class="slds-button slds-button_neutral" onclick={handleClosePlayer}>Cerrar</button>
-                    <button class="slds-button slds-button_brand" onclick={handleOpenExternal}>
-                        Abrir en nueva pestaña
-                    </button>
                 </div>
             </div>
         </section>

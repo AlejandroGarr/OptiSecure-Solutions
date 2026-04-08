@@ -141,6 +141,18 @@
     align-items: center;
     margin-bottom: 0.4rem;
 }
+.solicitud-header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.delete-solicitud-btn {
+    --sds-c-icon-color-foreground-default: #8a94a6;
+    transition: color 0.2s;
+}
+.delete-solicitud-btn:hover {
+    --sds-c-icon-color-foreground-default: #ef4444;
+}
 .solicitud-name {
     color: #fff;
     font-weight: 700;

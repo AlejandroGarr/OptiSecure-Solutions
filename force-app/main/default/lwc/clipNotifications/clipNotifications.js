@@ -1,5 +1,6 @@
 import { LightningElement, api } from 'lwc';
 import getRecentAlerts from '@salesforce/apex/SecurityClipController.getRecentAlerts';
+import deleteAlert from '@salesforce/apex/SecurityClipController.deleteAlert';
 
 export default class ClipNotifications extends LightningElement {
     @api recordId;
@@ -56,9 +57,17 @@ export default class ClipNotifications extends LightningElement {
         this.selectedAlert = null;
     }
 
-    handleOpenExternal() {
-        if (this.selectedAlert && this.selectedAlert.clipUrl) {
-            window.open(this.selectedAlert.clipUrl, '_blank');
+    async handleDeleteOne(event) {
+        const taskId = event.currentTarget.dataset.id;
+        try {
+            await deleteAlert({ taskId });
+            this.alerts = this.alerts.filter(a => a.taskId !== taskId);
+            if (this.selectedAlert && this.selectedAlert.taskId === taskId) {
+                this.selectedAlert = null;
+            }
+        } catch (err) {
+            this.error = err.body?.message || 'Error al eliminar la notificación';
+            console.error('ClipNotifications — delete error:', err);
         }
     }
 

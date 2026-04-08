@@ -194,11 +194,28 @@ public with sharing class SecurityClipController {
         return new AlertHelper().fetchAlerts();
     }
 
+    @AuraEnabled
+    public static void deleteAlert(Id taskId) {
+        new AlertHelper().removeAlert(taskId);
+    }
+
     /**
      * @description Helper without sharing para que usuarios portal
      *              puedan leer los Tasks de detección de personas.
      */
     private without sharing class AlertHelper {
+        public void removeAlert(Id taskId) {
+            List<Task> tasks = [
+                SELECT Id FROM Task
+                WHERE  Id = :taskId
+                AND    Subject LIKE '%Persona detectada%'
+                LIMIT  1
+            ];
+            if (!tasks.isEmpty()) {
+                delete tasks;
+            }
+        }
+
         public List<AlertInfo> fetchAlerts() {
             User currentUser = [
                 SELECT ContactId
