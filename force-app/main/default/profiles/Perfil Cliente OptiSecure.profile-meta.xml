@@ -25,6 +25,10 @@
         <apexClass>UserMenuController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>VoiceCommandController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <fieldPermissions>
         <editable>true</editable>
         <field>Camara__c.Activa__c</field>

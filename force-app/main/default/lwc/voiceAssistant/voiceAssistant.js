@@ -12,6 +12,8 @@ export default class VoiceAssistant extends LightningElement {
     @track aiResponse = null;
     @track errorMessage = '';
     @track isSuccess = false;
+    @track expandedCamera = null;
+    @track selectedNotification = null;
 
     _recognition = null;
     _micStream = null;
@@ -44,6 +46,22 @@ export default class VoiceAssistant extends LightningElement {
 
     get isSendDisabled() {
         return this.isProcessing || !this.hasTranscript;
+    }
+
+    get showCameraModal() {
+        return this.expandedCamera != null;
+    }
+
+    get showNotificationModal() {
+        return this.selectedNotification != null;
+    }
+
+    handleCloseCameraModal() {
+        this.expandedCamera = null;
+    }
+
+    handleCloseNotificationModal() {
+        this.selectedNotification = null;
     }
 
     // ═══════════════════════════════════════════
@@ -208,19 +226,51 @@ export default class VoiceAssistant extends LightningElement {
                 this.aiResponse = JSON.parse(result);
 
                 if (this.aiResponse.exito) {
-                    this.isSuccess = true;
-                    this.dispatchEvent(
-                        new ShowToastEvent({
-                            title: 'Comando Ejecutado',
-                            message: this.aiResponse.mensaje,
-                            variant: 'success',
-                            mode: 'dismissable'
-                        })
-                    );
+                    const accion = this.aiResponse.accion;
 
-                    this.dispatchEvent(new CustomEvent('voicecommand', {
-                        detail: { action: this.aiResponse.accion, recordId: this.aiResponse.recordId }
-                    }));
+                    // Acciones de UI: abrir cámara o notificación directamente
+                    if (accion === 'abrir_camara') {
+                        if (this.aiResponse.camara && this.aiResponse.camara.url) {
+                            this.expandedCamera = this.aiResponse.camara;
+                            this.isModalOpen = false;
+                        }
+                        this.isSuccess = true;
+                        this.dispatchEvent(
+                            new ShowToastEvent({
+                                title: 'Asistente de Voz',
+                                message: this.aiResponse.mensaje,
+                                variant: 'success',
+                                mode: 'dismissable'
+                            })
+                        );
+                    } else if (accion === 'abrir_notificacion') {
+                        if (this.aiResponse.notificacion && this.aiResponse.notificacion.clipUrl) {
+                            this.selectedNotification = this.aiResponse.notificacion;
+                            this.isModalOpen = false;
+                        }
+                        this.isSuccess = true;
+                        this.dispatchEvent(
+                            new ShowToastEvent({
+                                title: 'Asistente de Voz',
+                                message: this.aiResponse.mensaje,
+                                variant: 'success',
+                                mode: 'dismissable'
+                            })
+                        );
+                    } else {
+                        this.isSuccess = true;
+                        this.dispatchEvent(
+                            new ShowToastEvent({
+                                title: 'Comando Ejecutado',
+                                message: this.aiResponse.mensaje,
+                                variant: 'success',
+                                mode: 'dismissable'
+                            })
+                        );
+                        this.dispatchEvent(new CustomEvent('voicecommand', {
+                            detail: { action: accion, recordId: this.aiResponse.recordId }
+                        }));
+                    }
                 } else {
                     this.errorMessage = this.aiResponse.mensaje || 'No se pudo ejecutar el comando.';
                 }

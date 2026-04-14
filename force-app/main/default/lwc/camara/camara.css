@@ -398,6 +398,100 @@
     }
 }
 
+/* ─── MODAL CÁMARA AMPLIADA ─── */
+.cam-expanded-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cam-expanded-modal {
+    width: 90vw;
+    max-width: 1280px;
+    background: #0a0a0f;
+    border: 2px solid #1a3a5c;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(0, 120, 255, 0.25);
+}
+
+.cam-expanded-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: #111118;
+    border-bottom: 1px solid #1a3a5c;
+}
+
+.cam-expanded-label {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: #4fc3f7;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.cam-expanded-close {
+    background: transparent;
+    border: 1px solid #3a4a5a;
+    color: #c8d6e5;
+    font-size: 16px;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+}
+
+.cam-expanded-close:hover {
+    background: #c0392b;
+    color: #fff;
+    border-color: #c0392b;
+}
+
+.cam-expanded-stream {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    display: block;
+    border: none;
+}
+
+.cam-expanded-footer {
+    padding: 8px 16px;
+    background: #111118;
+    border-top: 1px solid #1a2a3a;
+}
+
+.cam-expanded-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    color: #5a6d80;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-family: 'Courier New', monospace;
+}
+
+/* Cursor pointer en celdas de cámara para indicar que son clicables */
+.cam-cell {
+    cursor: pointer;
+}
+.cam-cell:hover .cam-overlay-top {
+    background: linear-gradient(180deg, rgba(0, 80, 160, 0.7) 0%, transparent 100%);
+}
+
 @media (max-width: 768px) {
     .monitor-header {
         flex-direction: column;

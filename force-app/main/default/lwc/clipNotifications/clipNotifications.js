@@ -10,8 +10,29 @@ export default class ClipNotifications extends LightningElement {
     error;
     selectedAlert = null;
 
+    _lmsSubscription = null;
+
     connectedCallback() {
         this.loadAlerts();
+        this._subscribeLMS();
+    }
+
+    disconnectedCallback() {
+        window.removeEventListener('message', this._boundVoiceHandler);
+    }
+
+    _subscribeLMS() {
+        this._boundVoiceHandler = (event) => {
+            if (event.data && event.data.type === 'voiceassistantcommand') {
+                const message = event.data;
+                if (message.action === 'abrir_ultima_notificacion') {
+                    if (this.alerts && this.alerts.length > 0) {
+                        this.selectedAlert = this.alerts[0];
+                    }
+                }
+            }
+        };
+        window.addEventListener('message', this._boundVoiceHandler);
     }
 
     async loadAlerts() {

@@ -163,11 +163,11 @@
                                         placeholder="Escribe un mensaje..."
                                         value={newMessage}
                                         oninput={handleMessageChange}
-                                        onkeypress={handleKeyPress}
+                                        onkeydown={handleKeyDown}
                                         rows="2"
                                     ></textarea>
                                     <button
-                                        class="chat-send-btn"
+                                        class={sendButtonClass}
                                         onclick={handleSendMessage}
                                         disabled={isSendDisabled}
                                         title="Enviar"

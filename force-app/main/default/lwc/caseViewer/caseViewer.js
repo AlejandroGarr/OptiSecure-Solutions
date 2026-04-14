@@ -63,6 +63,10 @@ export default class CaseViewer extends LightningElement {
         return !this.newMessage || !this.newMessage.trim() || this.isSending;
     }
 
+    get sendButtonClass() {
+        return this.isSendDisabled ? 'chat-send-btn chat-send-btn--disabled' : 'chat-send-btn chat-send-btn--active';
+    }
+
     get caseCount() {
         return this.cases ? this.cases.length : 0;
     }
@@ -165,7 +169,7 @@ export default class CaseViewer extends LightningElement {
         this.newMessage = event.target.value;
     }
 
-    handleKeyPress(event) {
+    handleKeyDown(event) {
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault();
             this.handleSendMessage();

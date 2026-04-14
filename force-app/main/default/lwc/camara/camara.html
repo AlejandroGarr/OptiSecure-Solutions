@@ -42,7 +42,7 @@
                     <!-- 4 cámaras dentro del cuadrante -->
                     <div class="quad-cameras">
                         <template for:each={quad.cameras} for:item="cam">
-                            <div key={cam.id} class="cam-cell">
+                            <div key={cam.id} class="cam-cell" data-id={cam.id} onclick={handleCamClick} title="Clic para ampliar">
                                 <!-- Overlay superior de la cámara -->
                                 <div class="cam-overlay-top">
                                     <span class="cam-id">{cam.label}</span>
@@ -87,4 +87,30 @@
             <span class="footer-right">GRABACIÓN CONTINUA 24/7 · ALMACENAMIENTO SEGURO</span>
         </div>
     </div>
+
+    <!-- ═══ Modal: Cámara ampliada ═══ -->
+    <template lwc:if={showExpandedModal}>
+        <section class="cam-expanded-backdrop" onclick={handleCloseExpanded}>
+            <div class="cam-expanded-modal" onclick={handleCloseExpanded}>
+                <div class="cam-expanded-header">
+                    <span class="cam-expanded-label">{expandedCamera.label} — {expandedCamera.zone}</span>
+                    <button class="cam-expanded-close" onclick={handleCloseExpanded} title="Cerrar">✕</button>
+                </div>
+                <iframe
+                    src={expandedCamera.url}
+                    title={expandedCamera.label}
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    class="cam-expanded-stream"
+                ></iframe>
+                <div class="cam-expanded-footer">
+                    <span class="cam-expanded-status">
+                        <span class="rec-dot"></span>
+                        EN VIVO · {expandedCamera.location}
+                    </span>
+                </div>
+            </div>
+        </section>
+    </template>
 </template>

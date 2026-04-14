@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <masterLabel>Voice Assistant Command</masterLabel>
+    <isExposed>true</isExposed>
+    <description>Canal para transmitir comandos del asistente de voz a otros componentes LWC</description>
+    <lightningMessageFields>
+        <fieldName>action</fieldName>
+        <description>Acción a realizar: abrir_camara o abrir_ultima_notificacion</description>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <fieldName>cameraNumber</fieldName>
+        <description>Número de cámara (para acción abrir_camara)</description>
+    </lightningMessageFields>
+</LightningMessageChannel>

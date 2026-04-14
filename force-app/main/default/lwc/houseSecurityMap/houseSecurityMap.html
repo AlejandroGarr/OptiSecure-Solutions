@@ -311,34 +311,42 @@
         </div>
     </div>
 
-    <!-- ═══ FULLSCREEN — Visor de vídeo a pantalla completa ═══ -->
+    <!-- ═══ MODAL — Visor de vídeo flotante ═══ -->
     <template lwc:if={isFullscreen}>
-        <div class="fullscreen-overlay">
-            <!-- Barra superior -->
-            <div class="fullscreen-topbar">
-                <div class="fullscreen-title-group">
-                    <span class="fullscreen-live-badge">
-                        <span class="live-dot"></span>
-                        EN VIVO
-                    </span>
-                    <span class="fullscreen-cam-name">{fullscreenCameraName}</span>
-                </div>
-                <button class="fullscreen-close-btn" onclick={handleCloseFullscreen} title="Cerrar (ESC)">
-                    <lightning-icon icon-name="utility:close" size="small" alternative-text="Cerrar"></lightning-icon>
+        <section class="slds-modal slds-fade-in-open slds-modal_large"
+                 role="dialog"
+                 aria-modal="true"
+                 aria-label="Reproductor de cámara">
+            <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        onclick={handleCloseFullscreen}>
+                    <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                    <span class="slds-assistive-text">Cerrar</span>
                 </button>
+                <div class="slds-modal__header modal-cam-header">
+                    <div class="modal-cam-title-row">
+                        <span class="fullscreen-live-badge">
+                            <span class="live-dot"></span>
+                            EN VIVO
+                        </span>
+                        <h2 class="slds-modal__title modal-cam-title">{fullscreenCameraName}</h2>
+                    </div>
+                </div>
+                <div class="slds-modal__content modal-cam-content">
+                    <iframe
+                        src={fullscreenVideoUrl}
+                        title={fullscreenCameraName}
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                        class="modal-cam-iframe">
+                    </iframe>
+                </div>
+                <div class="slds-modal__footer modal-cam-footer">
+                    <button class="slds-button slds-button_neutral" onclick={handleCloseFullscreen}>Cerrar</button>
+                </div>
             </div>
-
-            <!-- Vídeo -->
-            <div class="fullscreen-video-wrapper">
-                <iframe
-                    src={fullscreenVideoUrl}
-                    title={fullscreenCameraName}
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                    class="fullscreen-iframe"
-                ></iframe>
-            </div>
-        </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" onclick={handleCloseFullscreen}></div>
     </template>
 </template>

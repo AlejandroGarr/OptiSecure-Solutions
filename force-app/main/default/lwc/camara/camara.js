@@ -2,7 +2,9 @@ import { LightningElement, track } from 'lwc';
 
 export default class Camara extends LightningElement {
     @track currentDateTime = '';
+    @track expandedCamera = null;
     intervalId;
+    _lmsSubscription = null;
 
     /**
      * 16 cámaras de vigilancia simuladas con streams en vivo 24/7.
@@ -165,18 +167,59 @@ export default class Camara extends LightningElement {
         return this.cameras.filter(c => c.status === 'ONLINE').length;
     }
 
+    get showExpandedModal() {
+        return this.expandedCamera != null;
+    }
+
     connectedCallback() {
         this.updateDateTime();
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         this.intervalId = setInterval(() => {
             this.updateDateTime();
         }, 1000);
+        this._subscribeLMS();
     }
 
     disconnectedCallback() {
         if (this.intervalId) {
             clearInterval(this.intervalId);
         }
+        window.removeEventListener('message', this._boundVoiceHandler);
+    }
+
+    _subscribeLMS() {
+        console.log('[Camara] Subscribiendo a window message...');
+        this._boundVoiceHandler = (event) => {
+            console.log('[Camara] message recibido:', JSON.stringify(event.data));
+            if (event.data && event.data.type === 'voiceassistantcommand') {
+                const message = event.data;
+                console.log('[Camara] Comando recibido - action:', message.action, 'cameraNumber:', message.cameraNumber);
+                if (message.action === 'abrir_camara' && message.cameraNumber) {
+                    const num = message.cameraNumber;
+                    const camId = 'cam-' + String(num).padStart(2, '0');
+                    console.log('[Camara] Buscando camId:', camId);
+                    const found = this.cameras.find(c => c.id === camId);
+                    console.log('[Camara] Encontrada:', found ? found.label : 'NO');
+                    if (found) {
+                        this.expandedCamera = found;
+                    }
+                }
+            }
+        };
+        window.addEventListener('message', this._boundVoiceHandler);
+        console.log('[Camara] Suscripción completada');
+    }
+
+    handleCamClick(event) {
+        const camId = event.currentTarget.dataset.id;
+        const found = this.cameras.find(c => c.id === camId);
+        if (found) {
+            this.expandedCamera = found;
+        }
+    }
+
+    handleCloseExpanded() {
+        this.expandedCamera = null;
     }
 
     updateDateTime() {

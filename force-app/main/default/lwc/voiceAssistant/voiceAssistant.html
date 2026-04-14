@@ -127,4 +127,54 @@
             </div>
         </section>
     </template>
+
+    <!-- Modal: Cámara ampliada (abierta por comando de voz) -->
+    <template lwc:if={showCameraModal}>
+        <section class="cam-expanded-backdrop" onclick={handleCloseCameraModal}>
+            <div class="cam-expanded-modal">
+                <div class="cam-expanded-header">
+                    <span class="cam-expanded-label">{expandedCamera.label} — {expandedCamera.zone}</span>
+                    <button class="cam-expanded-close" onclick={handleCloseCameraModal} title="Cerrar">✕</button>
+                </div>
+                <iframe
+                    src={expandedCamera.url}
+                    title={expandedCamera.label}
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    class="cam-expanded-stream"
+                ></iframe>
+                <div class="cam-expanded-footer">
+                    <span class="cam-expanded-status">
+                        <span class="rec-dot"></span>
+                        EN VIVO · {expandedCamera.location}
+                    </span>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <!-- Modal: Notificación / Clip de vídeo -->
+    <template lwc:if={showNotificationModal}>
+        <section class="cam-expanded-backdrop" onclick={handleCloseNotificationModal}>
+            <div class="cam-expanded-modal">
+                <div class="cam-expanded-header">
+                    <span class="cam-expanded-label">{selectedNotification.subject}</span>
+                    <button class="cam-expanded-close" onclick={handleCloseNotificationModal} title="Cerrar">✕</button>
+                </div>
+                <video
+                    src={selectedNotification.clipUrl}
+                    class="cam-expanded-stream"
+                    controls
+                    autoplay
+                ></video>
+                <div class="cam-expanded-footer">
+                    <span class="cam-expanded-status">
+                        <span class="rec-dot"></span>
+                        CLIP DE SEGURIDAD
+                    </span>
+                </div>
+            </div>
+        </section>
+    </template>
 </template>
