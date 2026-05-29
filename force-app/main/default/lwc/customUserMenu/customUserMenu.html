@@ -20,6 +20,12 @@
             icon-name="utility:identity"
         ></lightning-menu-item>
 
+        <lightning-menu-item
+            label="Añadir plano"
+            value="floorPlan"
+            icon-name="utility:image"
+        ></lightning-menu-item>
+
         <div class="slds-has-divider_top-space" role="separator"></div>
 
         <lightning-menu-item
@@ -311,5 +317,112 @@
 
         <!-- Backdrop -->
         <div class="slds-backdrop slds-backdrop_open" onclick={handleCloseModal}></div>
+    </template>
+
+    <!-- ─── MODAL "AÑADIR PLANO" ─── -->
+    <template lwc:if={isFloorPlanModalOpen}>
+        <section
+            role="dialog"
+            tabindex="-1"
+            aria-modal="true"
+            aria-labelledby="floor-plan-heading"
+            class="slds-modal slds-fade-in-open slds-modal_medium"
+        >
+            <div class="slds-modal__container floor-plan-modal-container">
+                <header class="slds-modal__header floor-plan-modal-header">
+                    <button
+                        class="profile-close-btn"
+                        onclick={handleCloseFloorPlanModal}
+                        aria-label="Cerrar"
+                    >&times;</button>
+                    <h2 id="floor-plan-heading" class="slds-text-heading_medium">Añadir plano de la casa</h2>
+                    <p class="slds-text-body_small slds-m-top_x-small">
+                        Sube tu propio plano (máx. 4&nbsp;MB). Sustituirá al plano por defecto.
+                    </p>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium floor-plan-modal-body">
+
+                    <!-- Zona de drag & drop -->
+                    <div
+                        class={floorPlanDropZoneClass}
+                        ondragover={handleFloorPlanDragOver}
+                        ondragleave={handleFloorPlanDragLeave}
+                        ondrop={handleFloorPlanDrop}
+                        onclick={handleFloorPlanZoneClick}
+                    >
+                        <template lwc:if={floorPlanPreviewUrl}>
+                            <img src={floorPlanPreviewUrl} alt="Vista previa" class="floor-plan-preview" />
+                            <p class="floor-plan-filename">{floorPlanFileName}</p>
+                            <p class="floor-plan-filesize">{floorPlanFileSizeLabel}</p>
+                            <lightning-button
+                                label="Quitar"
+                                variant="neutral"
+                                onclick={handleFloorPlanClear}
+                                class="slds-m-top_small"
+                            ></lightning-button>
+                        </template>
+
+                        <template lwc:else>
+                            <lightning-icon
+                                icon-name="utility:upload"
+                                size="large"
+                                alternative-text="Subir archivo"
+                            ></lightning-icon>
+                            <p class="floor-plan-drop-title slds-m-top_small">
+                                Arrastra tu archivo aquí o haz clic para seleccionar
+                            </p>
+                            <p class="floor-plan-drop-hint">
+                                Formatos: PNG, JPG, GIF, WEBP — Máx. 4&nbsp;MB
+                            </p>
+                        </template>
+
+                        <input
+                            type="file"
+                            class="floor-plan-file-input"
+                            accept="image/*"
+                            onchange={handleFloorPlanFileChange}
+                        />
+                    </div>
+
+                    <template lwc:if={floorPlanError}>
+                        <div class="floor-plan-error slds-m-top_small">
+                            <lightning-icon
+                                icon-name="utility:error"
+                                variant="error"
+                                size="x-small"
+                                alternative-text="Error"
+                            ></lightning-icon>
+                            <span class="slds-m-left_x-small">{floorPlanError}</span>
+                        </div>
+                    </template>
+
+                    <template lwc:if={isSavingFloorPlan}>
+                        <div class="slds-is-relative slds-m-top_medium" style="height:2rem;">
+                            <lightning-spinner alternative-text="Guardando..." size="small"></lightning-spinner>
+                        </div>
+                    </template>
+
+                </div>
+
+                <footer class="slds-modal__footer">
+                    <lightning-button
+                        label="Cancelar"
+                        variant="neutral"
+                        onclick={handleCloseFloorPlanModal}
+                        disabled={isSavingFloorPlan}
+                    ></lightning-button>
+                    <lightning-button
+                        label="Guardar plano"
+                        variant="brand"
+                        class="slds-m-left_x-small"
+                        onclick={handleSaveFloorPlan}
+                        disabled={isSaveFloorPlanDisabled}
+                    ></lightning-button>
+                </footer>
+            </div>
+        </section>
+
+        <div class="slds-backdrop slds-backdrop_open" onclick={handleCloseFloorPlanModal}></div>
     </template>
 </template>

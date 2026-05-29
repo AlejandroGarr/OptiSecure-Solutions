@@ -14,6 +14,13 @@ import getUserProfileData from '@salesforce/apex/UserMenuController.getUserProfi
 import deleteCamera from '@salesforce/apex/UserMenuController.deleteCamera';
 import renameCamera from '@salesforce/apex/UserMenuController.renameCamera';
 import createSolicitudCamara from '@salesforce/apex/UserMenuController.createSolicitudCamara';
+import saveFloorPlan from '@salesforce/apex/FloorPlanController.saveFloorPlan';
+
+// Tamaño máximo permitido para el plano (4 MB)
+const MAX_FLOOR_PLAN_SIZE = 4 * 1024 * 1024;
+const ACCEPTED_FLOOR_PLAN_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp', 'image/bmp'];
+// Evento global emitido al guardar para que houseSecurityMap recargue el plano
+const FLOOR_PLAN_UPDATED_EVENT = 'optisecurefloorplanupdated';
 
 // URL de logout estándar de Salesforce con redirección al sitio público
 const LOGOUT_URL = '/secur/logout.jsp?retUrl=https://www.optisecure-solutions.com';
@@ -36,6 +43,17 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
         { id: '1', label: 'Cámara 1', name: '', location: '', showRemove: false }
     ];
     _contractCounter = 1;
+
+    // ── Floor plan modal state ──
+    @track isFloorPlanModalOpen = false;
+    @track floorPlanPreviewUrl = null;
+    @track floorPlanFileName = '';
+    @track floorPlanFileSizeLabel = '';
+    @track floorPlanError = '';
+    @track isFloorPlanDragOver = false;
+    @track isSavingFloorPlan = false;
+    _floorPlanBase64 = null;
+    _floorPlanContentType = null;
 
     // ═══════════════════════════════════════════
     //  LIFECYCLE
@@ -205,6 +223,12 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
                     { id: '1', label: 'Cámara 1', name: '', location: '', showRemove: false }
                 ];
                 this.isContractModalOpen = true;
+                this._applyGlobalOverlay();
+                break;
+
+            case 'floorPlan':
+                this._resetFloorPlanState();
+                this.isFloorPlanModalOpen = true;
                 this._applyGlobalOverlay();
                 break;
 
@@ -411,5 +435,171 @@ export default class CustomUserMenu extends NavigationMixin(LightningElement) {
             .finally(() => {
                 this.isRenaming = false;
             });
+    }
+
+    // ═══════════════════════════════════════════
+    //  AÑADIR PLANO — Drag & drop / upload
+    // ═══════════════════════════════════════════
+
+    get floorPlanDropZoneClass() {
+        return 'floor-plan-dropzone' + (this.isFloorPlanDragOver ? ' floor-plan-dropzone--over' : '');
+    }
+
+    get isSaveFloorPlanDisabled() {
+        return this.isSavingFloorPlan || !this._floorPlanBase64;
+    }
+
+    _resetFloorPlanState() {
+        this.floorPlanPreviewUrl    = null;
+        this.floorPlanFileName      = '';
+        this.floorPlanFileSizeLabel = '';
+        this.floorPlanError         = '';
+        this.isFloorPlanDragOver    = false;
+        this.isSavingFloorPlan      = false;
+        this._floorPlanBase64       = null;
+        this._floorPlanContentType  = null;
+    }
+
+    handleCloseFloorPlanModal() {
+        if (this.isSavingFloorPlan) return;
+        this.isFloorPlanModalOpen = false;
+        this._resetFloorPlanState();
+        this._removeGlobalOverlay();
+    }
+
+    handleFloorPlanZoneClick(event) {
+        // Evitar que el clic en el botón "Quitar" o el propio input reabra el selector
+        if (event.target && (event.target.tagName === 'INPUT' || event.target.tagName === 'BUTTON')) {
+            return;
+        }
+        const input = this.template.querySelector('.floor-plan-file-input');
+        if (input) {
+            // Reset value para permitir volver a seleccionar el mismo fichero
+            input.value = null;
+            input.click();
+        }
+    }
+
+    handleFloorPlanDragOver(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isFloorPlanDragOver = true;
+    }
+
+    handleFloorPlanDragLeave(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isFloorPlanDragOver = false;
+    }
+
+    handleFloorPlanDrop(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isFloorPlanDragOver = false;
+
+        const files = event.dataTransfer && event.dataTransfer.files;
+        if (files && files.length > 0) {
+            this._processFloorPlanFile(files[0]);
+        }
+    }
+
+    handleFloorPlanFileChange(event) {
+        const file = event.target.files && event.target.files[0];
+        if (file) {
+            this._processFloorPlanFile(file);
+        }
+    }
+
+    handleFloorPlanClear(event) {
+        if (event) {
+            event.stopPropagation();
+        }
+        this._resetFloorPlanState();
+    }
+
+    _processFloorPlanFile(file) {
+        this.floorPlanError = '';
+        if (!file) return;
+
+        const type = (file.type || '').toLowerCase();
+        if (!ACCEPTED_FLOOR_PLAN_TYPES.includes(type)) {
+            this.floorPlanError = 'Formato no válido. Sube una imagen (PNG, JPG, GIF, WEBP).';
+            return;
+        }
+
+        if (file.size > MAX_FLOOR_PLAN_SIZE) {
+            this.floorPlanError = `El archivo supera el tamaño máximo de 4 MB (actual: ${this._formatBytes(file.size)}).`;
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const result = e.target.result; // data:<mime>;base64,<data>
+            this.floorPlanPreviewUrl    = result;
+            this.floorPlanFileName      = file.name;
+            this.floorPlanFileSizeLabel = this._formatBytes(file.size);
+            this._floorPlanContentType  = type;
+            const commaIdx = result.indexOf(',');
+            this._floorPlanBase64 = commaIdx >= 0 ? result.substring(commaIdx + 1) : result;
+        };
+        reader.onerror = () => {
+            this.floorPlanError = 'No se ha podido leer el archivo.';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    handleSaveFloorPlan() {
+        if (!this._floorPlanBase64 || this.isSavingFloorPlan) return;
+
+        this.isSavingFloorPlan = true;
+        this.floorPlanError = '';
+
+        saveFloorPlan({
+            base64Data:  this._floorPlanBase64,
+            contentType: this._floorPlanContentType,
+            fileName:    this.floorPlanFileName
+        })
+            .then(() => {
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Plano actualizado',
+                        message: 'Tu nuevo plano se ha guardado correctamente.',
+                        variant: 'success'
+                    })
+                );
+                // Avisar a houseSecurityMap (y a cualquier otro listener)
+                // para que recargue la imagen del plano sin refrescar la página.
+                try {
+                    window.dispatchEvent(new CustomEvent(FLOOR_PLAN_UPDATED_EVENT));
+                } catch (e) {
+                    // ignore
+                }
+                this.isFloorPlanModalOpen = false;
+                this._resetFloorPlanState();
+                this._removeGlobalOverlay();
+            })
+            .catch((error) => {
+                const msg = error && error.body && error.body.message
+                    ? error.body.message
+                    : 'No se ha podido guardar el plano.';
+                this.floorPlanError = msg;
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Error',
+                        message: msg,
+                        variant: 'error'
+                    })
+                );
+            })
+            .finally(() => {
+                this.isSavingFloorPlan = false;
+            });
+    }
+
+    _formatBytes(bytes) {
+        if (bytes === undefined || bytes === null) return '';
+        if (bytes < 1024) return `${bytes} B`;
+        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+        return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
     }
 }

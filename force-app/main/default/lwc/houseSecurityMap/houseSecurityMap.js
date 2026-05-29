@@ -10,7 +10,11 @@ import getSolicitudAprobadaActiva from '@salesforce/apex/ContratacionCamaraContr
 import completarSolicitud from '@salesforce/apex/ContratacionCamaraController.completarSolicitud';
 import saveCamarasContratadas from '@salesforce/apex/ContratacionCamaraController.saveCamarasContratadas';
 import getContactIdUsuarioActual from '@salesforce/apex/ContratacionCamaraController.getContactIdUsuarioActual';
+import getFloorPlanDataUri from '@salesforce/apex/FloorPlanController.getFloorPlanDataUri';
 import PLANO_CASA from '@salesforce/resourceUrl/Plano_Casa_1';
+
+// Evento global emitido por customUserMenu cuando el usuario sube un nuevo plano
+const FLOOR_PLAN_UPDATED_EVENT = 'optisecurefloorplanupdated';
 
 // ── Vídeos de reserva (se usan cuando la cámara no tiene Video_Url__c) ──
 const FALLBACK_VIDEOS = [
@@ -51,8 +55,8 @@ function _embedUrl(videoId) {
  */
 export default class HouseSecurityMap extends LightningElement {
 
-    // ── Static Resource ──
-    floorPlanUrl = PLANO_CASA;
+    // ── Static Resource (plano por defecto si el usuario no ha subido el suyo) ──
+    @track floorPlanUrl = PLANO_CASA;
 
     // ── Public API — contactId recibido del padre (null = sin filtro) ──
     _contactId = null;
@@ -189,10 +193,16 @@ export default class HouseSecurityMap extends LightningElement {
 
         this._boundHandleKeyDown = this._handleKeyDown.bind(this);
         this._boundCloseContextMenu = this._closeContextMenu.bind(this);
+        this._boundReloadFloorPlan  = this._loadUserFloorPlan.bind(this);
         // eslint-disable-next-line @lwc/lwc/no-document-query
         document.addEventListener('keydown', this._boundHandleKeyDown);
         // eslint-disable-next-line @lwc/lwc/no-document-query
         document.addEventListener('click', this._boundCloseContextMenu);
+        // Recarga del plano cuando customUserMenu emite el evento global
+        window.addEventListener(FLOOR_PLAN_UPDATED_EVENT, this._boundReloadFloorPlan);
+
+        // Carga inicial del plano personalizado del usuario (si existe)
+        this._loadUserFloorPlan();
     }
 
     disconnectedCallback() {
@@ -203,6 +213,29 @@ export default class HouseSecurityMap extends LightningElement {
         document.removeEventListener('keydown', this._boundHandleKeyDown);
         // eslint-disable-next-line @lwc/lwc/no-document-query
         document.removeEventListener('click', this._boundCloseContextMenu);
+        if (this._boundReloadFloorPlan) {
+            window.removeEventListener(FLOOR_PLAN_UPDATED_EVENT, this._boundReloadFloorPlan);
+        }
+    }
+
+    /**
+     * Carga el plano personalizado del usuario actual.
+     * Si no tiene uno subido, mantiene el static resource por defecto.
+     */
+    _loadUserFloorPlan() {
+        getFloorPlanDataUri()
+            .then((dataUri) => {
+                if (dataUri) {
+                    this.floorPlanUrl = dataUri;
+                } else {
+                    this.floorPlanUrl = PLANO_CASA;
+                }
+            })
+            .catch((err) => {
+                // No bloqueamos la UI por esto: simplemente usamos el plano por defecto
+                console.warn('No se pudo cargar el plano del usuario:', err);
+                this.floorPlanUrl = PLANO_CASA;
+            });
     }
 
     // ═══════════════════════════════════════════

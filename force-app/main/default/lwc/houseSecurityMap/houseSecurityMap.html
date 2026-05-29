@@ -1,3 +1,10 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 05-19-2026
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
 <template>
     <!-- ═══════════════════════════════════════════════════════
          HOUSE SECURITY MAP — OptiSecure Solutions
@@ -333,14 +340,12 @@
                     </div>
                 </div>
                 <div class="slds-modal__content modal-cam-content">
-                    <iframe
+                    <!-- Stream MJPEG: usar <img> permite que el modal se
+                         adapte automáticamente al tamaño nativo del vídeo. -->
+                    <img
                         src={fullscreenVideoUrl}
-                        title={fullscreenCameraName}
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                        class="modal-cam-iframe">
-                    </iframe>
+                        alt={fullscreenCameraName}
+                        class="modal-cam-img" />
                 </div>
                 <div class="slds-modal__footer modal-cam-footer">
                     <button class="slds-button slds-button_neutral" onclick={handleCloseFullscreen}>Cerrar</button>

@@ -442,6 +442,15 @@
 
 /* ═══ MODAL CÁMARA — Visor de vídeo flotante ═══ */
 
+/* El modal se ajusta al tamaño real del vídeo (no ocupa todo el ancho de
+   pantalla) para que no aparezcan grandes franjas negras alrededor. */
+.slds-modal__container {
+    width: fit-content !important;
+    max-width: 90vw !important;
+    min-width: 0 !important;
+    margin: 0 auto !important;
+}
+
 .live-dot {
     width: 6px;
     height: 6px;
@@ -490,14 +499,25 @@
     background: #000 !important;
     padding: 0 !important;
     position: relative;
-    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
-.modal-cam-iframe {
-    width: 100%;
-    height: 70vh;
-    border: none;
+.modal-cam-img {
+    /* Forzamos la altura al máximo disponible del viewport (descontando
+       header + footer del modal). El ancho se calcula automáticamente
+       manteniendo la proporción nativa del stream, y como el contenedor
+       del modal usa `width: fit-content`, todo el modal se adapta
+       dinámicamente al tamaño real del vídeo, sin franjas negras. */
     display: block;
+    height: 85vh;
+    width: auto;
+    max-width: 95vw;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .modal-cam-footer {

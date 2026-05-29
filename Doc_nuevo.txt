@@ -2258,19 +2258,430 @@ Archivo sfdx-project.json:
 
 
 ================================================================================
+      AMPLIACIÓN DOCUMENTAL PARA INCORPORAR EN LOS CAPÍTULOS EXISTENTES
+================================================================================
+
+La presente ampliación se incorpora al final de la memoria para recoger las
+funcionalidades desarrolladas con posterioridad a la redacción principal. No
+se plantea como un nuevo capítulo, sino como un conjunto de bloques listos
+para integrarse en los capítulos ya definidos. Por este motivo, cada epígrafe
+indica expresamente el capítulo y apartado al que pertenece dentro de la
+estructura original del Trabajo Fin de Grado.
+
+
+Capítulo 4.10 y 4.12. Tecnologías utilizadas — ampliación de la capa de visión
+artificial e integración Python-Salesforce
+───────────────────────────────────────────────────────────────────────────────
+
+La evolución reciente del proyecto amplía la pila tecnológica inicialmente
+descrita con la incorporación de un subsistema de visión artificial en el
+borde (edge computing). A las tecnologías ya documentadas para streaming
+local, concretamente Flask, OpenCV y Ngrok, se añaden dos elementos de gran
+relevancia técnica: por un lado, el modelo YOLOv8 de Ultralytics, utilizado
+para la detección de personas en tiempo real sobre los fotogramas capturados
+por la cámara; por otro, la librería simple-salesforce, empleada para
+establecer la comunicación autenticada entre el servidor Python y la org de
+Salesforce.
+
+Esta ampliación modifica de forma significativa el papel del servidor local.
+Deja de ser un mero emisor de vídeo MJPEG para convertirse en un agente capaz
+de analizar la escena, tomar decisiones automáticas, registrar evidencias y
+sincronizar eventos con la plataforma CRM. Desde el punto de vista académico,
+esta incorporación resulta especialmente relevante porque demuestra la
+viabilidad de una arquitectura híbrida en la que el procesamiento intensivo de
+imagen se ejecuta cerca de la fuente de datos, mientras que Salesforce asume
+la trazabilidad de negocio, la persistencia documental y la interacción con el
+usuario final.
+
+
+Capítulo 5.3. Requisitos funcionales — ampliación
+──────────────────────────────────────────────────
+
+  RF-14  El sistema debe detectar automáticamente la presencia de personas
+         en el flujo de vídeo de una cámara local y disparar un evento de
+         seguridad cuando la detección supere un umbral de confianza
+         configurable.
+
+  RF-15  El sistema debe generar, tras una detección válida, una
+         notificación automática en Salesforce vinculada a la cámara y al
+         contacto propietario, incorporando referencia temporal y acceso al
+         clip de evidencia asociado.
+
+  RF-16  El sistema debe permitir al usuario consultar desde el portal las
+         notificaciones recientes de detección y reproducir el clip generado
+         para cada evento de seguridad.
+
+  RF-17  El asistente de voz debe interpretar órdenes orientadas a la
+navegación operativa del sistema, incluyendo la apertura de una
+cámara concreta, la apertura de la última notificación o el recuento
+de detecciones registradas durante la jornada.
+
+
+Capítulo 5.4. Requisitos no funcionales — ampliación
+─────────────────────────────────────────────────────
+
+  RNF-07  Baja latencia operativa: El análisis de vídeo debe realizarse en el
+equipo local para reducir el retardo entre la detección y la
+generación del evento, evitando transferir continuamente vídeo bruto
+a servicios externos para su procesamiento.
+
+  RNF-08  Trazabilidad: Cada detección relevante debe quedar registrada como
+evidencia consultable, tanto a nivel de actividad de negocio
+(notificación) como a nivel de artefacto multimedia asociado a la
+cámara correspondiente.
+
+  RNF-09  Resiliencia: El subsistema de videovigilancia debe tolerar fallos
+transitorios de la cámara, disponer de mecanismos de reconexión y
+limitar la generación masiva de alertas repetidas mediante políticas
+de enfriamiento configurables.
+
+  RNF-10  Seguridad de la integración: La comunicación entre el servidor de
+seguridad y Salesforce debe realizarse mediante credenciales
+gestionadas fuera del código fuente, conexiones HTTPS y validaciones
+server-side que impidan el acceso cruzado entre clientes.
+
+
+Capítulo 6.1. Casos de uso — ampliación
+───────────────────────────────────────
+
+Actor adicional: Subsistema de seguridad con IA (servidor Python externo)
+
+  CU20  Detectar persona y generar alerta
+        El servidor local analiza el flujo de vídeo en tiempo real. Cuando
+        identifica una persona con confianza suficiente, inicia la captura de
+        un clip de evidencia y comunica el evento a Salesforce.
+
+  CU21  Consultar notificaciones de detección
+        El cliente accede desde el portal al listado de alertas recientes
+        generadas automáticamente por el sistema de videovigilancia.
+
+  CU22  Reproducir clip de seguridad asociado a una alerta
+        A partir de una notificación concreta, el usuario abre el clip de
+        evidencia y revisa el evento detectado por la cámara.
+
+  CU23  Abrir cámaras y notificaciones mediante voz
+        El cliente dicta una orden en lenguaje natural y el sistema interpreta
+        si debe mostrar una cámara específica, abrir la última notificación o
+        contabilizar las detecciones registradas.
+
+
+Capítulo 6.2. Flujo de información entre módulos — ampliación
+──────────────────────────────────────────────────────────────
+
+La incorporación del subsistema de seguridad con IA introduce un nuevo flujo
+de información transversal que conecta la capa física de captura de vídeo con
+los módulos de interacción y seguimiento del portal. El flujo ampliado puede
+describirse del siguiente modo:
+
+  1. La cámara conectada al equipo local proporciona fotogramas al servidor
+     Python mediante OpenCV.
+
+  2. El proceso de análisis ejecuta inferencias con YOLOv8 sobre cada frame y
+     determina si existe una detección de persona con una confianza superior
+     al umbral definido.
+
+  3. Cuando la detección es válida y no existe una alerta reciente dentro del
+     periodo de enfriamiento, el sistema inicia la grabación automática de un
+     clip corto de evidencia y lo conserva temporalmente en almacenamiento
+     local.
+
+  4. Una vez finalizada la grabación, el servidor genera una URL pública del
+     clip a través de Ngrok y realiza una llamada HTTP al endpoint Apex REST
+     responsable de registrar la alerta en Salesforce.
+
+  5. Salesforce crea una actividad de tipo Task vinculada al contacto de la
+     cámara, incluyendo en su descripción la referencia temporal del evento y
+     el enlace estructurado al clip capturado.
+
+  6. En paralelo, el propio servidor Python sube la evidencia multimedia a
+     Salesforce Files y la relaciona con el registro Camara__c correspondiente,
+     consolidando así la trazabilidad técnica y documental del evento.
+
+  7. Finalmente, los componentes LWC del portal consultan estas alertas y
+     evidencias para mostrarlas al usuario, mientras que el asistente de voz
+     puede invocar su apertura directa mediante comandos en lenguaje natural.
+
+Este flujo extiende el sistema desde una lógica puramente reactiva basada en
+interacción del usuario hacia un modelo proactivo de supervisión, en el que
+la plataforma no solo muestra información, sino que detecta eventos,
+construye evidencias y genera acciones de seguimiento dentro del ecosistema
+Salesforce.
+
+
+Capítulo 7.1, 7.3, 7.4 y 7.5. Diseño del sistema — ampliación de la
+arquitectura de vigilancia inteligente
+───────────────────────────────────────────────────────────────────────────────
+
+Desde el punto de vista del diseño, el proyecto evoluciona hacia una
+arquitectura híbrida edge-cloud organizada en tres niveles claramente
+diferenciados. En primer lugar, la capa de adquisición y análisis local, que
+engloba la cámara física, OpenCV, el modelo YOLOv8 y la lógica de grabación de
+clips. En segundo lugar, la capa de exposición segura, formada por Flask y el
+túnel Ngrok, responsable de publicar tanto el streaming en vivo como los clips
+generados. En tercer lugar, la capa cloud sobre Salesforce, donde residen la
+lógica de integración Apex, la persistencia de notificaciones y evidencias, y
+los componentes LWC consumidos desde Experience Cloud.
+
+Esta distribución de responsabilidades permite situar el cálculo intensivo en
+el borde, cerca de la fuente de datos, y reservar la plataforma Salesforce
+para las funciones de negocio: identificación de propietarios, control de
+acceso, consulta de histórico, trazabilidad documental y presentación de la
+información al usuario. Se trata de una decisión arquitectónica especialmente
+adecuada para un TFG de estas características, ya que combina el valor de una
+plataforma empresarial SaaS con técnicas de visión por computador ejecutadas
+fuera de la nube.
+
+En lo relativo al módulo backend, la ampliación introduce una separación clara
+entre controladores de integración y controladores de consulta. El endpoint
+REST recibe eventos desde el mundo físico y los traduce a entidades de
+negocio, mientras que el controlador de clips y alertas recupera y filtra la
+información para los distintos perfiles de usuario. En paralelo, el módulo
+frontend se enriquece con nuevos componentes especializados en consumo de
+evidencias y notificaciones, manteniendo la coherencia visual y funcional del
+portal original.
+
+
+Capítulo 8.1. Clases Apex — lógica de negocio (ampliación)
+───────────────────────────────────────────────────────────
+
+PersonDetectionController
+
+Se ha incorporado un endpoint Apex REST específicamente diseñado para recibir
+eventos de detección procedentes del servidor Python. Su responsabilidad
+principal consiste en deserializar el cuerpo JSON recibido, localizar la
+cámara afectada, resolver el contacto asociado y generar una actividad de tipo
+Task en Salesforce. Dicha actividad actúa como notificación persistente del
+evento de seguridad y queda ligada al propietario de la cámara, lo que permite
+su consulta posterior desde el portal Experience Cloud.
+
+Una decisión de diseño destacable reside en la forma de encapsular la URL del
+clip dentro de la descripción de la actividad mediante marcadores explícitos.
+Esta estrategia simplifica la extracción posterior del enlace sin necesidad de
+introducir un objeto personalizado adicional, preservando al mismo tiempo la
+compatibilidad con la estructura estándar de Salesforce.
+
+SecurityClipController
+
+Junto al endpoint REST se ha implementado un controlador Apex orientado a la
+consulta de evidencias multimedia y alertas de detección. Este controlador
+proporciona métodos para recuperar clips asociados a una cámara concreta, al
+conjunto de cámaras de un contacto o al usuario autenticado, así como para
+obtener las alertas recientes derivadas de las detecciones automáticas.
+
+La clase adopta un enfoque orientado a wrappers, devolviendo estructuras de
+datos específicas para clips y notificaciones. Además, incorpora un helper
+interno sin sharing para facilitar a usuarios de portal el acceso controlado a
+las actividades de alerta, manteniendo la lógica de filtrado por contacto y
+la separación entre usuarios internos y externos. Desde la perspectiva del
+diseño software, esta aproximación favorece la reutilización del código y la
+claridad contractual entre backend y frontend.
+
+VoiceCommandController — ampliación funcional
+
+El controlador del asistente de voz ya no se limita a crear casos o consultar
+cámaras activas. La integración actual amplía el catálogo de acciones para
+permitir la apertura directa de una cámara concreta, la apertura de una
+notificación determinada y el recuento de detecciones registradas durante el
+día. Esta evolución convierte al asistente en un mecanismo real de navegación
+operativa sobre la aplicación, y no únicamente en una interfaz de entrada de
+datos.
+
+
+Capítulo 8.2. Componentes LWC — interfaz de usuario (ampliación)
+──────────────────────────────────────────────────────────────────
+
+clipNotifications
+
+Se ha desarrollado un componente LWC encargado de presentar al usuario el
+listado de notificaciones recientes de detección. Cada alerta muestra la
+cámara afectada, la fecha y hora del evento y el contacto asociado cuando
+procede. Desde la propia tarjeta es posible abrir el clip de seguridad o
+eliminar la alerta del listado una vez revisada. Este componente traduce un
+evento técnico de detección en un elemento de interfaz comprensible, trazable
+y accionable para el usuario final.
+
+securityClipViewer
+
+Como complemento al visor de notificaciones, se ha añadido un componente LWC
+específico para consultar clips de seguridad vinculados a las cámaras. El
+usuario puede acceder a un histórico ordenado cronológicamente, reproducir el
+contenido almacenado y descargar la evidencia si resulta necesario. Este
+componente refuerza el papel del sistema no solo como herramienta de
+monitorización en vivo, sino también como repositorio de evidencias de
+seguridad.
+
+voiceAssistant — ampliación de comportamiento
+
+El componente de asistente de voz mantiene la captura de audio mediante Web
+Speech API y la posterior interpretación semántica por parte de Gemini, pero
+amplía su repertorio funcional con acciones orientadas a la navegación. En la
+versión extendida, el usuario puede formular órdenes como «abre la cámara del
+jardín», «abre la última notificación» o «cuántas notificaciones ha habido
+hoy», obteniendo una respuesta inmediata sobre la propia interfaz. Esta
+evolución mejora la accesibilidad y reduce la fricción de uso en escenarios
+de supervisión rápida.
+
+
+Capítulo 8.4. Integración con Google Gemini — ampliación del asistente de voz
+───────────────────────────────────────────────────────────────────────────────
+
+La integración con Google Gemini ha evolucionado hacia un esquema de
+orquestación más robusto y determinista. En lugar de limitarse a interpretar
+intenciones genéricas, el sistema define un prompt estructurado que obliga al
+modelo a devolver un JSON con acciones cerradas y parámetros concretos. Este
+contrato minimiza ambigüedades, simplifica el parseo en Apex y reduce el riesgo
+de respuestas libres difíciles de explotar de forma segura.
+
+La ampliación introduce nuevas acciones semánticas relacionadas con la capa de
+videovigilancia: apertura de cámaras por nombre, zona o referencia numérica;
+apertura de notificaciones por criterio temporal; y recuento de detecciones
+diarias. De este modo, la inteligencia artificial deja de operar únicamente
+como un parser de incidencias y pasa a funcionar como una interfaz conversacional
+de control sobre los activos de seguridad y sus eventos asociados.
+
+Conviene destacar, además, que esta integración sigue un principio de diseño
+seguro: el audio no se envía directamente a Gemini. La voz del usuario se
+transcribe previamente en el navegador y únicamente el texto resultante viaja
+a Apex para su posterior envío al modelo. Esta separación reduce exposición de
+datos, simplifica la arquitectura y aprovecha las capacidades nativas del
+navegador para la fase de reconocimiento de voz.
+
+
+Capítulo 8.5. Integración de streaming de vídeo local — evolución hacia un
+servidor de seguridad con IA
+───────────────────────────────────────────────────────────────────────────────
+
+La implementación del servidor Python ha experimentado un salto cualitativo.
+La versión actual no se limita a exponer el stream de la cámara, sino que
+incorpora un ciclo completo de supervisión: captura de fotogramas, inferencia
+con YOLOv8, anotación visual de detecciones, grabación automática de clips,
+publicación segura de evidencias y sincronización con Salesforce.
+
+En el plano interno, la solución mantiene un hilo de procesamiento continuo
+que lee frames desde la cámara, dibuja bounding boxes sobre las detecciones y
+actualiza el frame anotado que consume el streaming MJPEG. Cuando se detecta
+una persona, el sistema genera un clip corto de evidencia y aplica un periodo
+de enfriamiento configurable para evitar la multiplicación de alertas frente a
+una misma presencia prolongada. Esta medida resulta importante tanto para la
+estabilidad operativa como para la utilidad real de las notificaciones.
+
+Otro aspecto reseñable es la preocupación por la robustez de ejecución. El
+servidor controla fallos consecutivos de lectura desde la cámara e intenta la
+reconexión automática del dispositivo cuando detecta pérdida de señal. Del
+mismo modo, separa en hilos de fondo las tareas potencialmente más lentas,
+como la notificación a Salesforce o la subida del clip, evitando bloquear el
+proceso principal de captura y análisis. Desde una perspectiva de ingeniería,
+esta decisión permite mantener la continuidad del streaming incluso cuando se
+producen operaciones de integración con servicios externos.
+
+Finalmente, la publicación de rutas específicas para estado, listado de clips,
+stream en vivo y reproducción del clip proporciona una interfaz de servicio
+clara, que facilita tanto la depuración técnica como la integración con el
+portal. La solución resultante demuestra una transición madura desde un
+prototipo de visualización hacia un auténtico servidor de seguridad con IA.
+
+
+Capítulo 10.1 y 10.2. Conclusiones y trabajo futuro — actualización tras la
+ampliación funcional
+───────────────────────────────────────────────────────────────────────────────
+
+La funcionalidad añadida confirma una de las ideas centrales del proyecto:
+Salesforce puede actuar como núcleo de una solución empresarial compleja, aun
+cuando parte del procesamiento especializado se ejecute fuera de la propia
+plataforma. La incorporación del subsistema de detección automática de
+personas, las notificaciones de seguridad y la navegación conversacional sobre
+cámaras y alertas eleva el proyecto desde un portal de gestión y visualización
+hacia una plataforma de supervisión inteligente con capacidad de reacción.
+
+Asimismo, esta ampliación materializa parcialmente una de las líneas de mejora
+que en la redacción original se situaban como trabajo futuro: la aplicación de
+técnicas de visión por computador al dominio de la seguridad. En la versión
+actual ya existe un prototipo funcional centrado en la detección de personas y
+en la generación de evidencias automáticas. No obstante, siguen abiertas varias
+líneas de evolución, como la calibración avanzada de falsos positivos, la
+detección de múltiples clases de eventos, la normalización del almacenamiento
+multimedia, la ejecución de pruebas end-to-end y la sustitución de Ngrok por
+una solución de exposición segura más adecuada para producción.
+
+
+Capítulo 11.1 y 11.2. Manual de instalación — dependencias y configuración
+adicional para la capa de IA y notificaciones
+───────────────────────────────────────────────────────────────────────────────
+
+La ampliación funcional introduce requisitos adicionales en el entorno Python.
+Además de Flask y OpenCV, es necesario disponer de las librerías de inferencia
+YOLOv8 y de integración con Salesforce. En términos prácticos, el entorno debe
+incluir dependencias equivalentes a ultralytics, simple-salesforce y el resto
+de paquetes auxiliares requeridos por el servidor de seguridad. Igualmente,
+debe asegurarse la disponibilidad del modelo ligero de YOLOv8 empleado en el
+prototipo y del directorio destinado al almacenamiento temporal de clips.
+
+La configuración del servicio exige también la definición de variables de
+entorno para las credenciales de Salesforce, el dominio de autenticación, el
+identificador de la cámara, el contacto asociado y la URL base de Ngrok. Esta
+decisión es coherente con las buenas prácticas de despliegue, ya que separa la
+configuración sensible del código fuente y facilita la adaptación del sistema a
+distintos entornos de ejecución.
+
+Desde el lado de Salesforce, la instalación debe contemplar el despliegue del
+endpoint REST de detección, del controlador de clips y alertas, y de los
+componentes LWC encargados de mostrar notificaciones y evidencias. Del mismo
+modo, resulta necesario mantener configurado el dominio expuesto por Ngrok como
+origen de confianza para el portal, así como verificar que los perfiles y
+permission sets permitan el acceso controlado a las clases Apex y a los datos
+derivados de las detecciones.
+
+
+Capítulo 12.6 y 12.7. Manual de usuario — ampliación del uso del asistente y
+de la gestión de notificaciones de seguridad
+───────────────────────────────────────────────────────────────────────────────
+
+La versión ampliada del asistente de voz permite una interacción más rica que
+la documentada inicialmente. Además de reportar incidencias o consultar el
+estado general del sistema, el usuario puede emplear órdenes como «abre la
+cámara de la entrada», «muéstrame la cámara dos», «abre la última
+notificación» o «cuántas notificaciones ha habido hoy». El sistema interpreta
+la orden, ejecuta la acción correspondiente y muestra de forma directa la
+cámara o el clip de seguridad solicitado, reduciendo el número de pasos
+manuales necesarios para acceder a la información relevante.
+
+En paralelo, el portal incorpora un nuevo flujo de consulta de eventos de
+seguridad. Cuando el sistema detecta una persona, la notificación aparece en
+el módulo correspondiente junto con la marca temporal y la referencia de la
+cámara. El usuario puede abrir el clip asociado para revisar la escena o, una
+vez atendido el evento, eliminar la alerta del listado. Este comportamiento
+introduce una experiencia más próxima a la de una plataforma de vigilancia
+operativa real, donde la detección, la revisión de evidencias y la gestión del
+evento forman parte de un mismo ciclo de uso.
+
+Por último, el concepto de «streaming en vivo» deja de entenderse únicamente
+como visualización pasiva. La cámara conectada al equipo sigue pudiendo verse
+en tiempo real desde el mapa, pero ahora esa misma señal alimenta un proceso
+de análisis automático que puede generar eventos y evidencias sin intervención
+del usuario. Esta evolución refuerza el valor del sistema como herramienta de
+supervisión inteligente y no solo como visor remoto de cámaras.
+
+
+================================================================================
                         FIN DEL DOCUMENTO
 ================================================================================
 
 Documentación del proyecto OptiSecure Solutions — Trabajo Fin de Grado.
-Autor: Alejandro García.
+Autor: Alejandro Garrido Navarro.
 
 Resumen del proyecto:
-  - 12 clases Apex (8 controladores + 4 clases de test)
-  - 14 componentes LWC (10 funcionales + 4 scaffolds)
-  - 2 objetos personalizados (Camara__c, Solicitud_Camara__c)
-  - Integración con Google Gemini API
-  - Integración de streaming de vídeo local (Flask + OpenCV + Ngrok)
-  - Portal Experience Cloud con plantilla LWR
-  - Modelo de seguridad multi-nivel
+  - Aplicación Salesforce orientada a la gestión integral de cámaras,
+    incidencias y atención al cliente.
+  - Portal Experience Cloud con mapa interactivo, contratación, casos,
+    chat de soporte y asistente de voz.
+  - Integración conversacional con Google Gemini para interpretar órdenes
+    en lenguaje natural y ejecutar acciones sobre la interfaz.
+  - Servidor de seguridad local con Flask, OpenCV, YOLOv8 y exposición
+    segura mediante Ngrok.
+  - Generación automática de notificaciones de detección y evidencias
+    multimedia vinculadas a Salesforce.
+  - Componentes específicos para consultar alertas y clips de seguridad
+    desde el portal.
+  - Arquitectura híbrida edge-cloud con modelo de seguridad multi-nivel.
 
 ================================================================================

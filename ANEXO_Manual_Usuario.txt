@@ -1,0 +1,1747 @@
+ANEXO A. MANUAL DE USUARIO DEL PORTAL DE CLIENTES
+OptiSecure Solutions
+
+Trabajo Fin de Grado
+Versión del documento: 1.0
+Fecha: mayo de 2026
+
+
+ÍNDICE
+
+  1. Introducción
+     1.1. Propósito del manual
+     1.2. Destinatarios
+     1.3. Convenciones tipográficas
+     1.4. Requisitos técnicos del puesto del usuario
+     1.5. Notación de figuras
+
+  2. Acceso al portal
+     2.1. Dirección del portal
+     2.2. Registro de un nuevo cliente
+     2.3. Activación de la cuenta y primera contraseña
+     2.4. Inicio de sesión
+     2.5. Recuperación de contraseña
+     2.6. Cierre de sesión
+
+  3. Estructura general de la interfaz
+     3.1. Visión global tras iniciar sesión
+     3.2. Cabecera del portal y menú de usuario
+     3.3. Área principal de trabajo: el mapa de seguridad
+     3.4. Barra lateral de cámaras
+     3.5. Pie de página con accesos a módulos
+
+  4. Gestión del perfil del usuario
+     4.1. Apertura del menú desde la cabecera
+     4.2. Acceso a la opción «Perfil»
+     4.3. Datos personales y de cuenta
+     4.4. Datos de contacto y dirección de facturación
+     4.5. Resumen del estado del servicio
+     4.6. Resumen de cámaras del cliente
+     4.7. Cierre del modal de perfil
+
+  5. Personalización del plano de la vivienda
+     5.1. Concepto y utilidad
+     5.2. Acceso a la opción «Añadir plano»
+     5.3. Subida de un archivo de plano
+     5.4. Restricciones de tamaño y formato
+     5.5. Vista previa antes de guardar
+     5.6. Confirmación y aplicación del plano
+     5.7. Sustitución y eliminación de un plano existente
+
+  6. Operación con el mapa de seguridad
+     6.1. Componentes del mapa
+     6.2. Identificación visual de las cámaras
+     6.3. Apertura del visor de una cámara
+     6.4. Visualización del vídeo en directo
+     6.5. Cierre del visor y vuelta al mapa
+     6.6. Comportamiento responsive del mapa
+
+  7. Gestión individual de cámaras
+     7.1. Lista de cámaras en la barra lateral
+     7.2. Estado en línea de cada cámara
+     7.3. Renombrado de una cámara
+     7.4. Acceso rápido a una cámara desde la lista
+     7.5. Buenas prácticas de nomenclatura
+
+  8. Contratación de nuevas cámaras
+     8.1. Acceso al módulo de contratación
+     8.2. Pestaña «Nueva solicitud»
+     8.3. Cumplimentación del formulario
+     8.4. Envío de la solicitud
+     8.5. Pestaña «Mis solicitudes»
+     8.6. Estados posibles de una solicitud
+     8.7. Reanudación de una solicitud aprobada
+     8.8. Posicionamiento de las cámaras aprobadas
+     8.9. Confirmación final y cierre de la solicitud
+
+  9. Sistema de soporte y casos
+     9.1. Acceso al módulo de casos
+     9.2. Listado de casos del cliente
+     9.3. Apertura del detalle de un caso
+     9.4. Información mostrada en cada caso
+     9.5. Chat de soporte integrado
+     9.6. Envío de mensajes al equipo de soporte
+     9.7. Indicadores de estado y prioridad
+     9.8. Cierre de un caso
+
+  10. Reporte de incidencias en cámaras
+      10.1. Acceso al módulo de incidencias
+      10.2. Selección de la cámara afectada
+      10.3. Cumplimentación del asunto y descripción
+      10.4. Asignación de prioridad
+      10.5. Envío del reporte
+      10.6. Seguimiento del caso generado
+
+  11. Asistente de voz con inteligencia artificial
+      11.1. Acceso al asistente
+      11.2. Permisos de micrófono
+      11.3. Captura y transcripción del comando
+      11.4. Edición previa al envío
+      11.5. Comandos soportados
+      11.6. Apertura de cámaras por voz
+      11.7. Apertura y consulta de notificaciones por voz
+      11.8. Recuento de detecciones por voz
+      11.9. Creación de un caso por voz
+      11.10. Resultados y mensajes del asistente
+
+  12. Notificaciones de detección automática
+      12.1. Concepto de notificación
+      12.2. Acceso al panel de notificaciones
+      12.3. Información mostrada por cada alerta
+      12.4. Apertura de la cámara asociada a la alerta
+      12.5. Reproducción del clip de seguridad asociado
+      12.6. Eliminación de notificaciones revisadas
+
+  13. Clips de seguridad
+      13.1. Naturaleza y origen de los clips
+      13.2. Acceso al visor de clips
+      13.3. Filtrado por cámara
+      13.4. Reproducción en línea
+      13.5. Descarga de un clip
+      13.6. Antigüedad y rotación de los clips
+
+  14. Visualización de vídeo en directo desde una cámara local
+      14.1. Concepto del streaming local
+      14.2. Requisitos en el equipo del cliente
+      14.3. Puesta en marcha del servidor de vídeo
+      14.4. Activación del túnel seguro
+      14.5. Configuración de la URL en la cámara
+      14.6. Visualización desde el portal
+
+  15. Preguntas frecuentes
+      15.1. Acceso y autenticación
+      15.2. Plano y cámaras
+      15.3. Contratación
+      15.4. Soporte y casos
+      15.5. Asistente de voz
+      15.6. Notificaciones y clips
+
+  16. Resolución de problemas comunes
+      16.1. No puedo iniciar sesión
+      16.2. No veo el plano cargado
+      16.3. La cámara no muestra imagen
+      16.4. El asistente de voz no me escucha
+      16.5. No recibo notificaciones de detección
+      16.6. Errores al subir un archivo de plano
+
+  17. Recomendaciones de uso y buenas prácticas
+      17.1. Seguridad de la cuenta
+      17.2. Gestión ordenada de cámaras
+      17.3. Comunicación con el equipo de soporte
+      17.4. Uso eficiente del asistente de voz
+      17.5. Gestión de evidencias
+
+  18. Glosario de términos
+
+  Índice de figuras
+
+
+1. Introducción
+
+
+1.1. Propósito del manual
+
+El presente documento constituye el manual de usuario del portal de clientes
+de OptiSecure Solutions, plataforma de videovigilancia residencial integrada
+sobre Salesforce Experience Cloud. Su finalidad es guiar a cualquier persona
+registrada como cliente del servicio en la totalidad de operaciones que el
+portal pone a su disposición, desde el acceso inicial hasta la gestión
+avanzada de cámaras, evidencias de seguridad y soporte técnico.
+
+El manual ha sido redactado para acompañar a la memoria del Trabajo Fin de
+Grado a modo de anexo, completando la descripción técnica del sistema con
+una visión exclusivamente operativa, orientada al usuario final y exenta de
+detalles de implementación. Por este motivo, la terminología empleada se
+mantiene próxima a la experiencia visual del portal, evitando referencias a
+clases Apex, componentes Lightning Web Components u objetos personalizados,
+salvo cuando resulta imprescindible para la comprensión.
+
+
+1.2. Destinatarios
+
+El público objetivo del manual está constituido por:
+
+  - Clientes contratantes del servicio OptiSecure Solutions, que acceden al
+    portal para gestionar sus cámaras, sus solicitudes de contratación, sus
+    incidencias y sus evidencias de seguridad.
+
+  - Personal de soporte de primera línea, que puede emplear el documento
+    como referencia rápida durante la atención al cliente.
+
+  - Tribunales académicos y revisores del Trabajo Fin de Grado, a los que
+    se ofrece una visión funcional completa del sistema entregado.
+
+No se asumen conocimientos previos de Salesforce ni de tecnologías de
+videovigilancia. Se da por supuesta, únicamente, la familiaridad básica con
+el uso de un navegador web moderno.
+
+
+1.3. Convenciones tipográficas
+
+A lo largo del documento se aplican las siguientes convenciones:
+
+  - Los nombres de botones, opciones de menú y campos de formulario se
+    indican entre comillas angulares, por ejemplo «Iniciar sesión» o
+    «Añadir plano».
+
+  - Los mensajes mostrados por el sistema al usuario se reproducen entre
+    comillas dobles, por ejemplo "Plano guardado correctamente".
+
+  - Los nombres de pantallas, módulos o paneles del portal se escriben en
+    mayúscula inicial, por ejemplo Mapa de Seguridad o Panel de
+    Notificaciones.
+
+  - Las direcciones URL de ejemplo se muestran como portal.optisecure.example
+    sin pretender corresponder con un dominio real.
+
+  - Los procedimientos paso a paso se enumeran con dígitos seguidos de
+    punto, manteniendo siempre orden cronológico de ejecución.
+
+
+1.4. Requisitos técnicos del puesto del usuario
+
+Para una experiencia óptima del portal, se recomiendan las siguientes
+condiciones en el equipo del cliente:
+
+  - Sistema operativo Windows 10 o superior, macOS reciente o distribución
+    Linux equivalente.
+
+  - Navegador web actualizado: Google Chrome, Microsoft Edge, Mozilla
+    Firefox o Apple Safari, en cualquiera de sus versiones recientes.
+
+  - Resolución mínima recomendada de 1366 × 768 píxeles. El portal se
+    adapta automáticamente a resoluciones menores, incluyendo dispositivos
+    móviles, aunque la experiencia óptima se obtiene en pantallas de
+    sobremesa o portátil.
+
+  - Conexión a Internet estable. El consumo de datos depende
+    principalmente del visionado de vídeo en directo de las cámaras
+    locales, no de la operación general del portal.
+
+  - Para el uso del asistente de voz se requiere un micrófono operativo y
+    autorizar al navegador su utilización cuando se solicite.
+
+  - Para la reproducción de vídeo de cámaras locales conectadas al equipo,
+    se requiere la instalación previa del servidor de vídeo y de la
+    herramienta de túnel seguro descritas en el capítulo 14.
+
+
+1.5. Notación de figuras
+
+Cada captura de pantalla referenciada en el documento se identifica como
+«Figura N», donde N es un número correlativo a lo largo de toda la guía. El
+texto del manual sitúa siempre la figura correspondiente en el punto en el
+que el usuario debería verla en el flujo descrito. La relación completa de
+figuras se ofrece al final del documento, en el Índice de figuras.
+
+A modo de ejemplo, el lector encontrará referencias del tipo «como se
+muestra en la Figura 7» en aquellos puntos en los que la captura
+correspondiente refuerza la comprensión del paso descrito.
+
+
+2. Acceso al portal
+
+
+2.1. Dirección del portal
+
+El portal de clientes se encuentra accesible desde cualquier navegador web
+introduciendo la dirección que el equipo de OptiSecure Solutions haya
+proporcionado al cliente. A título ilustrativo:
+
+  https://portal.optisecure.example
+
+Al acceder a dicha dirección, el navegador presenta la página de bienvenida,
+estructurada en dos áreas verticales bien diferenciadas: a la izquierda, el
+formulario de autenticación; a la derecha, un banner corporativo con la
+imagen institucional del servicio. La pantalla inicial se reproduce en la
+Figura 1.
+
+
+2.2. Registro de un nuevo cliente
+
+El acceso al portal está reservado a clientes con contrato activo. Por
+tanto, el alta inicial de la cuenta no se realiza mediante un formulario
+público de auto-registro, sino que es el equipo comercial de OptiSecure
+Solutions quien crea el contacto del cliente en el sistema y habilita su
+acceso al portal en el momento en que se formaliza el contrato.
+
+Una vez creada la cuenta, el sistema envía al cliente un correo electrónico
+de bienvenida que contiene:
+
+  - El nombre con el que ha quedado registrado en el sistema.
+  - La dirección del portal.
+  - Un enlace seguro para definir su contraseña inicial.
+  - Una breve guía de primeros pasos.
+
+El cliente debe pulsar el enlace de activación para fijar la contraseña con
+la que accederá habitualmente al portal. La pantalla de definición de
+contraseña inicial se ilustra en la Figura 2.
+
+
+2.3. Activación de la cuenta y primera contraseña
+
+Al pulsar sobre el enlace recibido, el navegador abre la pantalla de
+activación. El cliente debe introducir dos veces la contraseña deseada,
+respetando los criterios de seguridad indicados sobre el propio formulario.
+Estos criterios incluyen, entre otros, una longitud mínima determinada,
+el uso de caracteres alfanuméricos y la inclusión de al menos un carácter
+no alfanumérico.
+
+Una vez confirmada la contraseña, el sistema redirige automáticamente al
+cliente al portal autenticado, sin necesidad de iniciar sesión manualmente
+por primera vez. A partir de ese momento, podrá acceder al portal
+introduciendo su correo electrónico y su contraseña.
+
+
+2.4. Inicio de sesión
+
+Para iniciar sesión en cualquier acceso posterior, el cliente debe:
+
+  1. Acceder a la dirección del portal proporcionada por OptiSecure
+     Solutions.
+  2. Introducir su correo electrónico en el campo «Usuario».
+  3. Introducir su contraseña en el campo «Contraseña».
+  4. Pulsar el botón «Iniciar sesión».
+
+Si los datos son correctos, el sistema redirige al cliente al Mapa de
+Seguridad, descrito en el capítulo 3 de este manual. La pantalla de inicio
+de sesión se reproduce en la Figura 3.
+
+En caso de credenciales erróneas, el portal muestra un mensaje informativo
+inmediatamente debajo del formulario, sin revelar nunca si es el usuario o
+la contraseña lo que resulta incorrecto, por motivos de seguridad.
+
+
+2.5. Recuperación de contraseña
+
+Si el cliente olvida su contraseña, dispone del enlace «¿Has olvidado tu
+contraseña?» situado bajo el formulario de inicio de sesión. Al pulsarlo,
+el portal presenta una pantalla en la que se debe introducir la dirección
+de correo electrónico asociada a la cuenta. Tras enviar el formulario, el
+sistema remite al cliente un correo con un enlace temporal que permite
+definir una nueva contraseña.
+
+El procedimiento de recuperación se ilustra en la Figura 4. El enlace
+recibido tiene una validez limitada en el tiempo. Si caduca antes de ser
+utilizado, el cliente puede repetir el proceso sin limitación alguna.
+
+
+2.6. Cierre de sesión
+
+El cierre de sesión se realiza desde el menú de usuario situado en la
+cabecera del portal, que se describe con detalle en el capítulo 3. La
+opción correspondiente se denomina «Cerrar sesión». Al pulsarla, el
+sistema invalida la sesión actual del navegador y redirige al cliente a la
+pantalla de inicio de sesión.
+
+Se recomienda cerrar sesión siempre que el equipo desde el que se accede
+sea compartido o no se encuentre bajo control exclusivo del cliente.
+
+
+3. Estructura general de la interfaz
+
+
+3.1. Visión global tras iniciar sesión
+
+Inmediatamente después de iniciar sesión, el cliente accede a la pantalla
+principal del portal: el Mapa de Seguridad. Esta pantalla está concebida
+para concentrar en un único entorno toda la información operativa que el
+cliente necesita en el día a día, evitando navegaciones complejas entre
+páginas separadas.
+
+La organización visual general de la pantalla principal se reproduce en la
+Figura 5 y consta de cuatro zonas claramente identificables:
+
+  - Una cabecera superior con la marca corporativa y el menú de usuario.
+  - Un área central, dominada por el plano de la vivienda y las cámaras
+    instaladas.
+  - Una barra lateral derecha con la lista de cámaras y su estado.
+  - Un pie de página con accesos directos a los demás módulos del portal y
+    con la fecha y hora actualizadas en tiempo real.
+
+Esta disposición se mantiene estable durante toda la sesión, de modo que
+el cliente puede regresar al estado inicial cerrando cualquier modal o
+panel auxiliar que se haya abierto.
+
+
+3.2. Cabecera del portal y menú de usuario
+
+La cabecera ocupa el extremo superior de la pantalla y se mantiene visible
+en todo momento. En su zona izquierda muestra la imagen corporativa de
+OptiSecure Solutions y, junto a ella, accesos visuales que el cliente
+puede emplear para regresar al Mapa de Seguridad desde cualquier punto del
+portal.
+
+El menú de usuario se encuentra accesible desde la propia cabecera. Al
+pulsar sobre la zona indicada, se despliega un panel con las siguientes
+opciones, descritas en detalle en el capítulo 4:
+
+  - «Perfil»: abre el panel de información del cliente.
+  - «Añadir plano»: abre el asistente para personalizar el plano del Mapa
+    de Seguridad con una imagen propia.
+  - «Cerrar sesión»: finaliza la sesión actual.
+
+La apertura del menú se ilustra en la Figura 6 y se describe en el
+apartado 4.1.
+
+
+3.3. Área principal de trabajo: el mapa de seguridad
+
+El centro de la pantalla está ocupado por el plano de la vivienda del
+cliente, sobre el que se superponen pequeños iconos en forma de chincheta
+que representan cada una de las cámaras instaladas. Cada chincheta se
+sitúa en la posición física aproximada de la cámara correspondiente
+dentro del plano. El conjunto se ilustra en la Figura 7.
+
+El plano puede ser una imagen genérica proporcionada por OptiSecure
+Solutions o un plano personalizado subido por el propio cliente desde la
+opción «Añadir plano». La forma de personalizar este plano se describe en
+el capítulo 5.
+
+
+3.4. Barra lateral de cámaras
+
+A la derecha del mapa se sitúa una barra lateral fija que muestra la
+relación completa de cámaras del cliente. Cada elemento del listado
+incluye el nombre de la cámara, un indicador de estado en línea y, en su
+caso, una pequeña descripción de su zona o ubicación.
+
+El usuario puede pulsar directamente sobre cualquier elemento del listado
+para abrir el visor correspondiente, sin necesidad de localizar la
+chincheta sobre el plano.
+
+La barra lateral se ilustra en la Figura 8.
+
+
+3.5. Pie de página con accesos a módulos
+
+El pie de página contiene los accesos a los módulos auxiliares del portal:
+
+  - «Contratar»: abre el módulo de contratación de nuevas cámaras.
+  - «Mis casos»: abre el visor de casos de soporte del cliente.
+  - «Incidencias»: abre el formulario para reportar fallos de cámaras.
+  - «Asistente de voz»: abre el asistente conversacional con IA.
+  - «Notificaciones»: abre el panel de alertas automáticas de detección.
+  - «Clips de seguridad»: abre el visor de evidencias multimedia.
+
+Junto a estos accesos, el pie de página muestra también la fecha y la
+hora actualizadas en tiempo real, como referencia operativa permanente.
+
+La disposición del pie de página se reproduce en la Figura 9.
+
+
+4. Gestión del perfil del usuario
+
+
+4.1. Apertura del menú desde la cabecera
+
+El menú de usuario se encuentra accesible desde la cabecera, en su
+extremo asociado al cliente. Para abrirlo, basta con pulsar sobre el
+indicador correspondiente, tal y como se ilustra en la Figura 10. El
+sistema despliega un menú emergente con las opciones disponibles, listas
+para ser seleccionadas con un único clic.
+
+
+4.2. Acceso a la opción «Perfil»
+
+Para abrir el panel de perfil personal, el cliente selecciona la opción
+«Perfil» dentro del menú de usuario. El sistema abre entonces un panel
+modal centrado sobre el Mapa de Seguridad, con la información estructurada
+en bloques temáticos, como se muestra en la Figura 11.
+
+El panel modal puede cerrarse en cualquier momento pulsando sobre el
+botón de cierre situado en la esquina superior del propio panel o sobre
+cualquier zona externa al mismo.
+
+
+4.3. Datos personales y de cuenta
+
+El primer bloque del perfil presenta los datos identificativos del
+cliente:
+
+  - Nombre completo y, en su caso, apellidos.
+  - Correo electrónico empleado para iniciar sesión.
+  - Cuenta corporativa o particular asociada al contrato.
+  - Idioma y franja horaria configurados.
+
+Estos datos se muestran únicamente a efectos de consulta. La modificación
+de la información personal y de la cuenta se realiza desde el equipo de
+OptiSecure Solutions, previa solicitud por parte del cliente a través del
+canal de soporte habitual. El motivo es garantizar la trazabilidad de los
+cambios y la coherencia de los datos contractuales.
+
+
+4.4. Datos de contacto y dirección de facturación
+
+El segundo bloque del perfil agrupa la información de contacto y la
+dirección de facturación asociada al contrato. Aparecen, entre otros
+campos:
+
+  - Teléfono de contacto principal.
+  - Dirección postal completa.
+  - Indicaciones adicionales de entrega, si procede.
+
+Como en el bloque anterior, los datos se muestran a efectos informativos.
+Cualquier actualización debe canalizarse a través del equipo comercial o
+de atención al cliente.
+
+
+4.5. Resumen del estado del servicio
+
+El tercer bloque del perfil ofrece una visión sintética del estado actual
+del servicio contratado, incluyendo elementos como:
+
+  - Tipo de plan o modalidad de servicio.
+  - Nivel de soporte vigente, expresado como acuerdo de nivel de servicio
+    aplicable.
+  - Fecha de alta del servicio.
+  - Estado contractual.
+
+Esta información permite al cliente comprobar de un vistazo las
+condiciones bajo las cuales recibe el servicio, sin necesidad de
+contactar con el equipo comercial para consultas habituales.
+
+
+4.6. Resumen de cámaras del cliente
+
+El cuarto bloque resume el equipamiento del cliente en términos de
+cámaras de seguridad. Se muestra el número total de cámaras asociadas a
+la cuenta y, dentro de este, el número de cámaras activas, lo que permite
+detectar posibles incidencias de manera rápida.
+
+Adicionalmente, el bloque ofrece una pequeña lista con los nombres de las
+cámaras y la zona en la que están instaladas. Esta lista coincide con la
+mostrada en la barra lateral del Mapa de Seguridad.
+
+
+4.7. Cierre del modal de perfil
+
+Para cerrar el panel de perfil y regresar al Mapa de Seguridad, el cliente
+puede:
+
+  - Pulsar el botón de cierre situado en la esquina superior del panel.
+  - Pulsar sobre el área oscurecida que rodea al modal.
+  - Pulsar la tecla Escape en su teclado.
+
+Cualquiera de estas acciones devuelve al cliente al Mapa de Seguridad sin
+modificar ningún dato.
+
+
+5. Personalización del plano de la vivienda
+
+
+5.1. Concepto y utilidad
+
+El Mapa de Seguridad utiliza, por defecto, una imagen genérica de un
+plano residencial proporcionada por OptiSecure Solutions. Sin embargo,
+con el objetivo de mejorar la experiencia y la percepción del cliente, el
+portal permite que cada cliente sustituya esa imagen por un plano propio
+de su vivienda real.
+
+Esta personalización facilita la asociación visual entre la posición de
+las chinchetas y la ubicación física de las cámaras, lo que resulta
+especialmente útil en viviendas con varias plantas, distribuciones
+complejas o numerosas estancias.
+
+
+5.2. Acceso a la opción «Añadir plano»
+
+Para iniciar la subida del plano, el cliente debe:
+
+  1. Pulsar sobre el menú de usuario en la cabecera, tal como se describe
+     en el apartado 4.1.
+  2. Seleccionar la opción «Añadir plano».
+
+El sistema abre entonces un panel modal específico, dedicado por completo
+al proceso de carga del plano. La apariencia inicial de este modal se
+reproduce en la Figura 12.
+
+
+5.3. Subida de un archivo de plano
+
+Dentro del modal, el cliente dispone de una zona de subida claramente
+señalizada con el texto «Arrastra aquí tu plano o haz clic para
+seleccionar un archivo». Esta zona admite dos formas de uso:
+
+  - Arrastrar y soltar: el cliente arrastra un archivo de imagen desde el
+    explorador de su equipo y lo deja caer sobre la zona indicada.
+
+  - Selección manual: el cliente pulsa sobre la zona y selecciona el
+    archivo a través del cuadro de diálogo de su sistema operativo.
+
+Mientras se arrastra un archivo sobre la zona, esta resalta visualmente
+para indicar que la subida es posible.
+
+
+5.4. Restricciones de tamaño y formato
+
+El sistema impone las siguientes restricciones al archivo subido, con el
+fin de garantizar el correcto rendimiento del portal y un consumo
+razonable del almacenamiento del cliente:
+
+  - Tamaño máximo: 4 megabytes por archivo.
+  - Formatos admitidos: PNG, JPEG, JPG, GIF, WEBP y BMP.
+
+Si el archivo seleccionado no cumple alguno de estos requisitos, el
+sistema muestra inmediatamente un mensaje explicativo en la zona inferior
+del modal, sin enviar el archivo al servidor. El cliente puede entonces
+elegir un archivo distinto sin necesidad de cerrar el modal.
+
+Estas restricciones se documentan visualmente debajo de la zona de
+subida, como se observa en la Figura 13.
+
+
+5.5. Vista previa antes de guardar
+
+Cuando el archivo seleccionado cumple los requisitos, el sistema muestra
+una vista previa de la imagen ocupando la parte central del modal, junto
+con su nombre y su tamaño expresado en una unidad legible (kilobytes o
+megabytes). De este modo, el cliente puede confirmar visualmente que está
+a punto de guardar la imagen correcta antes de hacerla efectiva.
+
+La vista previa se ilustra en la Figura 14. Junto a ella aparecen dos
+botones de acción:
+
+  - «Cancelar»: cierra el modal sin guardar cambios.
+  - «Guardar»: confirma la subida del plano y lo asocia al cliente.
+
+
+5.6. Confirmación y aplicación del plano
+
+Al pulsar «Guardar», el sistema valida nuevamente el archivo, lo
+transmite de forma segura al servidor y lo asocia al cliente. Una vez
+finalizada la operación, el modal se cierra automáticamente y el Mapa de
+Seguridad pasa a mostrar el nuevo plano sin necesidad de recargar la
+página, gracias a un mecanismo de sincronización interno.
+
+Si la operación tiene éxito, el portal muestra brevemente un mensaje de
+confirmación. En caso de error puntual, el sistema mantiene el modal
+abierto y comunica al cliente la causa con el mayor detalle posible,
+permitiendo reintentar el envío.
+
+
+5.7. Sustitución y eliminación de un plano existente
+
+Cada cliente puede subir su plano tantas veces como desee. Cada nueva
+subida sustituye automáticamente al plano anterior, de modo que en todo
+momento existe un único plano vigente para la cuenta. No es necesario
+eliminar manualmente la imagen previa.
+
+En caso de que el cliente prefiera regresar al plano genérico inicial,
+puede solicitarlo a través del canal de soporte. El equipo técnico de
+OptiSecure Solutions retirará el plano personalizado y el portal volverá
+a emplear la imagen genérica por defecto.
+
+
+6. Operación con el mapa de seguridad
+
+
+6.1. Componentes del mapa
+
+El Mapa de Seguridad combina dos elementos visuales fundamentales:
+
+  - El plano de la vivienda, ya sea el genérico o el personalizado por el
+    cliente.
+  - Las chinchetas que representan las cámaras, ubicadas sobre el plano
+    en la posición lógica que les corresponde.
+
+La combinación de ambos elementos ofrece una representación intuitiva
+del despliegue de cámaras del cliente, como se muestra en la Figura 15.
+
+
+6.2. Identificación visual de las cámaras
+
+Cada chincheta del mapa identifica una cámara concreta. Al situar el
+cursor sobre una chincheta, el sistema muestra una etiqueta emergente
+con el nombre asignado a la cámara correspondiente. Si la cámara está
+en línea, la chincheta se representa con su color característico; si no
+lo está, el color se atenúa para reflejar visualmente la incidencia.
+
+Esta diferenciación visual permite al cliente detectar de un vistazo
+cualquier desconexión sin necesidad de revisar manualmente cada cámara.
+
+
+6.3. Apertura del visor de una cámara
+
+Para abrir el visor de una cámara, el cliente puede:
+
+  - Pulsar directamente sobre la chincheta correspondiente en el mapa.
+  - Pulsar sobre el nombre de la cámara en la barra lateral derecha.
+
+Ambas acciones tienen el mismo efecto y abren el visor a pantalla
+completa, como se muestra en la Figura 16.
+
+
+6.4. Visualización del vídeo en directo
+
+Una vez abierto el visor, el portal carga el origen de vídeo configurado
+para la cámara seleccionada. Pueden darse dos situaciones:
+
+  - La cámara dispone de una URL de vídeo basada en un servicio externo,
+    en cuyo caso el portal embebe directamente el reproductor del
+    proveedor.
+
+  - La cámara dispone de una URL de vídeo correspondiente a un servidor
+    local del cliente publicado a través de un túnel seguro, en cuyo
+    caso el portal muestra el flujo de vídeo en directo procedente de
+    dicho equipo.
+
+En ambos casos, el visor incluye un indicador visual «EN DIRECTO» que
+informa al cliente de que el contenido se está mostrando en tiempo real.
+
+
+6.5. Cierre del visor y vuelta al mapa
+
+El visor puede cerrarse pulsando el botón de cierre situado en una de
+sus esquinas o, alternativamente, pulsando la tecla Escape. El cliente
+regresa entonces al Mapa de Seguridad en el mismo estado en el que se
+encontraba antes de abrir el visor.
+
+
+6.6. Comportamiento responsive del mapa
+
+El Mapa de Seguridad se adapta automáticamente al tamaño de la ventana
+del navegador. En pantallas estrechas, como las de teléfonos móviles, la
+barra lateral se reorganiza por debajo del mapa, conservando la
+funcionalidad pero priorizando el aprovechamiento del espacio
+disponible. En pantallas amplias, la disposición original se mantiene
+sin cambios.
+
+Esta adaptabilidad permite al cliente acceder al portal desde
+prácticamente cualquier dispositivo sin pérdida de funcionalidad.
+
+
+7. Gestión individual de cámaras
+
+
+7.1. Lista de cámaras en la barra lateral
+
+La barra lateral derecha del Mapa de Seguridad muestra la relación
+completa de cámaras vinculadas al cliente, ordenadas conforme a las
+preferencias internas del sistema. Cada entrada de la lista incluye:
+
+  - Nombre asignado a la cámara.
+  - Zona o ubicación, en su caso.
+  - Indicador de estado en línea.
+  - Acción rápida de renombrado.
+
+La lista se mantiene sincronizada con el conjunto real de cámaras
+existentes en la cuenta. Cualquier alta o baja se refleja
+inmediatamente, tanto en la barra lateral como en el mapa.
+
+
+7.2. Estado en línea de cada cámara
+
+Junto al nombre de cada cámara aparece un pequeño indicador de estado
+que adopta dos posibles valores visuales:
+
+  - En línea: la cámara está disponible para visualización en directo.
+  - Fuera de línea: la cámara no está respondiendo en este momento.
+
+El estado se actualiza periódicamente, de modo que el cliente dispone
+de una visión razonablemente reciente de la disponibilidad de su
+equipamiento.
+
+
+7.3. Renombrado de una cámara
+
+El cliente puede renombrar cualquiera de sus cámaras directamente desde
+la barra lateral siguiendo estos pasos:
+
+  1. Localizar la cámara que se desea renombrar dentro de la lista.
+  2. Pulsar sobre el icono de edición situado junto a su nombre, tal
+     como se muestra en la Figura 17.
+  3. Introducir el nuevo nombre en el campo que aparece.
+  4. Pulsar la tecla Intro o el icono de confirmación.
+
+Si el nombre se acepta correctamente, la lista se actualiza al
+instante. El sistema impide nombres vacíos y rechaza valores formados
+únicamente por espacios.
+
+
+7.4. Acceso rápido a una cámara desde la lista
+
+Pulsar sobre el nombre de una cámara abre directamente el visor de
+vídeo correspondiente, evitando la necesidad de localizar la chincheta
+sobre el plano. Esta vía resulta particularmente útil en cuentas con un
+número elevado de cámaras.
+
+
+7.5. Buenas prácticas de nomenclatura
+
+Aunque no existe ninguna restricción técnica al respecto, se recomienda
+emplear nombres descriptivos y breves, que reflejen sin ambigüedad la
+ubicación física o la finalidad de cada cámara. A modo de ejemplo:
+
+  - «Entrada principal».
+  - «Salón planta baja».
+  - «Garaje».
+  - «Patio trasero».
+
+Una nomenclatura cuidada simplifica la operación diaria y agiliza la
+interacción con el asistente de voz, descrita en el capítulo 11.
+
+
+8. Contratación de nuevas cámaras
+
+
+8.1. Acceso al módulo de contratación
+
+El módulo de contratación está disponible desde el pie de página del
+Mapa de Seguridad, mediante el botón «Contratar», como se observa en la
+Figura 18. Al pulsarlo, el sistema abre un panel modal con dos pestañas
+claramente diferenciadas:
+
+  - «Nueva solicitud».
+  - «Mis solicitudes».
+
+La pestaña activa por defecto es la primera, orientada a iniciar una
+nueva contratación.
+
+
+8.2. Pestaña «Nueva solicitud»
+
+La pestaña «Nueva solicitud» muestra un formulario que permite al
+cliente expresar su voluntad de contratar nuevas cámaras. Los datos
+identificativos del solicitante se rellenan automáticamente a partir
+del perfil del usuario autenticado, evitando duplicidad de información.
+
+El formulario solicita, como mínimo, dos datos:
+
+  - Número de cámaras deseadas.
+  - Detalle libre con observaciones, ubicaciones aproximadas o cualquier
+    información adicional que el cliente desee aportar.
+
+El sistema acepta hasta un número razonable de cámaras por solicitud,
+fijado por la lógica interna del portal, con el objetivo de evitar
+peticiones desproporcionadas accidentales.
+
+
+8.3. Cumplimentación del formulario
+
+Para cumplimentar el formulario, el cliente debe:
+
+  1. Verificar los datos identificativos precargados.
+  2. Indicar el número de cámaras deseadas.
+  3. Redactar las observaciones que considere pertinentes en el área de
+     detalle.
+
+Cualquier campo obligatorio sin cumplimentar impide el envío del
+formulario y se resalta visualmente para guiar al cliente.
+
+
+8.4. Envío de la solicitud
+
+Una vez cumplimentado, el cliente pulsa el botón «Enviar solicitud». El
+sistema registra la petición y muestra un mensaje de confirmación. La
+solicitud queda automáticamente en estado «Pendiente» y pasa a estar
+disponible para revisión por parte del equipo de OptiSecure Solutions.
+
+
+8.5. Pestaña «Mis solicitudes»
+
+La pestaña «Mis solicitudes» permite al cliente consultar el historial
+de sus propias peticiones de contratación, como se ilustra en la
+Figura 19. Cada solicitud aparece con:
+
+  - Número identificativo asignado por el sistema.
+  - Fecha y hora de creación.
+  - Número de cámaras solicitadas.
+  - Estado actual del ciclo de vida.
+
+Los registros se ordenan cronológicamente, mostrándose en primer lugar
+las solicitudes más recientes.
+
+
+8.6. Estados posibles de una solicitud
+
+Cada solicitud progresa por una secuencia controlada de estados:
+
+  - «Pendiente»: la solicitud ha sido registrada y aguarda revisión.
+  - «En revisión»: el equipo de OptiSecure Solutions está estudiando la
+    petición.
+  - «Aprobada»: la solicitud ha sido aceptada y permite al cliente
+    completar el posicionamiento de las cámaras.
+  - «Rechazada»: la solicitud ha sido denegada, total o parcialmente.
+  - «Completada»: el cliente ha posicionado las cámaras aprobadas y la
+    solicitud ha quedado finalizada.
+
+Cada estado se acompaña de un indicador visual diferenciado, lo que
+permite identificar de un vistazo el grado de avance de cada
+solicitud.
+
+
+8.7. Reanudación de una solicitud aprobada
+
+Cuando una solicitud queda en estado «Aprobada», el portal habilita
+automáticamente al cliente la posibilidad de posicionar sobre el plano
+las nuevas cámaras adquiridas. En el Mapa de Seguridad aparece una
+zona auxiliar con tantas chinchetas pendientes de ubicar como cámaras
+aprobadas, como se muestra en la Figura 20.
+
+
+8.8. Posicionamiento de las cámaras aprobadas
+
+Para situar cada cámara aprobada en el plano, el cliente debe:
+
+  1. Arrastrar una chincheta pendiente desde la zona auxiliar.
+  2. Soltarla sobre la posición deseada del plano.
+  3. Repetir el proceso con cada chincheta pendiente.
+
+El sistema permite reposicionar las chinchetas tantas veces como sea
+necesario hasta confirmar el resultado final. Cada nueva posición se
+calcula como porcentaje sobre las dimensiones del plano, lo que
+garantiza la coherencia visual aunque el plano se redimensione en
+distintos dispositivos.
+
+
+8.9. Confirmación final y cierre de la solicitud
+
+Una vez que todas las chinchetas pendientes han sido ubicadas, el
+cliente pulsa el botón «Guardar cámaras». El sistema crea entonces los
+registros definitivos de las nuevas cámaras y marca la solicitud
+correspondiente como «Completada». A partir de este momento, las
+nuevas cámaras forman parte del Mapa de Seguridad como cualquier otra
+cámara y pueden ser renombradas, abiertas y consultadas con
+normalidad.
+
+
+9. Sistema de soporte y casos
+
+
+9.1. Acceso al módulo de casos
+
+El módulo de casos de soporte se abre desde el pie de página, mediante
+el botón «Mis casos». Al pulsarlo, el portal muestra un panel modal
+estructurado en dos zonas: a la izquierda, la lista de casos del
+cliente; a la derecha, el detalle del caso seleccionado, como se
+observa en la Figura 21.
+
+
+9.2. Listado de casos del cliente
+
+El listado contiene todos los casos de soporte abiertos y cerrados
+asociados al cliente. Cada entrada muestra:
+
+  - Número de caso.
+  - Asunto.
+  - Indicadores visuales de prioridad y de estado.
+  - Fecha de creación.
+
+Los casos más recientes se sitúan en la parte superior del listado.
+Para abrir el detalle de un caso, basta con pulsar sobre la entrada
+correspondiente.
+
+
+9.3. Apertura del detalle de un caso
+
+Al seleccionar un caso, su detalle se carga en la zona derecha del
+panel. El cliente puede consultar:
+
+  - Asunto y descripción originales.
+  - Cliente y contacto asociados al caso.
+  - Estado actual.
+  - Prioridad asignada.
+  - Origen de creación del caso.
+
+La selección de un caso no afecta al resto del listado, lo que permite
+alternar libremente entre casos sin perder el contexto.
+
+
+9.4. Información mostrada en cada caso
+
+Por defecto, el detalle del caso muestra los datos descriptivos antes
+mencionados. La sección inferior incluye además el chat de soporte,
+descrito en el siguiente apartado.
+
+
+9.5. Chat de soporte integrado
+
+El chat de soporte permite al cliente comunicarse con el equipo de
+OptiSecure Solutions sin necesidad de salir del portal. Los mensajes
+se ordenan cronológicamente, de los más antiguos a los más recientes,
+con desplazamiento automático al último mensaje recibido. La
+disposición visual del chat se ilustra en la Figura 22.
+
+Los mensajes propios se muestran como burbujas alineadas a la derecha
+del panel, mientras que los del equipo de soporte aparecen alineadas
+a la izquierda, lo que facilita el seguimiento de la conversación.
+
+
+9.6. Envío de mensajes al equipo de soporte
+
+Para enviar un mensaje, el cliente debe:
+
+  1. Escribir el mensaje en el campo de texto situado en la parte
+     inferior del chat.
+  2. Pulsar el botón «Enviar» o, alternativamente, la tecla Intro.
+
+El mensaje aparece inmediatamente como una nueva burbuja propia. El
+equipo de soporte responde a través del mismo canal, y el portal
+notifica visualmente la llegada de nuevos mensajes mientras la
+conversación está abierta.
+
+
+9.7. Indicadores de estado y prioridad
+
+Cada caso se acompaña de dos indicadores visuales diferenciados:
+
+  - Estado del caso: refleja el momento del ciclo de vida en que se
+    encuentra el caso, incluyendo valores como «Nuevo», «En curso»,
+    «Esperando cliente» o «Cerrado».
+
+  - Prioridad: refleja la urgencia con la que el equipo de soporte
+    debe atender la incidencia, con valores como «Alta», «Media» o
+    «Baja».
+
+La combinación de estos indicadores permite al cliente identificar de
+un vistazo qué casos requieren su atención inmediata.
+
+
+9.8. Cierre de un caso
+
+El cierre formal de un caso corresponde al equipo de soporte, una vez
+que la incidencia ha sido resuelta a satisfacción del cliente. El
+cliente puede solicitar el cierre del caso a través del propio chat,
+indicándolo con un mensaje claro al equipo de soporte.
+
+
+10. Reporte de incidencias en cámaras
+
+
+10.1. Acceso al módulo de incidencias
+
+El reporte de incidencias se inicia desde el pie de página del Mapa
+de Seguridad, mediante el botón «Incidencias». Al pulsarlo, el
+sistema abre un formulario modal específicamente diseñado para
+registrar fallos detectados por el cliente en alguna de sus cámaras.
+El formulario inicial se reproduce en la Figura 23.
+
+
+10.2. Selección de la cámara afectada
+
+El primer paso consiste en seleccionar la cámara que presenta el
+fallo. El portal muestra un selector con la lista completa de cámaras
+del cliente, identificadas por su nombre. Solamente se ofrecen las
+cámaras del propio cliente, en aplicación de las reglas de seguridad
+y privacidad del sistema.
+
+
+10.3. Cumplimentación del asunto y descripción
+
+A continuación, el cliente debe rellenar:
+
+  - El campo «Asunto», con un resumen breve de la incidencia.
+  - El campo «Descripción», con una explicación detallada de los
+    síntomas observados, las circunstancias y, si procede, los pasos
+    realizados sin éxito por el propio cliente.
+
+Cuanta más información concreta aporte el cliente, mayor será la
+agilidad con la que el equipo de soporte podrá diagnosticar y
+resolver la incidencia.
+
+
+10.4. Asignación de prioridad
+
+El cliente puede indicar la prioridad sugerida para la incidencia,
+escogiendo entre los valores disponibles. Esta prioridad funciona
+como una orientación inicial; el equipo de soporte puede ajustarla
+posteriormente en función del impacto real de la incidencia.
+
+
+10.5. Envío del reporte
+
+Una vez cumplimentado el formulario, el cliente pulsa el botón
+«Enviar incidencia». El portal genera automáticamente un caso de
+soporte con los datos introducidos y vincula dicho caso a la cámara
+seleccionada y al contacto del cliente. Tras el envío, el portal
+muestra un mensaje de confirmación con el número de caso asignado.
+
+
+10.6. Seguimiento del caso generado
+
+A partir del envío, la incidencia puede consultarse desde el módulo
+«Mis casos», descrito en el capítulo 9, donde se reflejará con su
+asunto, su prioridad y su estado. Toda la comunicación posterior se
+canaliza a través del chat integrado del propio caso.
+
+
+11. Asistente de voz con inteligencia artificial
+
+
+11.1. Acceso al asistente
+
+El asistente de voz se abre desde el pie de página del Mapa de
+Seguridad, mediante el botón «Asistente de voz». Al pulsarlo, el
+portal abre un panel modal con un micrófono central y un área de
+texto destinada a mostrar la transcripción del comando, como se
+ilustra en la Figura 24.
+
+
+11.2. Permisos de micrófono
+
+La primera vez que el cliente utiliza el asistente, el navegador
+solicita permiso para acceder al micrófono. El cliente debe aceptar
+esta petición. Si en algún momento se hubiese denegado este permiso,
+puede modificarse desde la configuración del propio navegador para el
+dominio del portal.
+
+Sin acceso al micrófono, el asistente no puede capturar la voz del
+cliente y muestra un mensaje informativo claro que orienta sobre la
+forma de habilitar el permiso.
+
+
+11.3. Captura y transcripción del comando
+
+Para utilizar el asistente, el cliente debe:
+
+  1. Pulsar el botón con icono de micrófono situado en el centro del
+     modal.
+  2. Pronunciar el comando en lenguaje natural, en español, con voz
+     clara y a una distancia razonable del micrófono.
+  3. Esperar a que el sistema finalice la transcripción.
+
+El texto reconocido aparece progresivamente en el área de
+transcripción a medida que el cliente habla.
+
+
+11.4. Edición previa al envío
+
+Antes de enviar el comando para su procesamiento, el cliente puede
+modificar manualmente la transcripción si detecta algún error de
+reconocimiento, escribiendo o corrigiendo directamente sobre el área
+de texto. Esta capacidad permite suplir los errores ocasionales del
+reconocimiento de voz, frecuentes en entornos ruidosos.
+
+Una vez revisada la transcripción, el cliente pulsa el botón «Enviar
+comando» para enviarla al sistema.
+
+
+11.5. Comandos soportados
+
+El asistente reconoce un conjunto definido de intenciones,
+suficientes para cubrir las operaciones más habituales del cliente:
+
+  - Apertura de cámaras concretas.
+  - Apertura de notificaciones recientes.
+  - Recuento de detecciones del día.
+  - Creación de un caso de soporte a partir del comando de voz.
+  - Consulta del conjunto de cámaras activas.
+
+Si el comando no encaja en ninguna de estas intenciones, el sistema
+informa al cliente con un mensaje específico y le invita a
+reformularlo.
+
+
+11.6. Apertura de cámaras por voz
+
+Ejemplos de comandos válidos para abrir una cámara concreta:
+
+  - «Abre la cámara del salón».
+  - «Muéstrame la cámara del garaje».
+  - «Abre la cámara número uno».
+
+El sistema interpreta el comando, identifica la cámara solicitada y
+abre directamente su visor a pantalla completa, sin necesidad de
+volver al Mapa de Seguridad.
+
+
+11.7. Apertura y consulta de notificaciones por voz
+
+Ejemplos de comandos válidos relacionados con notificaciones:
+
+  - «Abre la última notificación».
+  - «Muéstrame las notificaciones de hoy».
+  - «¿Hay notificaciones nuevas?».
+
+El sistema abre el panel de notificaciones o, en su caso, reproduce
+directamente el clip asociado a la última alerta recibida.
+
+
+11.8. Recuento de detecciones por voz
+
+Ejemplos de comandos válidos relacionados con el recuento de
+detecciones:
+
+  - «¿Cuántas notificaciones han llegado hoy?».
+  - «¿Cuántas detecciones se han registrado?».
+
+El sistema responde con el número total de detecciones registradas
+durante el día en curso para el cliente autenticado.
+
+
+11.9. Creación de un caso por voz
+
+Ejemplos de comandos válidos para registrar un caso de soporte:
+
+  - «Quiero abrir un caso porque la cámara del salón no funciona».
+  - «Necesito reportar que el portero no responde».
+
+El sistema crea automáticamente un caso con asunto, descripción y
+prioridad inferidos del propio comando, y muestra al cliente el
+número de caso generado para su seguimiento.
+
+
+11.10. Resultados y mensajes del asistente
+
+Tras procesar cada comando, el asistente muestra al cliente un
+mensaje claro con el resultado de la operación: confirmación del
+caso creado, lista de cámaras activas, número de detecciones, o
+explicación detallada en caso de no haber comprendido el comando.
+
+El asistente puede invocarse de nuevo tantas veces como se desee, sin
+necesidad de cerrar el modal entre comando y comando.
+
+
+12. Notificaciones de detección automática
+
+
+12.1. Concepto de notificación
+
+Cuando una cámara local del cliente detecta automáticamente la
+presencia de una persona dentro de su campo visual, el sistema
+genera una notificación que queda registrada de forma persistente en
+el portal. Cada notificación se compone, como mínimo, de:
+
+  - Cámara afectada.
+  - Fecha y hora del evento.
+  - Acceso a un clip corto de evidencia.
+
+Las notificaciones permiten al cliente disponer de un histórico
+trazable de todos los eventos relevantes, incluso cuando no estaba
+viendo el portal en el momento de la detección.
+
+
+12.2. Acceso al panel de notificaciones
+
+El panel de notificaciones se abre desde el pie de página del Mapa
+de Seguridad, mediante el botón «Notificaciones». Al pulsarlo, el
+portal muestra un listado ordenado cronológicamente, con las
+notificaciones más recientes en primer lugar, como se observa en la
+Figura 25.
+
+
+12.3. Información mostrada por cada alerta
+
+Cada alerta del listado presenta:
+
+  - Nombre de la cámara que generó la detección.
+  - Fecha y hora exactas del evento.
+  - Resumen breve del tipo de detección.
+  - Botones de acción para abrir la cámara o reproducir el clip
+    asociado.
+
+
+12.4. Apertura de la cámara asociada a la alerta
+
+Al pulsar sobre el botón «Abrir cámara» de una alerta, el portal abre
+el visor de la cámara correspondiente, permitiendo al cliente
+observar la situación actual de dicha cámara aun cuando el evento
+detectado ya haya finalizado.
+
+
+12.5. Reproducción del clip de seguridad asociado
+
+Al pulsar sobre el botón «Ver clip» de una alerta, el portal abre el
+clip de evidencia generado en el momento de la detección. El clip se
+reproduce en línea, sin necesidad de descargarlo previamente.
+
+
+12.6. Eliminación de notificaciones revisadas
+
+El cliente puede eliminar de su listado aquellas notificaciones que
+ya no necesite conservar, manteniendo así el panel ordenado y
+manejable. La eliminación se realiza desde el botón correspondiente
+de cada alerta, previa confirmación.
+
+La eliminación retira la alerta del listado del cliente; los clips
+asociados conservan su disponibilidad desde el visor de clips,
+descrito en el capítulo 13.
+
+
+13. Clips de seguridad
+
+
+13.1. Naturaleza y origen de los clips
+
+Los clips de seguridad son grabaciones cortas generadas
+automáticamente por el sistema en el momento en que una cámara local
+detecta una situación relevante, típicamente la presencia de una
+persona. Cada clip está vinculado a una cámara concreta y a la
+detección que dio lugar a su grabación.
+
+
+13.2. Acceso al visor de clips
+
+El visor de clips se abre desde el pie de página del Mapa de
+Seguridad, mediante el botón «Clips de seguridad». Al pulsarlo, el
+portal muestra un listado de clips disponibles para el cliente,
+ordenados cronológicamente, como se observa en la Figura 26.
+
+
+13.3. Filtrado por cámara
+
+El visor permite filtrar los clips por cámara, lo que resulta
+especialmente útil cuando el cliente desea revisar exclusivamente
+las grabaciones de un punto concreto de su vivienda.
+
+El filtro se acciona desde el selector situado en la parte superior
+del listado.
+
+
+13.4. Reproducción en línea
+
+Al pulsar sobre un clip del listado, el portal lo reproduce
+directamente en línea dentro del propio visor, sin necesidad de
+abandonar el portal ni de instalar reproductores externos. El clip
+se acompaña de la cámara de origen y de la fecha y hora de
+grabación.
+
+
+13.5. Descarga de un clip
+
+Junto al reproductor, el visor ofrece una opción para descargar el
+clip en el equipo del cliente. Esta funcionalidad facilita la
+conservación de evidencias en caso de que el cliente desee
+adjuntarlas en denuncias, comunicaciones a su aseguradora o
+informes propios.
+
+
+13.6. Antigüedad y rotación de los clips
+
+Con el objetivo de mantener un consumo razonable del almacenamiento
+del cliente, el sistema puede aplicar políticas de rotación que
+retiren automáticamente los clips más antiguos pasado un determinado
+periodo de conservación. Las condiciones concretas de retención se
+definen en el contrato de servicio y pueden consultarse a través
+del equipo de soporte.
+
+
+14. Visualización de vídeo en directo desde una cámara local
+
+
+14.1. Concepto del streaming local
+
+El portal permite que el cliente visualice cámaras conectadas
+físicamente a su propio equipo, sin necesidad de cámaras IP
+dedicadas. Esta funcionalidad se basa en una arquitectura ligera en
+la que el equipo del cliente expone temporalmente el vídeo de su
+cámara mediante un servidor local y un túnel seguro.
+
+El uso de esta funcionalidad es opcional. Las cámaras IP
+profesionales o los servicios de vídeo de terceros pueden seguirse
+empleando sin esta capa adicional.
+
+
+14.2. Requisitos en el equipo del cliente
+
+Para activar el streaming local, el equipo del cliente debe
+disponer de:
+
+  - Una cámara funcional reconocida por el sistema operativo.
+  - Una versión reciente de Python instalada.
+  - Las dependencias necesarias para el servidor de vídeo local
+    proporcionadas por OptiSecure Solutions.
+  - Una herramienta de túnel seguro autorizada por el cliente.
+
+
+14.3. Puesta en marcha del servidor de vídeo
+
+Para iniciar el servidor de vídeo, el cliente ejecuta desde una
+ventana de terminal el comando que OptiSecure Solutions le facilita
+durante la instalación. El servidor confirma que ha quedado a la
+escucha en una dirección local, lista para emitir el flujo de
+vídeo procedente de la cámara.
+
+La salida típica del servidor en su arranque se muestra en la
+Figura 27.
+
+
+14.4. Activación del túnel seguro
+
+A continuación, el cliente activa la herramienta de túnel seguro,
+que publica la dirección local del servidor en una dirección pública
+con cifrado de extremo a extremo. Esta dirección pública es la que
+el portal utilizará para acceder al vídeo en directo.
+
+
+14.5. Configuración de la URL en la cámara
+
+El cliente debe comunicar al equipo de OptiSecure Solutions la
+dirección pública generada por la herramienta de túnel, para que sea
+configurada en el campo de URL de vídeo de la cámara correspondiente
+dentro del portal. A partir de este momento, al abrir la cámara
+desde el Mapa de Seguridad, el portal mostrará el vídeo en directo
+procedente del equipo del cliente.
+
+
+14.6. Visualización desde el portal
+
+Una vez configurado todo lo anterior, la operación desde el cliente
+es completamente transparente: basta con abrir el visor de la
+cámara como se describe en el capítulo 6, y el portal mostrará el
+flujo de vídeo en directo en pantalla completa.
+
+
+15. Preguntas frecuentes
+
+
+15.1. Acceso y autenticación
+
+¿Puedo registrarme directamente desde la página principal sin
+contrato previo?
+  No. El alta inicial requiere la formalización del contrato con
+  OptiSecure Solutions. El equipo comercial creará la cuenta y
+  enviará al cliente las credenciales y el enlace de activación.
+
+¿Qué hago si no recibo el correo de activación?
+  Comprobar la carpeta de correo no deseado y, si transcurridas
+  varias horas no aparece, contactar con el equipo de soporte para
+  reenviar el correo.
+
+¿Puedo cambiar mi correo electrónico de acceso?
+  Sí, pero la modificación debe realizarse a través del equipo de
+  soporte para garantizar la trazabilidad del cambio.
+
+¿Qué ocurre si introduzco la contraseña incorrectamente varias
+veces seguidas?
+  Por motivos de seguridad, el sistema puede bloquear
+  temporalmente el acceso. En ese caso, debe utilizarse el
+  procedimiento de recuperación de contraseña.
+
+
+15.2. Plano y cámaras
+
+¿Puedo subir un plano en formato PDF?
+  No. El sistema admite únicamente formatos de imagen: PNG, JPEG,
+  JPG, GIF, WEBP y BMP. Si el plano original está en PDF, conviene
+  exportarlo previamente a uno de los formatos admitidos.
+
+¿Por qué se rechaza mi plano por tamaño cuando ocupa apenas unos
+megabytes?
+  El tamaño máximo permitido por archivo es de 4 MB. Para imágenes
+  de mayor peso, se recomienda reducir su resolución antes de la
+  subida.
+
+¿Puedo tener varios planos simultáneos?
+  No. Cada cliente dispone de un único plano vigente en cada
+  momento. La nueva subida sustituye al plano anterior.
+
+¿Puedo eliminar las cámaras yo mismo?
+  La eliminación de cámaras la realiza el administrador del
+  sistema, normalmente a petición del cliente. El cliente sí puede
+  renombrarlas y posicionarlas, pero no darlas de baja
+  directamente.
+
+
+15.3. Contratación
+
+¿Cuánto tarda en aprobarse una solicitud de contratación?
+  El tiempo depende de la disponibilidad operativa de OptiSecure
+  Solutions. El cliente puede consultar en todo momento el estado
+  de su solicitud desde la pestaña «Mis solicitudes».
+
+¿Puedo cancelar una solicitud antes de que sea aprobada?
+  Sí, contactando con el equipo comercial. La cancelación se
+  reflejará posteriormente en el listado de solicitudes del
+  cliente.
+
+
+15.4. Soporte y casos
+
+¿En qué horario recibe el equipo de soporte mis mensajes?
+  Las condiciones concretas dependen del plan contratado y se
+  reflejan en el bloque de Acuerdo de Nivel de Servicio del perfil
+  del cliente.
+
+¿Puedo adjuntar archivos al chat de soporte?
+  La versión actual del portal centra el chat en mensajes de texto.
+  Para compartir archivos, el equipo de soporte puede facilitar un
+  canal alternativo en función de la naturaleza del caso.
+
+
+15.5. Asistente de voz
+
+¿Por qué el asistente no entiende mis comandos?
+  Las causas más frecuentes son la falta de permisos de micrófono,
+  un entorno ruidoso o expresiones demasiado abiertas. Se
+  recomienda formular comandos cortos, naturales y centrados en una
+  única acción.
+
+¿En qué idiomas funciona el asistente?
+  La versión actual está orientada al uso en español.
+
+¿El asistente envía mi voz a servicios externos?
+  No. El reconocimiento de voz se realiza en el navegador del
+  cliente. Únicamente se envía al sistema el texto resultante de
+  la transcripción.
+
+
+15.6. Notificaciones y clips
+
+¿Por qué no recibo notificaciones de detección?
+  Verificar que la cámara local se encuentra en funcionamiento, que
+  el servidor de vídeo y el túnel seguro están activos, y que la
+  cámara está correctamente configurada en el portal.
+
+¿Cuánto tiempo se conservan los clips?
+  Las condiciones de retención se definen en el contrato. Pasado el
+  periodo establecido, los clips más antiguos pueden retirarse
+  automáticamente.
+
+
+16. Resolución de problemas comunes
+
+
+16.1. No puedo iniciar sesión
+
+  - Comprobar que la dirección del portal es correcta.
+  - Verificar que las credenciales se introducen sin espacios
+    adicionales al principio o al final.
+  - Confirmar que la cuenta ha sido activada mediante el enlace
+    inicial recibido por correo.
+  - Si el problema persiste, utilizar la recuperación de contraseña
+    o contactar con el equipo de soporte.
+
+
+16.2. No veo el plano cargado
+
+  - Esperar unos segundos: el portal carga la imagen tras la
+    autenticación, y conexiones lentas pueden retrasar su
+    aparición.
+  - Comprobar que se ha subido un plano personalizado o, en su
+    caso, que el plano genérico se está cargando correctamente.
+  - Probar a recargar la página manualmente desde el navegador.
+
+
+16.3. La cámara no muestra imagen
+
+  - Verificar que el indicador de estado de la cámara la marca como
+    «En línea».
+  - Si se trata de una cámara local, comprobar que el servidor de
+    vídeo y el túnel seguro están en funcionamiento.
+  - Confirmar que la URL de vídeo configurada en el portal es la
+    actual; en herramientas gratuitas de túnel seguro, la dirección
+    pública puede cambiar entre sesiones.
+  - Si el problema persiste, abrir un caso desde el módulo
+    «Incidencias» para que el equipo de soporte revise la
+    situación.
+
+
+16.4. El asistente de voz no me escucha
+
+  - Confirmar que el navegador tiene autorizado el acceso al
+    micrófono para el dominio del portal.
+  - Comprobar que el micrófono está conectado, encendido y
+    seleccionado como dispositivo predeterminado en el sistema
+    operativo.
+  - Reducir, en la medida de lo posible, el ruido ambiente.
+  - Si la transcripción aparece pero contiene errores, editarla
+    manualmente antes del envío.
+
+
+16.5. No recibo notificaciones de detección
+
+  - Confirmar que la cámara local está activa y disponible.
+  - Verificar que el servidor de vídeo está ejecutando, además del
+    streaming, el módulo de detección automática proporcionado por
+    OptiSecure Solutions.
+  - Esperar al menos un periodo razonable: el sistema aplica una
+    pequeña pausa entre detecciones para evitar duplicados ante
+    una misma presencia prolongada.
+
+
+16.6. Errores al subir un archivo de plano
+
+  - Asegurarse de que el archivo no supera los 4 MB.
+  - Confirmar que el formato es uno de los admitidos.
+  - Si el sistema notifica un error puntual de almacenamiento o de
+    red, reintentar el envío transcurridos unos segundos.
+  - Si el problema persiste, abrir un caso desde el módulo
+    «Incidencias» para revisión por parte del equipo de soporte.
+
+
+17. Recomendaciones de uso y buenas prácticas
+
+
+17.1. Seguridad de la cuenta
+
+Se recomienda:
+
+  - Utilizar una contraseña robusta, no reutilizada en otros
+    servicios.
+  - Cambiar la contraseña con cierta periodicidad.
+  - No compartir las credenciales con terceros.
+  - Cerrar sesión al concluir la actividad en equipos compartidos.
+
+
+17.2. Gestión ordenada de cámaras
+
+  - Mantener una nomenclatura coherente y descriptiva para las
+    cámaras.
+  - Revisar periódicamente el estado en línea desde el Mapa de
+    Seguridad para detectar caídas a tiempo.
+  - Reposicionar las chinchetas en el plano cuando se produzcan
+    cambios físicos en la instalación.
+
+
+17.3. Comunicación con el equipo de soporte
+
+  - Aportar siempre información concreta y reproducible al
+    reportar incidencias.
+  - Indicar la cámara afectada y la franja temporal aproximada del
+    problema.
+  - Evitar abrir múltiples casos para una misma incidencia, salvo
+    que existan razones que lo justifiquen.
+
+
+17.4. Uso eficiente del asistente de voz
+
+  - Formular comandos breves y centrados en una única acción.
+  - Hacer pausas claras al inicio y al final del comando.
+  - Verificar la transcripción antes de enviarla, especialmente en
+    nombres de cámaras poco habituales.
+
+
+17.5. Gestión de evidencias
+
+  - Revisar periódicamente las notificaciones recientes para
+    detectar eventos relevantes a tiempo.
+  - Descargar y conservar fuera del portal aquellos clips que el
+    cliente considere especialmente importantes, dado que el
+    sistema puede aplicar políticas de rotación automática.
+
+
+18. Glosario de términos
+
+Acuerdo de Nivel de Servicio
+  Compromiso formal entre OptiSecure Solutions y el cliente sobre
+  las condiciones de prestación del servicio, incluidos tiempos
+  de respuesta y resolución.
+
+Asistente de voz
+  Componente del portal capaz de transcribir comandos hablados del
+  cliente y de ejecutar acciones interpretadas por inteligencia
+  artificial.
+
+Cámara local
+  Cámara conectada físicamente al equipo del cliente cuyo vídeo se
+  expone al portal mediante un servidor de vídeo y un túnel
+  seguro.
+
+Caso de soporte
+  Registro formal de una solicitud, incidencia o consulta
+  presentada por el cliente, susceptible de seguimiento mediante
+  número de caso y chat de soporte.
+
+Chincheta
+  Representación visual de una cámara sobre el plano de la
+  vivienda en el Mapa de Seguridad.
+
+Clip de seguridad
+  Grabación corta generada automáticamente al detectarse una
+  situación relevante, vinculada a una cámara y a un evento
+  concreto.
+
+Detección
+  Identificación automática de una situación relevante, típicamente
+  la presencia de una persona, en el flujo de vídeo de una cámara
+  local.
+
+Mapa de Seguridad
+  Pantalla principal del portal, que combina el plano de la
+  vivienda con las chinchetas correspondientes a cada cámara.
+
+Modal
+  Panel emergente que se superpone al contenido principal del
+  portal y que reclama la atención exclusiva del cliente hasta su
+  cierre.
+
+Notificación
+  Registro persistente generado por el sistema para informar al
+  cliente de un evento de seguridad detectado automáticamente.
+
+Plano personalizado
+  Imagen del plano real de la vivienda subida por el cliente para
+  sustituir a la imagen genérica predeterminada.
+
+Solicitud de contratación
+  Petición formal del cliente para incorporar nuevas cámaras al
+  servicio, sometida a un ciclo de vida controlado.
+
+Túnel seguro
+  Mecanismo que publica una dirección local del equipo del cliente
+  en una dirección pública con cifrado de extremo a extremo.
+
+
+Índice de figuras
+
+  Figura 1.  Pantalla inicial del portal con formulario de inicio
+              de sesión y banner corporativo.
+  Figura 2.  Pantalla de definición de la contraseña inicial tras
+              activar la cuenta.
+  Figura 3.  Pantalla de inicio de sesión con campos de usuario y
+              contraseña cumplimentados.
+  Figura 4.  Pantalla de recuperación de contraseña con
+              indicación del correo electrónico.
+  Figura 5.  Visión global de la pantalla principal tras iniciar
+              sesión.
+  Figura 6.  Apertura del menú de usuario desde la cabecera.
+  Figura 7.  Vista del Mapa de Seguridad con chinchetas
+              superpuestas al plano.
+  Figura 8.  Barra lateral con la lista de cámaras y sus
+              indicadores de estado.
+  Figura 9.  Pie de página con accesos a los distintos módulos
+              del portal.
+  Figura 10. Detalle de la cabecera con el menú de usuario
+              desplegado.
+  Figura 11. Modal de perfil del cliente, con bloques temáticos
+              de información.
+  Figura 12. Apariencia inicial del modal «Añadir plano».
+  Figura 13. Restricciones de tamaño y formato visibles en el
+              modal de subida.
+  Figura 14. Vista previa del plano antes de pulsar «Guardar».
+  Figura 15. Mapa de Seguridad con plano personalizado y
+              chinchetas.
+  Figura 16. Visor de cámara abierto a pantalla completa con
+              indicador «EN DIRECTO».
+  Figura 17. Renombrado en línea de una cámara desde la barra
+              lateral.
+  Figura 18. Acceso al módulo de contratación desde el pie de
+              página.
+  Figura 19. Pestaña «Mis solicitudes» con histórico y badges de
+              estado.
+  Figura 20. Zona auxiliar con chinchetas pendientes de
+              ubicación tras una solicitud aprobada.
+  Figura 21. Panel modal de casos de soporte con lista y detalle.
+  Figura 22. Chat integrado de un caso con burbujas propias y de
+              soporte.
+  Figura 23. Formulario de reporte de incidencias en una cámara.
+  Figura 24. Modal del asistente de voz con micrófono y área de
+              transcripción.
+  Figura 25. Panel de notificaciones de detección automática.
+  Figura 26. Visor de clips de seguridad con filtro por cámara.
+  Figura 27. Salida del servidor de vídeo local en su arranque.
+
+
+Fin del Anexo A. Manual de Usuario.
