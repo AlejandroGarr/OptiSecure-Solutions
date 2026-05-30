@@ -1,18 +1,13 @@
 /**
- * @description Controlador Apex para el componente HouseMap / Cámara LWC.
- *              Devuelve las cámaras activas con sus coordenadas y zona
- *              para renderizarlas sobre el plano de la vivienda.
- * @author      OptiSecure Solutions
- * @date        2026-02-12
- */
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-30-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
+
 public without sharing class HouseMapController {
 
-    /**
-     * @description Obtiene cámaras activas, filtrando por contacto si se indica.
-     * @param       contactId Id del contacto (null = todas las activas).
-     * @return      Lista de Camara__c con campos principales y contacto.
-     * @throws      AuraHandledException si ocurre un error en la consulta.
-     */
     @AuraEnabled(cacheable=false)
     public static List<Camara__c> getCamaras(Id contactId) {
         try {
@@ -68,10 +63,6 @@ public without sharing class HouseMapController {
         }
     }
 
-    /**
-     * @description Comprueba si el usuario actual tiene perfil System Administrator.
-     * @return      True si el usuario es System Administrator, false en caso contrario.
-     */
     @AuraEnabled(cacheable=true)
     public static Boolean isSystemAdmin() {
         try {
@@ -87,14 +78,6 @@ public without sharing class HouseMapController {
         }
     }
 
-    /**
-     * @description Guarda la posición de una chincheta (cámara) creada por drag & drop.
-     * @param       name     Nombre de la cámara
-     * @param       posX     Posición X en porcentaje
-     * @param       posY     Posición Y en porcentaje
-     * @param       videoUrl URL del vídeo de YouTube
-     * @return      La cámara creada
-     */
     @AuraEnabled
     public static Camara__c saveDraggedCamera(String name, Decimal posX, Decimal posY, String videoUrl) {
         Camara__c cam = new Camara__c(
@@ -109,11 +92,6 @@ public without sharing class HouseMapController {
         return cam;
     }
 
-    /**
-     * @description Elimina una cámara existente (desactiva).
-     * @param       cameraId Id de la cámara a eliminar
-     * @throws      AuraHandledException si la cámara no existe o falla el delete.
-     */
     @AuraEnabled
     public static void deleteCamera(Id cameraId) {
         try {
@@ -132,13 +110,6 @@ public without sharing class HouseMapController {
         }
     }
 
-    /**
-     * @description Actualiza la posición de una cámara existente.
-     * @param       cameraId Id de la cámara a reposicionar
-     * @param       newX     Nueva posición X en porcentaje (0-100)
-     * @param       newY     Nueva posición Y en porcentaje (0-100)
-     * @throws      AuraHandledException si la cámara no existe o falla el update.
-     */
     @AuraEnabled
     public static void updateCameraPosition(Id cameraId, Decimal newX, Decimal newY) {
         try {

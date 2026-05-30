@@ -1,6 +1,11 @@
 /**
- * An apex page controller that exposes the site login functionality
- */
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-30-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
+
 global with sharing class SiteLoginController {
     global String username {get; set;}
     global String password {get; set;}

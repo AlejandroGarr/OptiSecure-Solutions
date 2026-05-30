@@ -1,9 +1,12 @@
 /**
- * An apex class that creates a portal user
- */
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-30-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
+
 public with sharing class SiteRegisterController {
-    // PORTAL_ACCOUNT_ID is the account on which the contact will be created on and then enabled as a portal user.
-    // you need to add the account owner into the role hierarchy before this will work - please see Customer Portal Setup help for more information.       
     private static Id PORTAL_ACCOUNT_ID = '001x000xxx35tPN';
     
     public SiteRegisterController () {
@@ -20,7 +23,6 @@ public with sharing class SiteRegisterController {
     }
     
     public PageReference registerUser() {
-        // it's okay if password is null - we'll send the user a random password in that case
         if (!isValidPassword()) {
         	ApexPages.Message msg = new ApexPages.Message(ApexPages.Severity.ERROR, Label.site.passwords_dont_match);
         	ApexPages.addMessage(msg);
@@ -33,7 +35,6 @@ public with sharing class SiteRegisterController {
         
         String accountId = PORTAL_ACCOUNT_ID;
 
-        // lastName is a required field on user, but if it isn't specified, we'll default it to the username
         String userId = Site.createPortalUser(u, accountId, password);
         if (userId != null) { 
             if (password != null && password.length() > 1) {

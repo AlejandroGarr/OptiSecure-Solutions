@@ -1,17 +1,13 @@
 /**
- * @description Controlador Apex para el componente LWC securityClipViewer.
- *              Devuelve los clips de seguridad (ContentVersion) vinculados
- *              a las cámaras del usuario, filtrando por cámara o contacto.
- * @author      OptiSecure Solutions
- * @date        2026-04-05
- */
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-30-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
+
 public with sharing class SecurityClipController {
 
-    /**
-     * @description Obtiene clips vinculados a una cámara específica.
-     * @param       cameraId Id del registro Camara__c.
-     * @return      Lista de ClipInfo con los datos de cada clip.
-     */
     @AuraEnabled(cacheable=false)
     public static List<ClipInfo> getClipsForCamera(Id cameraId) {
         List<ClipInfo> clips = new List<ClipInfo>();
@@ -36,11 +32,6 @@ public with sharing class SecurityClipController {
         return clips;
     }
 
-    /**
-     * @description Obtiene clips de todas las cámaras de un contacto.
-     * @param       contactId Id del contacto (standard Contact).
-     * @return      Lista de ClipInfo con los datos de cada clip.
-     */
     @AuraEnabled(cacheable=false)
     public static List<ClipInfo> getClipsForContact(Id contactId) {
         List<ClipInfo> clips = new List<ClipInfo>();
@@ -86,12 +77,6 @@ public with sharing class SecurityClipController {
         return clips;
     }
 
-    /**
-     * @description Obtiene clips para el usuario actual (auto-detecta contacto).
-     *              Usuarios portal: clips de sus cámaras.
-     *              Admins: clips de todas las cámaras.
-     * @return      Lista de ClipInfo.
-     */
     @AuraEnabled(cacheable=false)
     public static List<ClipInfo> getMyClips() {
         User currentUser = [
@@ -149,9 +134,6 @@ public with sharing class SecurityClipController {
         return clips;
     }
 
-    /**
-     * @description Construye un ClipInfo a partir de un ContentDocumentLink.
-     */
     private static ClipInfo buildClipInfo(ContentDocumentLink link, String cameraName) {
         ClipInfo clip       = new ClipInfo();
         clip.contentDocumentId = link.ContentDocumentId;
@@ -165,9 +147,6 @@ public with sharing class SecurityClipController {
         return clip;
     }
 
-    /**
-     * @description Wrapper para datos de un clip de seguridad.
-     */
     public class ClipInfo {
         @AuraEnabled public String   contentDocumentId;
         @AuraEnabled public String   contentVersionId;
@@ -178,17 +157,6 @@ public with sharing class SecurityClipController {
         @AuraEnabled public String   downloadUrl;
     }
 
-    // ═══════════════════════════════════════════════════════
-    // ALERTAS CON ENLACES NGROK
-    // ═══════════════════════════════════════════════════════
-
-    /**
-     * @description Obtiene las alertas recientes de detección de personas
-     *              que contienen un enlace ngrok al clip de vídeo.
-     *              Usuarios portal: solo alertas de sus cámaras.
-     *              Admins: todas las alertas recientes.
-     * @return      Lista de AlertInfo con los datos de cada alerta.
-     */
     @AuraEnabled(cacheable=false)
     public static List<AlertInfo> getRecentAlerts() {
         return new AlertHelper().fetchAlerts();
@@ -198,11 +166,6 @@ public with sharing class SecurityClipController {
     public static void deleteAlert(Id taskId) {
         new AlertHelper().removeAlert(taskId);
     }
-
-    /**
-     * @description Helper without sharing para que usuarios portal
-     *              puedan leer los Tasks de detección de personas.
-     */
     private without sharing class AlertHelper {
         public void removeAlert(Id taskId) {
             List<Task> tasks = [
@@ -263,10 +226,6 @@ public with sharing class SecurityClipController {
         }
     }
 
-    /**
-     * @description Extrae la URL del clip del campo Description del Task.
-     *              Busca el patrón [CLIP_URL]...[/CLIP_URL].
-     */
     private static String extractClipUrl(String description) {
         if (String.isBlank(description)) return null;
         Integer startIdx = description.indexOf('[CLIP_URL]');
@@ -275,9 +234,7 @@ public with sharing class SecurityClipController {
         return description.substring(startIdx + 10, endIdx).trim();
     }
 
-    /**
-     * @description Wrapper para datos de una alerta de detección.
-     */
+
     public class AlertInfo {
         @AuraEnabled public String   taskId;
         @AuraEnabled public String   subject;

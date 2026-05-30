@@ -1,16 +1,13 @@
 /**
- * @description Controlador Apex para el flujo de contratación de cámaras.
- *              Gestiona la creación de solicitudes desde el portal,
- *              la aprobación por parte del admin, y la consulta
- *              de solicitudes aprobadas pendientes de colocación.
- * @author      OptiSecure Solutions
- */
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-30-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
+
 public with sharing class ContratacionCamaraController {
 
-    /**
-     * @description Devuelve el ContactId del usuario actual del portal.
-     *              Devuelve null si el usuario es admin (sin ContactId).
-     */
     @AuraEnabled(cacheable=true)
     public static Id getContactIdUsuarioActual() {
         User currentUser = [
@@ -22,13 +19,6 @@ public with sharing class ContratacionCamaraController {
         return currentUser.ContactId;
     }
 
-    /**
-     * @description Crea una nueva solicitud de contratación de cámaras
-     *              desde el portal del cliente.
-     * @param       numeroCamaras Cantidad de cámaras solicitadas
-     * @param       detalle       Texto libre con detalles de la solicitud
-     * @return      Id de la solicitud creada
-     */
     @AuraEnabled
     public static Id crearSolicitud(Integer numeroCamaras, String detalle) {
         // Obtener contacto y cuenta del usuario del portal
@@ -53,10 +43,6 @@ public with sharing class ContratacionCamaraController {
         return solicitud.Id;
     }
 
-    /**
-     * @description Obtiene las solicitudes del usuario actual del portal.
-     * @return      Lista de solicitudes del contacto actual.
-     */
     @AuraEnabled
     public static List<Solicitud_Camara__c> getMisSolicitudes() {
         User currentUser = [
@@ -92,10 +78,6 @@ public with sharing class ContratacionCamaraController {
         }
     }
 
-    /**
-     * @description Obtiene todas las solicitudes pendientes (para el admin).
-     * @return      Lista de solicitudes con estado Pendiente o En Revision.
-     */
     @AuraEnabled
     public static List<Solicitud_Camara__c> getSolicitudesPendientes() {
         return [
@@ -109,10 +91,6 @@ public with sharing class ContratacionCamaraController {
         ];
     }
 
-    /**
-     * @description El admin aprueba una solicitud. Cambia estado a 'Aprobada'.
-     * @param       solicitudId Id de la solicitud a aprobar
-     */
     @AuraEnabled
     public static void aprobarSolicitud(Id solicitudId) {
         Solicitud_Camara__c sol = [
@@ -125,10 +103,6 @@ public with sharing class ContratacionCamaraController {
         update sol;
     }
 
-    /**
-     * @description El admin rechaza una solicitud. Cambia estado a 'Rechazada'.
-     * @param       solicitudId Id de la solicitud a rechazar
-     */
     @AuraEnabled
     public static void rechazarSolicitud(Id solicitudId) {
         Solicitud_Camara__c sol = [
@@ -141,11 +115,6 @@ public with sharing class ContratacionCamaraController {
         update sol;
     }
 
-    /**
-     * @description Comprueba si el usuario actual del portal tiene una
-     *              solicitud aprobada pendiente de colocar cámaras.
-     * @return      Wrapper con la info de la solicitud aprobada, o null.
-     */
     @AuraEnabled
     public static SolicitudAprobada getSolicitudAprobadaActiva() {
         User currentUser = [
@@ -181,10 +150,6 @@ public with sharing class ContratacionCamaraController {
         return result;
     }
 
-    /**
-     * @description Marca la solicitud como 'Completada' tras colocar las cámaras.
-     * @param       solicitudId Id de la solicitud a completar
-     */
     @AuraEnabled
     public static void completarSolicitud(Id solicitudId) {
         Solicitud_Camara__c sol = [
@@ -197,15 +162,7 @@ public with sharing class ContratacionCamaraController {
         update sol;
     }
 
-    /**
-     * @description Guarda las cámaras colocadas por un usuario del portal tras
-     *              una solicitud aprobada y marca la solicitud como Completada.
-     *              Usa una inner class without sharing para el DML, ya que los
-     *              usuarios de portal no tienen permisos directos de Create en
-     *              Camara__c, pero la aprobación del admin autoriza la operación.
-     * @param       solicitudId Id de la solicitud aprobada activa
-     * @param       camarasJson JSON array con {name, posX, posY, videoUrl}
-     */
+
     @AuraEnabled
     public static void saveCamarasContratadas(Id solicitudId, String camarasJson) {
         try {
@@ -259,10 +216,7 @@ public with sharing class ContratacionCamaraController {
         }
     }
 
-    /**
-     * @description Obtiene el historial completo de solicitudes (para el admin).
-     * @return      Lista de todas las solicitudes ordenadas por fecha desc.
-     */
+
     @AuraEnabled
     public static List<Solicitud_Camara__c> getAllSolicitudes() {
         return [
@@ -278,9 +232,6 @@ public with sharing class ContratacionCamaraController {
         ];
     }
 
-    /**
-     * @description Wrapper para devolver la info de una solicitud aprobada al LWC.
-     */
     public class SolicitudAprobada {
         @AuraEnabled public Id      solicitudId;
         @AuraEnabled public String  nombre;

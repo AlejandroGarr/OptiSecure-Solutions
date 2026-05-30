@@ -1,15 +1,13 @@
 /**
- * @description Clase de prueba para VoiceCommandController.
- *              Usa HttpCalloutMock para simular la respuesta de Google Gemini
- *              y verifica la creación de Casos y la consulta de cámaras.
- * @author      OptiSecure Solutions
- */
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-30-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
+
 @isTest
 private class VoiceCommandControllerTest {
-
-    // ═══════════════════════════════════════════
-    //  MOCK — Simula la respuesta de Google Gemini
-    // ═══════════════════════════════════════════
 
     private class GeminiMockCrearCaso implements HttpCalloutMock {
         public HttpResponse respond(HttpRequest req) {
@@ -51,10 +49,6 @@ private class VoiceCommandControllerTest {
         }
     }
 
-    // ═══════════════════════════════════════════
-    //  TEST SETUP
-    // ═══════════════════════════════════════════
-
     @testSetup
     static void setupTestData() {
         List<Camara__c> camaras = new List<Camara__c>{
@@ -78,14 +72,6 @@ private class VoiceCommandControllerTest {
         insert camaras;
     }
 
-    // ═══════════════════════════════════════════
-    //  TESTS
-    // ═══════════════════════════════════════════
-
-    /**
-     * @description Verifica que un comando de voz para crear un caso
-     *              genera correctamente un registro Case en Salesforce.
-     */
     @isTest
     static void testCrearCasoExitoso() {
         Test.setMock(HttpCalloutMock.class, new GeminiMockCrearCaso());
@@ -109,9 +95,6 @@ private class VoiceCommandControllerTest {
         System.assertEquals('New', cases[0].Status);
     }
 
-    /**
-     * @description Verifica que la consulta de cámaras devuelve la info correcta.
-     */
     @isTest
     static void testConsultarCamaras() {
         Test.setMock(HttpCalloutMock.class, new GeminiMockConsultarCamaras());
@@ -129,9 +112,6 @@ private class VoiceCommandControllerTest {
         System.assert(mensaje.contains('2'), 'Debería mencionar 2 cámaras activas');
     }
 
-    /**
-     * @description Verifica que un comando no reconocido devuelve la respuesta correcta.
-     */
     @isTest
     static void testComandoNoReconocido() {
         Test.setMock(HttpCalloutMock.class, new GeminiMockNoReconocido());
@@ -147,9 +127,6 @@ private class VoiceCommandControllerTest {
         System.assertEquals('no_reconocido', response.get('accion'));
     }
 
-    /**
-     * @description Verifica que un texto vacío devuelve error sin hacer callout.
-     */
     @isTest
     static void testTextoVacio() {
         Test.startTest();
@@ -161,9 +138,6 @@ private class VoiceCommandControllerTest {
         System.assertEquals('no_reconocido', response.get('accion'));
     }
 
-    /**
-     * @description Verifica que un texto nulo devuelve error sin hacer callout.
-     */
     @isTest
     static void testTextoNulo() {
         Test.startTest();
@@ -175,9 +149,6 @@ private class VoiceCommandControllerTest {
         System.assertEquals('no_reconocido', response.get('accion'));
     }
 
-    /**
-     * @description Verifica que un error HTTP de Gemini lanza AuraHandledException.
-     */
     @isTest
     static void testErrorGemini() {
         Test.setMock(HttpCalloutMock.class, new GeminiMockError());

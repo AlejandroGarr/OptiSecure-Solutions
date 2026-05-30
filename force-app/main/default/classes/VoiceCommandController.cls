@@ -1,10 +1,10 @@
 /**
- * @description Controlador Apex para el Asistente de Voz IA.
- *              Recibe el texto transcrito del LWC, lo envía a la API de Google Gemini
- *              (gratuita) para extraer la intención y los parámetros, y luego ejecuta
- *              la acción correspondiente en Salesforce (ej. crear un Caso).
- * @author      OptiSecure Solutions
- */
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-30-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
 public with sharing class VoiceCommandController {
 
     // Prompt del sistema que define el comportamiento del LLM
@@ -44,12 +44,6 @@ public with sharing class VoiceCommandController {
         + '"parcial", "intermitente" → Medium; "menor", "estético" → Low. Por defecto → Medium.\n'
         + '- Responde SOLO con el JSON, sin texto adicional ni bloques de código.';
 
-    /**
-     * @description Punto de entrada invocado desde el LWC.
-     *              Envía el texto a Google Gemini, parsea la respuesta y ejecuta la acción.
-     * @param  userText  Texto transcrito del usuario.
-     * @return String    JSON con el resultado: {exito, accion, mensaje, recordId}
-     */
     @AuraEnabled
     public static String processVoiceCommand(String userText) {
         try {
@@ -103,13 +97,6 @@ public with sharing class VoiceCommandController {
         }
     }
 
-    // ═══════════════════════════════════════════
-    //  ACCIONES
-    // ═══════════════════════════════════════════
-
-    /**
-     * @description Crea un registro Case con los parámetros extraídos por la IA.
-     */
     private static String ejecutarCrearCaso(Map<String, Object> parametros) {
         String asunto      = parametros != null ? (String) parametros.get('asunto') : 'Incidencia por voz';
         String descripcion = parametros != null ? (String) parametros.get('descripcion') : '';
@@ -136,9 +123,6 @@ public with sharing class VoiceCommandController {
             'Se ha creado el caso "' + asunto + '" con prioridad ' + prioridad + '.', newCase.Id);
     }
 
-    /**
-     * @description Consulta las cámaras activas y devuelve un resumen.
-     */
     private static String ejecutarConsultarCamaras() {
         List<Camara__c> camaras = [
             SELECT Name, Zone__c
@@ -163,10 +147,6 @@ public with sharing class VoiceCommandController {
             'Hay ' + camaras.size() + ' cámaras activas: ' + String.join(nombres, ', ') + '.', null);
     }
 
-    /**
-     * @description Busca una cámara por nombre o zona y devuelve sus datos para el LWC.
-     *              Es inteligente: si el usuario dice "uno", prueba también "1" y viceversa.
-     */
     private static String ejecutarAbrirCamara(String nombreCamara) {
         // Generar variantes: texto original + conversión número↔palabra
         List<String> variantes = new List<String>();
@@ -217,10 +197,6 @@ public with sharing class VoiceCommandController {
         return JSON.serialize(response);
     }
 
-    /**
-     * @description Resuelve una posición numérica a partir del texto.
-     *              "uno"/​"1"/​"primera" → 1, "dos"/​"2" → 2, etc.
-     */
     private static Integer resolverPosicionNumerica(String input) {
         String lower = input.toLowerCase().trim();
         // Si ya es un dígito
@@ -235,10 +211,6 @@ public with sharing class VoiceCommandController {
         return null;
     }
 
-    /**
-     * @description Convierte entre números escritos en palabras y dígitos.
-     *              "uno" → "1", "1" → "uno", "dos" → "2", etc.
-     */
     private static String convertirNumero(String input) {
         Map<String, String> palabraADigito = new Map<String, String>{
             'uno' => '1', 'una' => '1', 'primero' => '1', 'primera' => '1',
@@ -293,15 +265,6 @@ public with sharing class VoiceCommandController {
         }
     }
 
-    // ═══════════════════════════════════════════
-    //  ACCIONES — Notificaciones
-    // ═══════════════════════════════════════════
-
-    /**
-     * @description Busca la notificación según el selector de la IA y devuelve
-     *              su URL de clip para que el LWC la muestre.
-     *              Usa without sharing (AlertHelper) para que usuarios portal puedan leer Tasks.
-     */
     private static String ejecutarAbrirNotificacion(String selector) {
         // Reutilizar AlertHelper (without sharing) del SecurityClipController
         List<Task> tasks = fetchAlertTasks();
@@ -342,9 +305,6 @@ public with sharing class VoiceCommandController {
         return JSON.serialize(response);
     }
 
-    /**
-     * @description Cuenta las notificaciones (Tasks de alerta) creadas hoy.
-     */
     private static String ejecutarContarNotificaciones() {
         List<Task> tasks = fetchAlertTasks();
         Date hoy = Date.today();
@@ -367,11 +327,6 @@ public with sharing class VoiceCommandController {
         return buildResponse(true, 'contar_notificaciones', mensaje, null);
     }
 
-    /**
-     * @description Resuelve el índice en la lista de alertas según el selector.
-     *              "ultima" → 0, "penultima" → 1, "primera" → último,
-     *              "N" → N-1, "HH:MM" → busca por hora.
-     */
     private static Integer resolveAlertIndex(String selector, List<Task> tasks) {
         if (String.isBlank(selector) || selector == 'ultima') {
             return 0;
@@ -430,9 +385,6 @@ public with sharing class VoiceCommandController {
         return -1;
     }
 
-    /**
-     * @description Obtiene Tasks de alertas (without sharing para usuarios portal).
-     */
     private static List<Task> fetchAlertTasks() {
         return new AlertTaskFetcher().fetch();
     }
@@ -467,9 +419,6 @@ public with sharing class VoiceCommandController {
         }
     }
 
-    /**
-     * @description Extrae la URL del clip del campo Description del Task.
-     */
     private static String extractClipUrlFromDescription(String description) {
         if (String.isBlank(description)) return null;
         Integer startIdx = description.indexOf('[CLIP_URL]');
@@ -478,17 +427,6 @@ public with sharing class VoiceCommandController {
         return description.substring(startIdx + 10, endIdx).trim();
     }
 
-    // ═══════════════════════════════════════════
-    //  CALLOUT A GOOGLE GEMINI (GRATUITO)
-    // ═══════════════════════════════════════════
-
-    /**
-     * @description Realiza una llamada HTTP POST a la API de Google Gemini
-     *              (modelo gemini-2.0-flash, gratuito hasta 15 RPM).
-     *              La API Key se almacena en una Custom Label llamada 'Gemini_API_Key'.
-     * @param  userText  El texto del usuario a analizar.
-     * @return String    El contenido JSON devuelto por el modelo.
-     */
     private static String callGemini(String userText) {
         String apiKey = System.Label.Gemini_API_Key;
 
@@ -540,14 +478,6 @@ public with sharing class VoiceCommandController {
         return text.trim();
     }
 
-    // ═══════════════════════════════════════════
-    //  HELPERS
-    // ═══════════════════════════════════════════
-
-    /**
-     * @description Elimina bloques de código markdown que Gemini a veces
-     *              añade alrededor del JSON (```json ... ```).
-     */
     private static String stripMarkdownCodeBlock(String text) {
         if (String.isBlank(text)) return text;
         String trimmed = text.trim();
@@ -564,9 +494,6 @@ public with sharing class VoiceCommandController {
         return trimmed.trim();
     }
 
-    /**
-     * @description Construye el JSON de respuesta estándar.
-     */
     private static String buildResponse(Boolean exito, String accion, String mensaje, Id recordId) {
         Map<String, Object> response = new Map<String, Object>{
             'exito'    => exito,
@@ -577,9 +504,6 @@ public with sharing class VoiceCommandController {
         return JSON.serialize(response);
     }
 
-    /**
-     * @description Construye el JSON de respuesta para acciones de UI con payload numérico.
-     */
     private static String buildResponseWithPayload(Boolean exito, String accion, String mensaje, Integer payload) {
         Map<String, Object> response = new Map<String, Object>{
             'exito'    => exito,

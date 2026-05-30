@@ -1,11 +1,14 @@
 /**
- * An apex class that updates details of a portal user.
-   Guest users are never able to access this page.
- */
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-30-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
+
 @IsTest public with sharing class MyProfilePageControllerTest {
 
     @IsTest(SeeAllData=true) static void testSave() {
-        // Modify the test to query for a portal user that exists in your org
         List<User> existingPortalUsers = [SELECT id, profileId, userRoleId FROM User WHERE UserRoleId <> null AND UserType='CustomerSuccess'];
 
         if (existingPortalUsers.isEmpty()) {
@@ -47,7 +50,6 @@
                 System.assert(controller.getIsEdit() == false);
             }
 
-            // verify that the user was updated
             existingPortalUser = [Select id, fax from User where id =: existingPortalUser.Id];
             System.assert(existingPortalUser.fax == randFax);
         }

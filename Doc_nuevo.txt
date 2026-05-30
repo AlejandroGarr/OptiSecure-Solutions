@@ -2685,3 +2685,4 @@ Resumen del proyecto:
   - Arquitectura híbrida edge-cloud con modelo de seguridad multi-nivel.
 
 ================================================================================
+-

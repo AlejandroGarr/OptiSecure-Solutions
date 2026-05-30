@@ -1,21 +1,14 @@
 /**
- * @description Endpoint REST para recibir alertas de detección de personas
- *              desde el servidor Python (YOLOv8). Crea un registro Task
- *              vinculado al contacto propietario de la cámara para que
- *              aparezca en el LWC de alertas de Experience Cloud.
- * @author      OptiSecure Solutions
- * @date        2026-04-05
- */
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-31-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
+
 @RestResource(urlMapping='/PersonDetection/*')
 global without sharing class PersonDetectionController {
 
-    /**
-     * @description Recibe una alerta de detección de persona.
-     *              Body JSON esperado: { "cameraId": "...", "timestamp": "...", "clipUrl": "..." }
-     *              Busca automáticamente el contacto asociado a la cámara (Contacto__c)
-     *              y crea un Task vinculado a ese contacto.
-     * @return      Mensaje de confirmación o error.
-     */
     @HttpPost
     global static String handleDetection() {
         RestRequest req = RestContext.request;

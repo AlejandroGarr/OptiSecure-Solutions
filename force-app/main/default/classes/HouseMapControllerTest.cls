@@ -1,18 +1,15 @@
 /**
- * @description Clase de prueba para HouseMapController.
- *              Verifica la correcta obtención de cámaras activas,
- *              la comprobación de perfil administrador, la creación
- *              de cámaras por drag & drop y la actualización de posición.
- * @author      OptiSecure Solutions
- * @date        2026-02-25
- */
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-30-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
+
 @isTest
 private class HouseMapControllerTest {
 
-    /**
-     * @description Crea datos de prueba aislados:
-     *              2 cámaras activas y 1 inactiva.
-     */
+
     @testSetup
     static void setupTestData() {
         List<Camara__c> camaras = new List<Camara__c>{
@@ -44,9 +41,6 @@ private class HouseMapControllerTest {
         insert camaras;
     }
 
-    /**
-     * @description Verifica que getCamaras() solo devuelve las cámaras activas.
-     */
     @isTest
     static void testGetCameras() {
         Test.startTest();
@@ -66,10 +60,6 @@ private class HouseMapControllerTest {
         }
     }
 
-    /**
-     * @description Verifica que isSystemAdmin() devuelve un valor booleano
-     *              sin lanzar excepción.
-     */
     @isTest
     static void testIsSystemAdmin() {
         Test.startTest();
@@ -80,10 +70,6 @@ private class HouseMapControllerTest {
             'isSystemAdmin() debe devolver un valor booleano no nulo');
     }
 
-    /**
-     * @description Verifica que saveDraggedCamera() crea correctamente
-     *              una cámara con los datos proporcionados.
-     */
     @isTest
     static void testSaveDraggedCamera() {
         String nombre   = 'Cámara Test Drag';
@@ -113,10 +99,6 @@ private class HouseMapControllerTest {
             'La zona debe ser Salón');
     }
 
-    /**
-     * @description Verifica que updateCameraPosition() actualiza
-     *              las coordenadas de una cámara existente.
-     */
     @isTest
     static void testUpdateCameraPosition() {
         Camara__c cam = [

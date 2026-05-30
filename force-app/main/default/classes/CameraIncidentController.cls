@@ -1,18 +1,14 @@
 /**
- * @description Controlador Apex para el componente de reporte de incidencias
- *              de cámaras de seguridad. Permite a los usuarios de Experience
- *              Cloud crear Casos (Case) asociados a una cámara que falla.
- * @author      OptiSecure Solutions
- * @date        2026-02-26
- */
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-30-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
+
 public without sharing class CameraIncidentController {
 
-    /**
-     * @description Obtiene la lista de cámaras activas para el picklist
-     *              del formulario de incidencias, filtradas por el contacto
-     *              del usuario actual (portal users solo ven sus propias cámaras).
-     * @return      Lista de mapas con Id y Name de cada cámara activa.
-     */
+
     @AuraEnabled(cacheable=true)
     public static List<Map<String, String>> getCameraOptions() {
         User currentUser = [SELECT ContactId FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
@@ -43,15 +39,7 @@ public without sharing class CameraIncidentController {
         return options;
     }
 
-    /**
-     * @description Crea un registro Case vinculado a una cámara con fallo.
-     * @param       cameraId    Id de la cámara reportada.
-     * @param       subject     Asunto del caso.
-     * @param       description Descripción detallada del problema.
-     * @param       priority    Prioridad (High, Medium, Low).
-     * @return      El Id del Case creado.
-     * @throws      AuraHandledException si ocurre un error.
-     */
+
     @AuraEnabled
     public static Id createCameraIncident(Id cameraId, String subject, String description, String priority) {
         try {

@@ -1,16 +1,13 @@
 /**
- * @description Controlador Apex para el componente caseViewer.
- *              Permite al usuario de Experience Cloud ver sus casos,
- *              leer mensajes (CaseComment) y enviar respuestas.
- *              También permite al admin del CRM ver/enviar comentarios.
- * @author      OptiSecure Solutions
- * @date        2026-03-11
- */
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-30-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
+
 public with sharing class CaseViewerController {
 
-    /**
-     * Wrapper para la lista de casos.
-     */
     public class CaseInfo {
         @AuraEnabled public String id;
         @AuraEnabled public String caseNumber;
@@ -23,9 +20,6 @@ public with sharing class CaseViewerController {
         @AuraEnabled public String contactEmail;
     }
 
-    /**
-     * Wrapper para cada mensaje del chat (CaseComment).
-     */
     public class ChatMessage {
         @AuraEnabled public String id;
         @AuraEnabled public String body;
@@ -34,10 +28,6 @@ public with sharing class CaseViewerController {
         @AuraEnabled public Boolean isCurrentUser;
     }
 
-    /**
-     * @description Obtiene los casos del usuario actual (a través de su ContactId).
-     * @return      Lista de CaseInfo ordenada por fecha de creación descendente.
-     */
     @AuraEnabled(cacheable=true)
     public static List<CaseInfo> getUserCases() {
         try {
@@ -99,11 +89,7 @@ public with sharing class CaseViewerController {
         }
     }
 
-    /**
-     * @description Obtiene los comentarios (chat) de un caso concreto.
-     * @param       caseId Id del caso.
-     * @return      Lista de ChatMessage ordenada cronológicamente.
-     */
+
     @AuraEnabled
     public static List<ChatMessage> getCaseComments(Id caseId) {
         try {
@@ -135,12 +121,6 @@ public with sharing class CaseViewerController {
         }
     }
 
-    /**
-     * @description Añade un comentario a un caso (chat).
-     * @param       caseId  Id del caso.
-     * @param       body    Texto del comentario.
-     * @return      El ChatMessage recién creado.
-     */
     @AuraEnabled
     public static ChatMessage addCaseComment(Id caseId, String body) {
         try {

@@ -1,10 +1,11 @@
 /**
- * @description Clase de prueba para CameraIncidentController.
- *              Verifica la obtención de opciones de cámara y la
- *              creación de Cases asociados a incidencias de cámaras.
- * @author      OptiSecure Solutions
- * @date        2026-02-26
- */
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-30-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
+
 @isTest
 private class CameraIncidentControllerTest {
 
@@ -39,10 +40,6 @@ private class CameraIncidentControllerTest {
         insert camaras;
     }
 
-    /**
-     * @description Verifica que getCameraOptions() devuelve solo las cámaras
-     *              activas con el formato correcto (value=Id, label=Name—Zone).
-     */
     @isTest
     static void testGetCameraOptions() {
         Test.startTest();
@@ -62,10 +59,6 @@ private class CameraIncidentControllerTest {
         }
     }
 
-    /**
-     * @description Verifica que createCameraIncident() crea un Case
-     *              con los datos correctos.
-     */
     @isTest
     static void testCreateCameraIncident() {
         Camara__c cam = [
@@ -108,10 +101,6 @@ private class CameraIncidentControllerTest {
             'La descripción debe contener el nombre de la cámara');
     }
 
-    /**
-     * @description Verifica que createCameraIncident() con un Id
-     *              inválido lanza AuraHandledException.
-     */
     @isTest
     static void testCreateCameraIncidentInvalidId() {
         Boolean exceptionThrown = false;

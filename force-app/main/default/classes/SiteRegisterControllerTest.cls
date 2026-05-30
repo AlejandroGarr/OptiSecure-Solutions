@@ -1,6 +1,11 @@
 /**
- * Class containing tests for SiteRegisterController
- */
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-30-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
+
 @IsTest public with sharing class SiteRegisterControllerTest {
     @IsTest(SeeAllData=true) static void testRegistration() {
         SiteRegisterController controller = new SiteRegisterController();

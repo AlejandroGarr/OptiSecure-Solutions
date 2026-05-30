@@ -1,15 +1,12 @@
 /**
- * @description Controlador Apex para el componente customUserMenu.
- *              Proporciona los datos de perfil del usuario actual,
- *              información de su cuenta (Account) y el recuento de cámaras.
- * @author      OptiSecure Solutions
- * @date        2026-03-06
- */
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-30-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
 public without sharing class UserMenuController {
 
-    /**
-     * Wrapper para devolver datos completos de perfil al LWC.
-     */
     public class UserProfileData {
         // Usuario
         @AuraEnabled public String name;
@@ -39,9 +36,6 @@ public without sharing class UserMenuController {
         @AuraEnabled public List<CameraData> cameras;
     }
 
-    /**
-     * Wrapper ligero para cada cámara.
-     */
     public class CameraData {
         @AuraEnabled public String id;
         @AuraEnabled public String name;
@@ -56,11 +50,6 @@ public without sharing class UserMenuController {
         }
     }
 
-    /**
-     * @description Obtiene datos completos del usuario, su cuenta y cámaras.
-     * @return      UserProfileData con toda la información del perfil.
-     * @throws      AuraHandledException si ocurre un error en la consulta.
-     */
     @AuraEnabled
     public static UserProfileData getUserProfileData() {
         Id currentUserId = UserInfo.getUserId();
@@ -168,10 +157,6 @@ public without sharing class UserMenuController {
         return profile;
     }
 
-    /**
-     * @description Elimina una cámara por su Id. Solo admins deberían invocar esto.
-     * @param cameraId Id de la cámara a eliminar.
-     */
     @AuraEnabled
     public static void deleteCamera(Id cameraId) {
         if (!checkIsAdmin()) {
@@ -191,11 +176,6 @@ public without sharing class UserMenuController {
         }
     }
 
-    /**
-     * @description Crea una solicitud de contratación de nuevas cámaras.
-     * @param camerasJson JSON con array de objetos {name, location}.
-     * @return Id del registro Solicitud_Camara__c creado.
-     */
     @AuraEnabled
     public static Id createSolicitudCamara(String camerasJson) {
         try {
@@ -242,9 +222,6 @@ public without sharing class UserMenuController {
         }
     }
 
-    /**
-     * @description Comprueba si el usuario actual es System Administrator.
-     */
     private static Boolean checkIsAdmin() {
         try {
             Profile p = [
@@ -259,9 +236,6 @@ public without sharing class UserMenuController {
         }
     }
 
-    /**
-     * @description Genera iniciales a partir del nombre completo.
-     */
     private static String buildInitials(String fullName) {
         if (String.isBlank(fullName)) return '??';
         List<String> parts = fullName.trim().split('\\s+');
@@ -272,11 +246,6 @@ public without sharing class UserMenuController {
         return result;
     }
 
-    /**
-     * @description Renombra una cámara. Solo el propietario puede renombrar sus cámaras.
-     * @param cameraId Id de la cámara.
-     * @param newName  Nuevo nombre.
-     */
     @AuraEnabled
     public static void renameCamera(Id cameraId, String newName) {
         if (String.isBlank(newName)) {

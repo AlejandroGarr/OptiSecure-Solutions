@@ -1,7 +1,11 @@
 /**
- * An apex class that updates portal user details.
-   Guest users are never able to access this page.
- */
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-30-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
+
 public with sharing class MyProfilePageController {
 
     private User user;

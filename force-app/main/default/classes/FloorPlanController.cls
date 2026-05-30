@@ -1,16 +1,11 @@
 /**
- * @description Controlador Apex para la subida y obtención del plano
- *              personalizado de cada usuario / contacto.
- *              Cada cliente del portal puede subir su propio plano que
- *              sustituirá al static resource Plano_Casa_1.
- *
- *              El fichero se almacena como ContentVersion enlazada al
- *              ContactId del usuario (o a su UserId si es un usuario
- *              interno sin contacto, p.ej. admin).
- *
- * @author      OptiSecure Solutions
- * @date        2026-05-14
- */
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-30-2026
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
+
 public without sharing class FloorPlanController {
 
     // Prefijo del título usado para identificar planos subidos por nuestro
@@ -20,10 +15,6 @@ public without sharing class FloorPlanController {
     // Tamaño máximo permitido (4 MB en bytes)
     private static final Integer MAX_FILE_SIZE_BYTES = 4 * 1024 * 1024;
 
-    /**
-     * @description Devuelve el Id de la entidad (Contact o User) a la que
-     *              hay que enlazar el plano para el usuario actual.
-     */
     private static Id getOwnerEntityId() {
         User u = [
             SELECT Id, ContactId
@@ -34,14 +25,6 @@ public without sharing class FloorPlanController {
         return u.ContactId != null ? (Id) u.ContactId : (Id) u.Id;
     }
 
-    /**
-     * @description Guarda (o reemplaza) el plano del usuario actual.
-     * @param       base64Data    Contenido del archivo en Base64.
-     * @param       contentType   MIME type (image/png, image/jpeg, ...).
-     * @param       fileName      Nombre original del archivo (informativo).
-     * @return      ContentVersionId creado.
-     * @throws      AuraHandledException si el archivo supera 4 MB o falla el DML.
-     */
     @AuraEnabled
     public static Id saveFloorPlan(String base64Data, String contentType, String fileName) {
         try {
@@ -113,11 +96,6 @@ public without sharing class FloorPlanController {
         }
     }
 
-    /**
-     * @description Obtiene el plano del usuario actual como data-URI base64
-     *              para usarlo directamente en un atributo src de imagen.
-     * @return      Cadena "data:<mime>;base64,...." o null si no hay plano.
-     */
     @AuraEnabled(cacheable=false)
     public static String getFloorPlanDataUri() {
         try {
@@ -159,10 +137,6 @@ public without sharing class FloorPlanController {
         }
     }
 
-    /**
-     * @description Elimina el plano personalizado del usuario actual
-     *              (vuelve a usarse el plano por defecto).
-     */
     @AuraEnabled
     public static Boolean deleteFloorPlan() {
         try {
@@ -191,18 +165,12 @@ public without sharing class FloorPlanController {
         }
     }
 
-    /**
-     * @description Indica si el Id pertenece al objeto User (key prefix 005).
-     */
     private static Boolean isUserId(Id recordId) {
         return recordId != null
             && recordId.getSObjectType() == User.SObjectType;
     }
 
-    /**
-     * @description Convierte el FileType/Extension de Salesforce a un
-     *              MIME type válido para data-URIs de imagen.
-     */
+
     private static String mapFileTypeToMime(String fileType, String extension) {
         String ext = String.isNotBlank(extension) ? extension.toLowerCase() : '';
         if (ext == 'png')                  return 'image/png';
