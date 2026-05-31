@@ -1,0 +1,1428 @@
+/* ═══════════════════════════════════════════════════════
+   CUSTOM USER MENU — Profile Modal Styles
+   OptiSecure Solutions — Dark Security Theme
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── MODAL CONTAINER ─── */
+.slds-modal {
+    z-index: 10000 !important;
+    position: fixed !important;
+}
+
+.slds-backdrop {
+    z-index: 9999 !important;
+    position: fixed !important;
+}
+
+.slds-modal__container {
+    height: auto;
+    padding: 0 !important;
+}
+
+.profile-modal-container {
+    max-width: 900px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    background: #1a1d2e;
+    padding: 0;
+    margin: 0 auto;
+}
+
+/* ─── HEADER CON GRADIENTE ─── */
+.profile-modal-header {
+    position: relative;
+    background: linear-gradient(135deg, #0f1923 0%, #1b2a4a 50%, #0d3b66 100%);
+    padding: 1rem 2rem 0.85rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.profile-modal-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 20% 50%, rgba(0, 188, 212, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(33, 150, 243, 0.1) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.profile-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-size: 1.5rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 10;
+    line-height: 1;
+}
+
+.profile-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+/* ─── AVATAR ─── */
+.profile-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00bcd4, #2196f3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.5rem;
+    box-shadow:
+        0 0 0 4px rgba(0, 188, 212, 0.25),
+        0 8px 24px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 1;
+}
+
+.profile-avatar-text {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.profile-name {
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 0 0.1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.profile-email {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.82rem;
+    margin: 0 0 0.4rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* ─── BODY ─── */
+.profile-modal-body {
+    padding: 1rem;
+    background: #1a1d2e;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.profile-modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.profile-modal-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.profile-modal-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+}
+
+/* ─── FILA DE ESTADÍSTICAS ─── */
+.profile-stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.profile-stat-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 0.6rem 0.75rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.profile-stat-card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.stat-icon-wrap {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.35rem;
+}
+
+.stat-icon-blue {
+    background: rgba(33, 150, 243, 0.15);
+    --sds-c-icon-color-foreground-default: #2196f3;
+}
+
+.stat-icon-green {
+    background: rgba(76, 175, 80, 0.15);
+    --sds-c-icon-color-foreground-default: #4caf50;
+}
+
+.stat-icon-red {
+    background: rgba(244, 67, 54, 0.15);
+    --sds-c-icon-color-foreground-default: #f44336;
+}
+
+.stat-icon-purple {
+    background: rgba(156, 39, 176, 0.15);
+    --sds-c-icon-color-foreground-default: #9c27b0;
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 0.25rem;
+}
+
+/* ─── BARRA DE PROGRESO CÁMARAS ─── */
+.camera-progress-section {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 0.45rem 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.progress-title {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.progress-percent {
+    color: #00bcd4;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.progress-track {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00bcd4, #2196f3);
+    border-radius: 4px;
+    transition: width 0.8s ease;
+    min-width: 0;
+}
+
+/* ─── GRID DE TARJETAS ─── */
+.profile-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.65rem;
+}
+
+.profile-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.profile-card:hover {
+    border-color: rgba(0, 188, 212, 0.25);
+    box-shadow: 0 4px 16px rgba(0, 188, 212, 0.08);
+}
+
+.profile-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.02);
+    --sds-c-icon-color-foreground-default: #00bcd4;
+}
+
+.profile-card-header h2 {
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin: 0;
+}
+
+.profile-card-body {
+    padding: 0.4rem 1rem;
+}
+
+.profile-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.profile-field:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.field-label {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.field-value {
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: right;
+    max-width: 60%;
+    word-break: break-word;
+}
+
+.field-mono {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+/* ─── BADGES ─── */
+.profile-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.badge-platinum {
+    background: linear-gradient(135deg, rgba(200, 200, 220, 0.2), rgba(180, 180, 200, 0.1));
+    color: #e0e0e8;
+    border: 1px solid rgba(200, 200, 220, 0.3);
+    text-shadow: 0 0 8px rgba(200, 200, 220, 0.3);
+}
+
+.badge-gold {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 152, 0, 0.1));
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    text-shadow: 0 0 8px rgba(255, 193, 7, 0.2);
+}
+
+.badge-silver {
+    background: linear-gradient(135deg, rgba(158, 158, 158, 0.2), rgba(189, 189, 189, 0.1));
+    color: #bdbdbd;
+    border: 1px solid rgba(189, 189, 189, 0.3);
+}
+
+.badge-bronze {
+    background: linear-gradient(135deg, rgba(205, 127, 50, 0.2), rgba(176, 109, 42, 0.1));
+    color: #cd7f32;
+    border: 1px solid rgba(205, 127, 50, 0.3);
+}
+
+.badge-active {
+    background: rgba(76, 175, 80, 0.15);
+    color: #4caf50;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.badge-inactive {
+    background: rgba(244, 67, 54, 0.15);
+    color: #f44336;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.badge-priority-high {
+    background: rgba(244, 67, 54, 0.15);
+    color: #f44336;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.badge-priority-medium {
+    background: rgba(255, 152, 0, 0.15);
+    color: #ff9800;
+    border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.badge-priority-low {
+    background: rgba(158, 158, 158, 0.15);
+    color: #9e9e9e;
+    border: 1px solid rgba(158, 158, 158, 0.3);
+}
+
+.badge-default {
+    background: rgba(158, 158, 158, 0.1);
+    color: #9e9e9e;
+    border: 1px solid rgba(158, 158, 158, 0.2);
+}
+
+/* ─── FOOTER ─── */
+.profile-modal-footer {
+    padding: 0.6rem 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* ─── LISTA DE CÁMARAS ─── */
+.camera-list-card {
+    grid-column: 1 / -1;
+    margin-top: 0.25rem;
+}
+
+.camera-list-body {
+    max-height: 180px;
+    overflow-y: auto;
+    padding: 0.4rem 0;
+}
+
+.camera-list-body::-webkit-scrollbar {
+    width: 4px;
+}
+
+.camera-list-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 2px;
+}
+
+.camera-list-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.45rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background 0.15s ease;
+}
+
+.camera-list-row:last-child {
+    border-bottom: none;
+}
+
+.camera-list-row:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.camera-list-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.cam-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.cam-dot-active {
+    background: #4caf50;
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.5);
+}
+
+.cam-dot-inactive {
+    background: #f44336;
+    box-shadow: 0 0 6px rgba(244, 67, 54, 0.4);
+}
+
+.camera-list-name {
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.camera-list-zone {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.72rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+.camera-list-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+}
+
+.camera-list-status {
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.camera-delete-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(244, 67, 54, 0.25);
+    background: rgba(244, 67, 54, 0.08);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    --sds-c-icon-color-foreground-default: #f44336;
+}
+
+.camera-delete-btn:hover {
+    background: rgba(244, 67, 54, 0.2);
+    border-color: rgba(244, 67, 54, 0.5);
+    transform: scale(1.1);
+}
+
+.camera-delete-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.camera-delete-btn lightning-icon {
+    pointer-events: none;
+}
+
+/* ─── RENOMBRAR CÁMARA ─── */
+.camera-rename-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(33, 150, 243, 0.25);
+    background: rgba(33, 150, 243, 0.08);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    --sds-c-icon-color-foreground-default: #2196f3;
+}
+
+.camera-rename-btn:hover {
+    background: rgba(33, 150, 243, 0.2);
+    border-color: rgba(33, 150, 243, 0.5);
+    transform: scale(1.1);
+}
+
+.camera-rename-input {
+    flex: 1;
+    min-width: 0;
+}
+
+.camera-rename-confirm-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(76, 175, 80, 0.35);
+    background: rgba(76, 175, 80, 0.12);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    --sds-c-icon-color-foreground-default: #4caf50;
+}
+
+.camera-rename-confirm-btn:hover {
+    background: rgba(76, 175, 80, 0.25);
+    border-color: rgba(76, 175, 80, 0.6);
+}
+
+.camera-rename-confirm-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.camera-rename-cancel-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    --sds-c-icon-color-foreground-default: rgba(255, 255, 255, 0.6);
+}
+
+.camera-rename-cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ─── ESTADOS ERROR / LOADING ─── */
+.profile-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 3rem 2rem;
+    color: #f44336;
+}
+
+.profile-error p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.95rem;
+}
+
+.profile-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 3rem 2rem;
+}
+
+.profile-loading p {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+}
+
+/* ═══════════════════════════════════════════════════════
+   CONTRACT MODAL — Formulario de contratación de cámaras
+   ═══════════════════════════════════════════════════════ */
+
+.contract-modal-container {
+    max-width: 640px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    background: #1a1d2e;
+    padding: 0;
+    margin: 0 auto;
+}
+
+.contract-modal-header {
+    position: relative;
+    background: linear-gradient(135deg, #0f1923 0%, #1b2a4a 50%, #0d3b66 100%);
+    padding: 1.25rem 2rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.contract-header-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00bcd4, #2196f3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.6rem;
+    --sds-c-icon-color-foreground-default: #fff;
+}
+
+.contract-title {
+    color: #ffffff;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 0 0 0.2rem;
+}
+
+.contract-subtitle {
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+.contract-modal-body {
+    padding: 1.25rem 1.5rem;
+    background: #1a1d2e;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* ─── Fila de cámara ─── */
+.contract-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.contract-row:last-of-type {
+    border-bottom: none;
+}
+
+.contract-row-number {
+    color: #00bcd4;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    padding-bottom: 0.55rem;
+    flex-shrink: 0;
+}
+
+.contract-row-fields {
+    display: flex;
+    gap: 0.75rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.contract-input {
+    flex: 1;
+    min-width: 0;
+    --slds-c-input-color-background: rgba(255, 255, 255, 0.06);
+    --sds-c-input-color-background: rgba(255, 255, 255, 0.06);
+    --slds-c-input-color-border: rgba(255, 255, 255, 0.12);
+    --sds-c-input-color-border: rgba(255, 255, 255, 0.12);
+    --slds-c-input-text-color: #e2e8f0;
+    --sds-c-input-text-color: #e2e8f0;
+    --slds-c-input-label-text-color: rgba(255, 255, 255, 0.6);
+    --sds-c-input-label-text-color: rgba(255, 255, 255, 0.6);
+}
+
+.contract-remove-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+    background: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    margin-bottom: 0.3rem;
+}
+
+.contract-remove-btn:hover {
+    background: rgba(244, 67, 54, 0.25);
+    border-color: rgba(244, 67, 54, 0.5);
+    transform: scale(1.1);
+}
+
+/* ─── Botón añadir ─── */
+.contract-add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.65rem;
+    margin-top: 0.5rem;
+    border: 2px dashed rgba(0, 188, 212, 0.3);
+    border-radius: 10px;
+    background: rgba(0, 188, 212, 0.05);
+    color: #00bcd4;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    --sds-c-icon-color-foreground-default: #00bcd4;
+}
+
+.contract-add-btn:hover {
+    background: rgba(0, 188, 212, 0.12);
+    border-color: rgba(0, 188, 212, 0.5);
+}
+
+.contract-max-msg {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.78rem;
+    margin-top: 0.75rem;
+    font-style: italic;
+}
+
+/* ─── Footer ─── */
+.contract-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ─── Responsive contrato ─── */
+@media (max-width: 640px) {
+    .contract-modal-container {
+        max-width: 100vw;
+        border-radius: 10px;
+    }
+
+    .contract-modal-header {
+        padding: 1rem 1.25rem 0.85rem;
+    }
+
+    .contract-modal-body {
+        padding: 1rem;
+    }
+
+    .contract-row {
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+
+    .contract-row-fields {
+        flex-direction: column;
+        gap: 0.4rem;
+        width: 100%;
+    }
+
+    .contract-modal-footer {
+        padding: 0.65rem 1rem;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE — Tablet & Mobile (Experience Cloud)
+   Breakpoints:
+     • Tablet  : 768px – 1024px
+     • Mobile  : 481px – 767px
+     • Small   : ≤ 480px
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── TABLET (768px – 1024px) ─── */
+@media (max-width: 1024px) {
+    .profile-modal-container {
+        max-width: 96vw;
+        border-radius: 12px;
+    }
+
+    .profile-modal-header {
+        padding: 0.9rem 1.5rem 0.75rem;
+    }
+
+    .profile-avatar {
+        width: 50px;
+        height: 50px;
+    }
+
+    .profile-avatar-text {
+        font-size: 1.25rem;
+    }
+
+    .profile-name {
+        font-size: 1.1rem;
+    }
+
+    .profile-email {
+        font-size: 0.78rem;
+    }
+
+    .profile-stats-row {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+    }
+
+    .profile-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.55rem;
+    }
+
+    .profile-card-body {
+        padding: 0.35rem 0.75rem;
+    }
+
+    .profile-modal-body {
+        padding: 0.85rem;
+    }
+
+    .camera-list-body {
+        max-height: 160px;
+    }
+}
+
+/* ─── MOBILE (481px – 767px) ─── */
+@media (max-width: 767px) {
+    .profile-modal-container {
+        max-width: 100vw;
+        border-radius: 10px;
+        margin: 0;
+    }
+
+    .profile-modal-header {
+        padding: 0.85rem 1.2rem 0.7rem;
+    }
+
+    .profile-close-btn {
+        top: 8px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.6rem;
+    }
+
+    .profile-avatar {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 0.4rem;
+    }
+
+    .profile-avatar-text {
+        font-size: 1.15rem;
+    }
+
+    .profile-name {
+        font-size: 1.05rem;
+    }
+
+    .profile-email {
+        font-size: 0.76rem;
+    }
+
+    .profile-modal-body {
+        padding: 0.7rem;
+        max-height: 70vh;
+    }
+
+    /* Stats: 3 columnas se mantienen pero más compactas */
+    .profile-stats-row {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .profile-stat-card {
+        padding: 0.5rem 0.4rem;
+        border-radius: 10px;
+    }
+
+    .stat-icon-wrap {
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-value {
+        font-size: 1.1rem;
+    }
+
+    .stat-label {
+        font-size: 0.68rem;
+        letter-spacing: 0.3px;
+    }
+
+    /* Cards: una sola columna */
+    .profile-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .profile-card-header {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .profile-card-header h2 {
+        font-size: 0.8rem;
+    }
+
+    .profile-card-body {
+        padding: 0.3rem 0.75rem;
+    }
+
+    .field-label {
+        font-size: 0.75rem;
+    }
+
+    .field-value {
+        font-size: 0.8rem;
+        max-width: 55%;
+    }
+
+    .field-mono {
+        font-size: 0.72rem;
+        padding: 2px 6px;
+    }
+
+    /* Barra progreso */
+    .camera-progress-section {
+        padding: 0.4rem 0.75rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .progress-title {
+        font-size: 0.8rem;
+    }
+
+    .progress-percent {
+        font-size: 0.82rem;
+    }
+
+    /* Lista de cámaras */
+    .camera-list-body {
+        max-height: 150px;
+    }
+
+    .camera-list-row {
+        padding: 0.4rem 0.75rem;
+    }
+
+    .camera-list-name {
+        font-size: 0.78rem;
+    }
+
+    .camera-list-zone {
+        font-size: 0.68rem;
+        padding: 1px 6px;
+    }
+
+    /* Badges más compactos */
+    .profile-badge {
+        padding: 2px 10px;
+        font-size: 0.7rem;
+    }
+
+    /* Footer */
+    .profile-modal-footer {
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* ─── SMALL MOBILE (≤ 480px) ─── */
+@media (max-width: 480px) {
+    .profile-modal-container {
+        max-width: 100vw;
+        border-radius: 8px 8px 0 0;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .profile-modal-header {
+        padding: 0.75rem 1rem 0.6rem;
+    }
+
+    .profile-close-btn {
+        top: 6px;
+        right: 8px;
+        width: 36px;
+        height: 36px;
+        font-size: 1.4rem;
+    }
+
+    .profile-avatar {
+        width: 44px;
+        height: 44px;
+        margin-bottom: 0.3rem;
+        box-shadow:
+            0 0 0 3px rgba(0, 188, 212, 0.2),
+            0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .profile-avatar-text {
+        font-size: 1.05rem;
+        letter-spacing: 1.5px;
+    }
+
+    .profile-name {
+        font-size: 1rem;
+    }
+
+    .profile-email {
+        font-size: 0.72rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .profile-modal-body {
+        padding: 0.5rem;
+        max-height: 65vh;
+    }
+
+    /* Stats: 2 columnas en pantallas pequeñas, tercera se mueve abajo */
+    .profile-stats-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .profile-stat-card {
+        padding: 0.45rem 0.35rem;
+        border-radius: 8px;
+    }
+
+    .stat-icon-wrap {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        margin-bottom: 0.2rem;
+    }
+
+    .stat-value {
+        font-size: 1rem;
+    }
+
+    .stat-label {
+        font-size: 0.62rem;
+    }
+
+    /* Cards: columna única, más compactas */
+    .profile-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 0.4rem;
+    }
+
+    .profile-card {
+        border-radius: 10px;
+    }
+
+    .profile-card-header {
+        padding: 0.45rem 0.65rem;
+        gap: 0.4rem;
+    }
+
+    .profile-card-header h2 {
+        font-size: 0.78rem;
+    }
+
+    .profile-card-body {
+        padding: 0.25rem 0.65rem;
+    }
+
+    .profile-field {
+        padding: 0.25rem 0;
+        flex-wrap: wrap;
+        gap: 0.15rem;
+    }
+
+    .field-label {
+        font-size: 0.72rem;
+    }
+
+    .field-value {
+        font-size: 0.76rem;
+        max-width: 100%;
+        text-align: left;
+    }
+
+    .field-mono {
+        font-size: 0.68rem;
+        padding: 2px 5px;
+        word-break: break-all;
+    }
+
+    /* Progreso */
+    .camera-progress-section {
+        padding: 0.35rem 0.65rem;
+        margin-bottom: 0.5rem;
+        border-radius: 10px;
+    }
+
+    .progress-title {
+        font-size: 0.76rem;
+    }
+
+    .progress-percent {
+        font-size: 0.78rem;
+    }
+
+    .progress-track {
+        height: 5px;
+    }
+
+    /* Cámaras */
+    .camera-list-body {
+        max-height: 130px;
+    }
+
+    .camera-list-row {
+        padding: 0.35rem 0.65rem;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+    }
+
+    .camera-list-info {
+        gap: 0.35rem;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .camera-list-name {
+        font-size: 0.74rem;
+    }
+
+    .camera-list-zone {
+        font-size: 0.64rem;
+        padding: 1px 5px;
+    }
+
+    .camera-list-actions {
+        gap: 0.4rem;
+    }
+
+    .camera-list-status {
+        font-size: 0.66rem;
+    }
+
+    .camera-delete-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+    }
+
+    /* Badges */
+    .profile-badge {
+        padding: 2px 8px;
+        font-size: 0.66rem;
+    }
+
+    /* Footer */
+    .profile-modal-footer {
+        padding: 0.45rem 0.75rem;
+    }
+
+    /* Error y Loading */
+    .profile-error,
+    .profile-loading {
+        padding: 2rem 1rem;
+        gap: 0.75rem;
+    }
+
+    .profile-error p,
+    .profile-loading p {
+        font-size: 0.82rem;
+    }
+}
+
+/* ─── TOUCH-FRIENDLY — Mejoras para interacción táctil ─── */
+@media (hover: none) and (pointer: coarse) {
+    .profile-close-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .profile-stat-card {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .profile-stat-card:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .profile-card:hover {
+        border-color: rgba(255, 255, 255, 0.08);
+        box-shadow: none;
+    }
+
+    .camera-delete-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .camera-delete-btn:hover {
+        transform: none;
+    }
+
+    .camera-list-row:hover {
+        background: transparent;
+    }
+
+    .profile-close-btn:hover {
+        transform: none;
+    }
+}
+
+/* ─── LANDSCAPE MOBILE ─── */
+@media (max-height: 500px) and (orientation: landscape) {
+    .profile-modal-body {
+        max-height: 55vh;
+    }
+
+    .profile-modal-header {
+        padding: 0.5rem 1rem 0.4rem;
+    }
+
+    .profile-avatar {
+        width: 36px;
+        height: 36px;
+        margin-bottom: 0.2rem;
+    }
+
+    .profile-avatar-text {
+        font-size: 0.9rem;
+    }
+
+    .profile-name {
+        font-size: 0.9rem;
+    }
+
+    .profile-email {
+        font-size: 0.7rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .profile-stats-row {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.4rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .camera-list-body {
+        max-height: 100px;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════
+   FLOOR PLAN MODAL — Subida del plano del usuario
+   ═══════════════════════════════════════════════════════ */
+.floor-plan-modal-container {
+    max-width: 560px;
+    background: #fff;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.floor-plan-modal-header {
+    background: linear-gradient(135deg, #1b4d8a 0%, #2563eb 100%);
+    color: #fff;
+    padding: 1.25rem 1.5rem;
+    position: relative;
+}
+
+.floor-plan-modal-header h2 {
+    color: #fff;
+    margin: 0;
+    font-weight: 600;
+}
+
+.floor-plan-modal-header p {
+    color: rgba(255,255,255,0.85);
+    margin: 0;
+}
+
+.floor-plan-modal-body {
+    background: #f9fafb;
+}
+
+.floor-plan-dropzone {
+    position: relative;
+    border: 2px dashed #94a3b8;
+    border-radius: 0.5rem;
+    background: #fff;
+    padding: 2rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background-color 0.15s, transform 0.1s;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.floor-plan-dropzone:hover {
+    border-color: #2563eb;
+    background: #f0f6ff;
+}
+
+.floor-plan-dropzone--over {
+    border-color: #2563eb;
+    background: #e0ecff;
+    transform: scale(1.01);
+}
+
+.floor-plan-drop-title {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.floor-plan-drop-hint {
+    color: #6b7280;
+    font-size: 0.85rem;
+    margin: 0.25rem 0 0;
+}
+
+.floor-plan-file-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    pointer-events: none; /* el clic lo gestionamos desde la zona */
+}
+
+.floor-plan-preview {
+    max-width: 100%;
+    max-height: 240px;
+    object-fit: contain;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.floor-plan-filename {
+    margin: 0.5rem 0 0;
+    font-weight: 600;
+    color: #1f2937;
+    word-break: break-all;
+}
+
+.floor-plan-filesize {
+    margin: 0;
+    color: #6b7280;
+    font-size: 0.8rem;
+}
+
+.floor-plan-error {
+    display: flex;
+    align-items: center;
+    color: #b91c1c;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+}

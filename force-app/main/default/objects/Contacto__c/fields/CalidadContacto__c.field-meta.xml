@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CalidadContacto__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+   AND(
+       NOT(ISBLANK( CreatedBy.Email )),
+       NOT(ISBLANK( CreatedBy.Phone )),
+       NOT(ISBLANK( CreatedBy.MobilePhone ))
+   ),
+   IMAGE(&quot;/img/samples/stars_500.gif&quot;, &quot;5 Estrellas&quot;, 20, 150),
+   IF(
+       AND(
+           NOT(ISBLANK(CreatedBy.Email)),
+           NOT(ISBLANK(CreatedBy.MobilePhone ))
+       ),
+       IMAGE(&quot;/img/samples/stars_300.gif&quot;, &quot;3 Estrellas&quot;, 20, 150),
+       IF(
+           NOT(ISBLANK(CreatedBy.Email)),
+           IMAGE(&quot;/img/samples/stars_100.gif&quot;, &quot;1 Estrellas&quot;, 20, 150),
+           IMAGE(&quot;/img/samples/stars_000.gif&quot;, &quot;0 Estrellas&quot;, 20, 150)
+       )
+   )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Calidad del contacto</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,186 @@
+<template>
+    <!-- ═══════════════════════════════════════════════════════
+         CASE VIEWER — OptiSecure Solutions
+         Visor de casos + chat para Experience Cloud
+    ═══════════════════════════════════════════════════════════ -->
+
+    <!-- Botón de apertura -->
+    <div class="case-trigger">
+        <lightning-button
+            label="Casos"
+            variant="brand"
+            icon-name="utility:case"
+            onclick={handleOpenModal}
+            class="case-btn"
+        ></lightning-button>
+    </div>
+
+    <!-- Modal -->
+    <template lwc:if={isModalOpen}>
+        <section class="case-modal-backdrop" onclick={handleBackdropClick}>
+            <div class="case-modal" onclick={handleModalClick}>
+
+                <!-- ═══ CABECERA ═══ -->
+                <header class="case-modal-header">
+                    <div class="case-modal-header-left">
+                        <template lwc:if={showDetail}>
+                            <button class="back-btn" onclick={handleBack} title="Volver">
+                                <lightning-icon icon-name="utility:chevronleft" size="x-small" alternative-text="Volver"></lightning-icon>
+                            </button>
+                        </template>
+                        <lightning-icon icon-name="utility:case" size="small" class="header-case-icon"></lightning-icon>
+                        <h2 class="case-modal-title">
+                            <template lwc:if={showList}>Mis Casos</template>
+                            <template lwc:if={showDetail}>Caso {selectedCase.caseNumber}</template>
+                        </h2>
+                    </div>
+                    <div class="case-modal-header-right">
+                        <template lwc:if={showList}>
+                            <span class="case-count-badge">{caseCount}</span>
+                        </template>
+                        <button class="case-modal-close" onclick={handleCloseModal} title="Cerrar">
+                            <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Cerrar"></lightning-icon>
+                        </button>
+                    </div>
+                </header>
+
+                <!-- ═══ CUERPO ═══ -->
+                <div class="case-modal-body">
+
+                    <!-- ─── LISTA DE CASOS ─── -->
+                    <template lwc:if={showList}>
+                        <template lwc:if={hasCases}>
+                            <div class="case-list">
+                                <template for:each={caseList} for:item="c">
+                                    <div key={c.id} class="case-card" data-id={c.id} onclick={handleCaseClick}>
+                                        <div class="case-card-top">
+                                            <span class="case-card-number">#{c.caseNumber}</span>
+                                            <span class={c.priorityClass}>{c.priority}</span>
+                                        </div>
+                                        <div class="case-card-subject">{c.subject}</div>
+                                        <div class="case-card-bottom">
+                                            <span class={c.statusClass}>{c.status}</span>
+                                            <span class="case-card-date">{c.createdDate}</span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template lwc:else>
+                            <div class="empty-state">
+                                <lightning-icon icon-name="utility:emoji" size="large" class="empty-icon"></lightning-icon>
+                                <p class="empty-title">Sin casos abiertos</p>
+                                <p class="empty-subtitle">No tienes casos registrados actualmente.</p>
+                            </div>
+                        </template>
+                    </template>
+
+                    <!-- ─── DETALLE DEL CASO ─── -->
+                    <template lwc:if={showDetail}>
+                        <div class="case-detail">
+
+                            <!-- Info principal -->
+                            <div class="detail-header-info">
+                                <h3 class="detail-subject">{selectedCase.subject}</h3>
+                                <div class="detail-badges">
+                                    <span class={detailPriorityClass}>{selectedCase.priority}</span>
+                                    <span class={detailStatusClass}>{selectedCase.status}</span>
+                                </div>
+                            </div>
+
+                            <!-- Meta info -->
+                            <div class="detail-meta">
+                                <div class="meta-item">
+                                    <lightning-icon icon-name="utility:date_input" size="xx-small" class="meta-icon"></lightning-icon>
+                                    <span>{selectedCase.createdDate}</span>
+                                </div>
+                                <template lwc:if={selectedCase.contactName}>
+                                    <div class="meta-item">
+                                        <lightning-icon icon-name="utility:user" size="xx-small" class="meta-icon"></lightning-icon>
+                                        <span>{selectedCase.contactName}</span>
+                                    </div>
+                                </template>
+                                <template lwc:if={selectedCase.contactEmail}>
+                                    <div class="meta-item">
+                                        <lightning-icon icon-name="utility:email" size="xx-small" class="meta-icon"></lightning-icon>
+                                        <span>{selectedCase.contactEmail}</span>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <!-- Descripción -->
+                            <template lwc:if={selectedCase.description}>
+                                <div class="detail-description">
+                                    <h4 class="section-title">Descripción</h4>
+                                    <p class="description-text">{selectedCase.description}</p>
+                                </div>
+                            </template>
+
+                            <!-- ─── CHAT / COMENTARIOS ─── -->
+                            <div class="chat-section">
+                                <h4 class="section-title">
+                                    <lightning-icon icon-name="utility:chat" size="xx-small" class="section-icon"></lightning-icon>
+                                    Mensajes
+                                </h4>
+
+                                <!-- Zona de mensajes -->
+                                <div class="chat-messages">
+                                    <template lwc:if={isLoadingChat}>
+                                        <div class="chat-loading">
+                                            <lightning-spinner size="small" alternative-text="Cargando..."></lightning-spinner>
+                                        </div>
+                                    </template>
+                                    <template lwc:else>
+                                        <template lwc:if={hasChatMessages}>
+                                            <template for:each={chatMessages} for:item="msg">
+                                                <div key={msg.id} class={msg.bubbleClass}>
+                                                    <span class="bubble-author">{msg.createdByName}</span>
+                                                    <p class="bubble-body">{msg.body}</p>
+                                                    <span class="bubble-time">{msg.createdDate}</span>
+                                                </div>
+                                            </template>
+                                        </template>
+                                        <template lwc:else>
+                                            <div class="chat-empty">
+                                                <p>No hay mensajes aún. ¡Envía el primero!</p>
+                                            </div>
+                                        </template>
+                                    </template>
+                                </div>
+
+                                <!-- Error -->
+                                <template lwc:if={errorMessage}>
+                                    <div class="chat-error">
+                                        <lightning-icon icon-name="utility:error" size="xx-small" class="error-icon"></lightning-icon>
+                                        <span>{errorMessage}</span>
+                                    </div>
+                                </template>
+
+                                <!-- Input del chat -->
+                                <div class="chat-input-area">
+                                    <textarea
+                                        class="chat-input"
+                                        placeholder="Escribe un mensaje..."
+                                        value={newMessage}
+                                        oninput={handleMessageChange}
+                                        onkeydown={handleKeyDown}
+                                        rows="2"
+                                    ></textarea>
+                                    <button
+                                        class={sendButtonClass}
+                                        onclick={handleSendMessage}
+                                        disabled={isSendDisabled}
+                                        title="Enviar"
+                                        type="button"
+                                    >
+                                        <lightning-icon icon-name="utility:send" size="x-small" alternative-text="Enviar"></lightning-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </section>
+    </template>
+</template>

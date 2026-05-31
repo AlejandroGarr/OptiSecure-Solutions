@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BotVersion xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>v1</fullName>
+    <articleAnswersGPTEnabled>false</articleAnswersGPTEnabled>
+    <botDialogs>
+        <botSteps>
+            <botMessages>
+                <message>Hi! I’m an AI assistant, here to help you troubleshoot user access, look for answers in Salesforce Help, easily create report types, and more.</message>
+                <messageIdentifier>2ad10b89-4875-409d-abbc-747c4ac25268</messageIdentifier>
+            </botMessages>
+            <stepIdentifier>f70ea3a7-34f8-40a2-a4ce-48656361f204</stepIdentifier>
+            <type>Message</type>
+        </botSteps>
+        <botSteps>
+            <stepIdentifier>3b6558c8-47c3-496a-8bd0-e82696d44418</stepIdentifier>
+            <type>Wait</type>
+        </botSteps>
+        <developerName>Welcome</developerName>
+        <isPlaceholderDialog>false</isPlaceholderDialog>
+        <label>Hi! I&apos;m your helpful bot.</label>
+        <showInFooterMenu>false</showInFooterMenu>
+    </botDialogs>
+    <botDialogs>
+        <botSteps>
+            <botMessages>
+                <message>Unfortunately, a system error occurred. Let us start again.</message>
+                <messageIdentifier>bfd4696a-2c50-4c5f-b34b-a6c21f2efcc1</messageIdentifier>
+            </botMessages>
+            <stepIdentifier>fc3437d8-7033-49fe-b09e-ad9e7d63a1cb</stepIdentifier>
+            <type>Message</type>
+        </botSteps>
+        <botSteps>
+            <stepIdentifier>ca4f93b6-b63d-499f-99f4-3ceb4c611457</stepIdentifier>
+            <type>Wait</type>
+        </botSteps>
+        <developerName>Error_Handling</developerName>
+        <isPlaceholderDialog>false</isPlaceholderDialog>
+        <label>Unfortunately, a system error occurred. Let us start again.</label>
+        <showInFooterMenu>false</showInFooterMenu>
+    </botDialogs>
+    <citationsEnabled>false</citationsEnabled>
+    <company>Your Company</company>
+    <conversationDefinitionPlanners>
+        <genAiPlannerName>Agent_for_Setup</genAiPlannerName>
+    </conversationDefinitionPlanners>
+    <conversationVariables>
+        <dataType>Text</dataType>
+        <description>This variable may also be referred to as VerifiedCustomerId</description>
+        <developerName>VerifiedCustomerId</developerName>
+        <includeInPrompt>false</includeInPrompt>
+        <label>VerifiedCustomerId</label>
+        <visibility>Internal</visibility>
+    </conversationVariables>
+    <conversationVariables>
+        <dataType>Text</dataType>
+        <description>The ID of a setup page that the user is currently viewing.</description>
+        <developerName>setupPageId</developerName>
+        <includeInPrompt>false</includeInPrompt>
+        <label>setupPageId</label>
+        <visibility>External</visibility>
+    </conversationVariables>
+    <conversationVariables>
+        <dataType>Text</dataType>
+        <description>The API name of the Salesforce object that the user is viewing in the object detail page in Setup. Do not use this if the user is already talking about another Salesforce object in the conversation.</description>
+        <developerName>currentObjectApiName</developerName>
+        <includeInPrompt>true</includeInPrompt>
+        <label>currentObjectApiName</label>
+        <visibility>External</visibility>
+    </conversationVariables>
+    <conversationVariables>
+        <dataType>Text</dataType>
+        <description>The API name of the field of a Salesforce object that the user is viewing in the object field detail page in Setup. Do not use this field if user is already talking about another field in the conversation.</description>
+        <developerName>currentField</developerName>
+        <includeInPrompt>true</includeInPrompt>
+        <label>currentField</label>
+        <visibility>External</visibility>
+    </conversationVariables>
+    <conversationVariables>
+        <dataType>Text</dataType>
+        <description>The unique ID of the connected app used for migrating it to an external client app (ECA) or for summarizing the connected app details. This ID is sourced from the current connected app page in Setup and should be used only if the user has not explicitly m</description>
+        <developerName>applicationId</developerName>
+        <includeInPrompt>true</includeInPrompt>
+        <label>applicationId</label>
+        <visibility>External</visibility>
+    </conversationVariables>
+    <conversationVariables>
+        <dataType>Text</dataType>
+        <description>The ID of the user record that is currently viewed in the user setup page. Do not use this if the user is already talking about another user record in the conversation.</description>
+        <developerName>userId</developerName>
+        <includeInPrompt>true</includeInPrompt>
+        <label>userId</label>
+        <visibility>External</visibility>
+    </conversationVariables>
+    <entryDialog>Welcome</entryDialog>
+    <intentDisambiguationEnabled>false</intentDisambiguationEnabled>
+    <intentV3Enabled>false</intentV3Enabled>
+    <knowledgeActionEnabled>false</knowledgeActionEnabled>
+    <knowledgeFallbackEnabled>false</knowledgeFallbackEnabled>
+    <role>You help users with administrative tasks in setup, such as troubleshooting user access and finding answers in Salesforce Help.</role>
+    <smallTalkEnabled>false</smallTalkEnabled>
+    <staticPromptsEnabled>false</staticPromptsEnabled>
+    <stopRecPrompts>false</stopRecPrompts>
+    <stopWelcomePrompts>false</stopWelcomePrompts>
+    <surfacesEnabled>false</surfacesEnabled>
+    <toneType>Casual</toneType>
+</BotVersion>

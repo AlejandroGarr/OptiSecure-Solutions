@@ -1,0 +1,1157 @@
+/* ═══════════════════════════════════════════════════════
+   HOUSE SECURITY MAP — CSS Grid Layout
+   Grid:  map (75%)  | sidebar (25%)
+          footer     | footer
+═══════════════════════════════════════════════════════ */
+
+/* ── Host ── */
+:host {
+    display: block;
+    --color-bg:        #0a0e1a;
+    --color-surface:   #111827;
+    --color-border:    #1e293b;
+    --color-accent:    #3b82f6;
+    --color-accent-glow: rgba(59, 130, 246, 0.4);
+    --color-text:      #e2e8f0;
+    --color-text-dim:  #94a3b8;
+    --color-danger:    #ef4444;
+    --color-success:   #22c55e;
+    --radius:          0.5rem;
+}
+
+/* ── Grid principal ── */
+.house-security-map {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+        "map     sidebar"
+        "footer  footer";
+    height: 85vh;
+    min-height: 500px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+    color: var(--color-text);
+}
+
+/* ═══ GRID AREA: MAP ═══ */
+.grid-area-map {
+    grid-area: map;
+    position: relative;
+    overflow: hidden;
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.map-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.floor-plan-img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    display: block;
+    opacity: 0.85;
+}
+
+/* Badge de cámaras activas sobre el mapa */
+.map-badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    display: flex;
+    align-items: center;
+    background: rgba(10, 14, 26, 0.8);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--color-border);
+    border-radius: 2rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-accent);
+}
+
+/* ── Pins de cámara ── */
+.camera-pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: rgba(59, 130, 246, 0.2);
+    border: 2px solid var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    padding: 0;
+}
+
+.camera-pin:hover {
+    transform: translate(-50%, -50%) scale(1.25);
+    background: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 0 16px var(--color-accent-glow);
+}
+
+.camera-pin:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.camera-icon {
+    --sds-c-icon-color-foreground-default: #3b82f6;
+    --slds-c-icon-color-foreground-default: #3b82f6;
+    color: #3b82f6;
+    pointer-events: none;
+}
+
+/* ═══ MENÚ CONTEXTUAL (clic derecho) ═══ */
+.context-menu {
+    position: absolute;
+    z-index: 100;
+    min-width: 180px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    padding: 0.35rem 0;
+    animation: fade-in 0.1s ease;
+}
+
+.context-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.12s ease;
+    white-space: nowrap;
+}
+
+.context-menu-item--danger {
+    color: var(--color-danger);
+}
+
+.context-menu-item--danger:hover {
+    background: rgba(239, 68, 68, 0.12);
+}
+
+.context-menu-icon {
+    --sds-c-icon-color-foreground-default: var(--color-danger);
+    --slds-c-icon-color-foreground-default: var(--color-danger);
+    flex-shrink: 0;
+}
+
+/* Pulso animado */
+.camera-pin-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid var(--color-accent);
+    animation: pulse-ring 2s ease-out infinite;
+    pointer-events: none;
+}
+
+@keyframes pulse-ring {
+    0%   { transform: scale(1);   opacity: 0.6; }
+    100% { transform: scale(2.2); opacity: 0;   }
+}
+
+/* ═══ GRID AREA: SIDEBAR ═══ */
+.grid-area-sidebar {
+    grid-area: sidebar;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    background: rgba(10, 14, 26, 0.5);
+}
+
+.sidebar-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0;
+    color: var(--color-text);
+}
+
+.sidebar-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Items de cámara en la lista */
+.cam-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: background 0.15s ease, border-left 0.15s ease;
+    border-left: 3px solid transparent;
+}
+
+.cam-list-item:hover {
+    background: rgba(59, 130, 246, 0.08);
+}
+
+.cam-list-item--selected {
+    background: rgba(59, 130, 246, 0.12);
+    border-left-color: var(--color-accent);
+}
+
+.cam-list-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.cam-list-icon {
+    --sds-c-icon-color-foreground-default: #60a5fa;
+    flex-shrink: 0;
+}
+
+.cam-list-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.cam-list-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cam-list-zone {
+    font-size: 0.65rem;
+    color: var(--color-text-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cam-list-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex-shrink: 0;
+}
+
+.cam-rename-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+    border: 1px solid rgba(96, 165, 250, 0.25);
+    background: rgba(96, 165, 250, 0.08);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    --sds-c-icon-color-foreground-default: #60a5fa;
+    flex-shrink: 0;
+}
+
+.cam-rename-btn:hover {
+    background: rgba(96, 165, 250, 0.2);
+    border-color: rgba(96, 165, 250, 0.5);
+    transform: scale(1.1);
+}
+
+.cam-rename-confirm-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+    border: 1px solid rgba(76, 175, 80, 0.35);
+    background: rgba(76, 175, 80, 0.12);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    --sds-c-icon-color-foreground-default: #4caf50;
+}
+
+.cam-rename-confirm-btn:hover {
+    background: rgba(76, 175, 80, 0.25);
+}
+
+.cam-rename-confirm-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.cam-rename-cancel-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    --sds-c-icon-color-foreground-default: rgba(255, 255, 255, 0.5);
+}
+
+.cam-rename-cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.cam-rename-input {
+    flex: 1;
+    min-width: 0;
+}
+
+.badge-online {
+    --sds-c-badge-color-background: rgba(34, 197, 94, 0.15);
+    --sds-c-badge-text-color: #4ade80;
+    --slds-c-badge-color-background: rgba(34, 197, 94, 0.15);
+    --slds-c-badge-text-color: #4ade80;
+    font-size: 0.6rem;
+    flex-shrink: 0;
+}
+
+/* ── Panel de detalle (debajo de la lista) ── */
+.sidebar-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    color: var(--color-text-dim);
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+.sidebar-detail {
+    border-top: 1px solid var(--color-border);
+    padding: 1rem;
+    background: rgba(10, 14, 26, 0.5);
+}
+
+.detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.detail-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--color-accent);
+}
+
+.detail-close-btn {
+    --sds-c-button-icon-color-foreground: var(--color-text-dim);
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    margin: 0;
+}
+
+.detail-grid dt {
+    color: var(--color-text-dim);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+    padding: 0.15rem 0;
+}
+
+.detail-grid dd {
+    margin: 0;
+    padding: 0.15rem 0;
+    color: var(--color-text);
+}
+
+.detail-live-btn {
+    width: 100%;
+}
+
+/* ═══ GRID AREA: FOOTER ═══ */
+.grid-area-footer {
+    grid-area: footer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    background: rgba(10, 14, 26, 0.85);
+    border-top: 1px solid var(--color-border);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-text-dim);
+}
+
+.footer-icon {
+    --sds-c-icon-color-foreground-default: var(--color-accent);
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.footer-datetime {
+    color: var(--color-text-dim);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ═══ MODAL CÁMARA — Visor de vídeo flotante ═══ */
+
+/* El modal se ajusta al tamaño real del vídeo (no ocupa todo el ancho de
+   pantalla) para que no aparezcan grandes franjas negras alrededor. */
+.slds-modal__container {
+    width: fit-content !important;
+    max-width: 90vw !important;
+    min-width: 0 !important;
+    margin: 0 auto !important;
+}
+
+.live-dot {
+    width: 6px;
+    height: 6px;
+    background: #ef4444;
+    border-radius: 50%;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.3; }
+}
+
+.modal-cam-header {
+    background: var(--color-surface, #111827) !important;
+    border-bottom: 1px solid var(--color-border, #1e293b) !important;
+}
+
+.modal-cam-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.modal-cam-title {
+    color: #e2e8f0 !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+}
+
+.fullscreen-live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    padding: 0.25rem 0.7rem;
+    border-radius: 2rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.modal-cam-content {
+    background: #000 !important;
+    padding: 0 !important;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.modal-cam-img {
+    /* Forzamos la altura al máximo disponible del viewport (descontando
+       header + footer del modal). El ancho se calcula automáticamente
+       manteniendo la proporción nativa del stream, y como el contenedor
+       del modal usa `width: fit-content`, todo el modal se adapta
+       dinámicamente al tamaño real del vídeo, sin franjas negras. */
+    display: block;
+    height: 85vh;
+    width: auto;
+    max-width: 95vw;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.modal-cam-footer {
+    background: var(--color-surface, #111827) !important;
+    border-top: 1px solid var(--color-border, #1e293b) !important;
+}
+
+/* ═══ RESPONSIVE ═══ */
+
+/*
+ * Estrategia: En tablet/móvil el layout pasa a 1 columna.
+ * La imagen del plano se muestra completa (width:100%, height:auto)
+ * y el contenedor se ajusta a su tamaño exacto, así los pins
+ * con porcentajes quedan perfectos.
+ * El sidebar va horizontal debajo.
+ */
+
+@media (max-width: 1024px) {
+    .house-security-map {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        min-height: unset;
+        overflow: visible;
+        border-radius: 0;
+    }
+
+    .grid-area-map {
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+        overflow: hidden;
+        width: 100%;
+        flex-shrink: 0;
+    }
+
+    /* Contenedor toma el tamaño natural de la imagen */
+    .map-container,
+    .map-container--dragover {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 75%; /* aspect-ratio 4:3 */
+        overflow: hidden;
+    }
+
+    /* Imagen llena el contenedor con padding-bottom trick */
+    .floor-plan-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+        display: block;
+    }
+
+    /* ── Sidebar — cámaras en lista vertical, solo nombre ── */
+    .grid-area-sidebar {
+        max-height: none;
+        overflow: visible;
+        flex-shrink: 0;
+    }
+
+    .sidebar-list {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        overflow-x: hidden;
+        overflow-y: auto;
+        max-height: 30vh;
+    }
+
+    .cam-list-item {
+        flex: none;
+        width: 100%;
+        border-bottom: 1px solid var(--color-border);
+        border-right: none;
+        padding: 0.6rem 1rem;
+    }
+
+    .cam-list-item:last-child {
+        border-bottom: none;
+    }
+
+    /* Ocultar icono y badge, solo mostrar nombre */
+    .cam-list-icon {
+        display: none;
+    }
+
+    .cam-list-zone {
+        display: none;
+    }
+
+    .badge-online {
+        display: none;
+    }
+
+    .cam-list-name {
+        font-size: 0.82rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .sidebar-detail {
+        width: 100%;
+    }
+
+    /* Drag tray horizontal */
+    .drag-tray-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        max-height: none;
+    }
+
+    .drag-pin-card {
+        flex: 0 0 auto;
+    }
+
+    .grid-area-footer {
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+}
+
+/* ─── MOBILE (≤ 768px) ─── */
+@media (max-width: 768px) {
+    .footer-datetime {
+        display: none;
+    }
+
+    .camera-pin {
+        width: 1.75rem;
+        height: 1.75rem;
+    }
+
+    .dropped-pin {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    .map-badge {
+        font-size: 0.6rem;
+        padding: 0.25rem 0.55rem;
+    }
+
+    .sidebar-header {
+        padding: 0.6rem 0.75rem;
+    }
+
+    .sidebar-title {
+        font-size: 0.78rem;
+    }
+
+    .cam-list-name {
+        font-size: 0.72rem;
+    }
+
+    .cam-list-zone {
+        font-size: 0.58rem;
+    }
+
+    .badge-online {
+        font-size: 0.55rem;
+    }
+
+    .detail-title {
+        font-size: 0.8rem;
+    }
+
+    .detail-grid {
+        font-size: 0.68rem;
+    }
+
+    .grid-area-footer {
+        padding: 0.35rem 0.65rem;
+        font-size: 0.6rem;
+    }
+
+    .footer-right {
+        gap: 0.4rem;
+    }
+
+    .fullscreen-topbar {
+        padding: 0.4rem 0.65rem;
+    }
+
+    .fullscreen-cam-name {
+        font-size: 0.85rem;
+    }
+
+    .fullscreen-close-btn {
+        width: 2.25rem;
+        height: 2.25rem;
+    }
+}
+
+/* ─── SMALL MOBILE (≤ 480px) ─── */
+@media (max-width: 480px) {
+    .camera-pin {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    .dropped-pin {
+        width: 2.2rem;
+        height: 2.2rem;
+    }
+
+    .map-badge {
+        font-size: 0.55rem;
+        padding: 0.2rem 0.45rem;
+        top: 0.4rem;
+        left: 0.4rem;
+    }
+
+    .cam-list-item {
+        padding: 0.4rem 0.6rem;
+    }
+
+    .cam-list-name {
+        font-size: 0.68rem;
+    }
+
+    .badge-online {
+        font-size: 0.48rem;
+    }
+
+    .sidebar-detail {
+        padding: 0.5rem;
+    }
+
+    .detail-title {
+        font-size: 0.75rem;
+    }
+
+    .detail-grid {
+        font-size: 0.62rem;
+        gap: 0.15rem 0.5rem;
+    }
+
+    .grid-area-footer {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.55rem;
+    }
+
+    .drag-tray {
+        padding: 0.5rem 0.6rem;
+    }
+
+    .drag-pin-thumb {
+        width: 38px;
+        height: 26px;
+    }
+
+    .drag-pin-name {
+        font-size: 0.64rem;
+    }
+}
+
+/* ─── TOUCH ─── */
+@media (hover: none) and (pointer: coarse) {
+    .camera-pin {
+        min-width: 36px;
+        min-height: 36px;
+    }
+
+    .camera-pin:hover {
+        transform: translate(-50%, -50%);
+        background: rgba(59, 130, 246, 0.2);
+        box-shadow: none;
+    }
+
+    .cam-list-item {
+        min-height: 44px;
+    }
+
+    .cam-list-item:hover {
+        background: transparent;
+    }
+
+    .context-menu-item {
+        min-height: 44px;
+        padding: 0.65rem 1rem;
+    }
+
+    .dropped-pin-remove {
+        opacity: 1;
+        width: 20px;
+        height: 20px;
+        font-size: 0.6rem;
+    }
+}
+
+/* ─── LANDSCAPE MOBILE ─── */
+@media (max-height: 500px) and (orientation: landscape) {
+    .house-security-map {
+        grid-template-columns: 2fr 1fr;
+        grid-template-rows: 1fr auto;
+        grid-template-areas:
+            "map     sidebar"
+            "footer  footer";
+        height: 100vh;
+    }
+
+    .grid-area-map {
+        border-right: 1px solid var(--color-border);
+    }
+
+    .map-container,
+    .map-container--dragover {
+        width: 100%;
+        height: 100%;
+    }
+
+    .floor-plan-img {
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+    }
+
+    .sidebar-list {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .cam-list-item {
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .grid-area-footer {
+        padding: 0.25rem 0.65rem;
+        font-size: 0.58rem;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════
+   DRAG & DROP — Bandeja de chinchetas (solo admins)
+═══════════════════════════════════════════════════════ */
+
+/* Feedback visual al arrastrar sobre el mapa */
+.map-container--dragover {
+    outline: 3px dashed var(--color-accent);
+    outline-offset: -3px;
+    background: rgba(59, 130, 246, 0.06);
+}
+
+/* Indicador central de drop */
+.drop-zone-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 14, 26, 0.55);
+    backdrop-filter: blur(4px);
+    z-index: 20;
+    pointer-events: none;
+    animation: fade-in 0.15s ease;
+}
+
+.drop-zone-icon {
+    --sds-c-icon-color-foreground-default: var(--color-accent);
+    margin-bottom: 0.5rem;
+}
+
+.drop-zone-text {
+    color: var(--color-accent);
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* ── Bandeja lateral ── */
+.drag-tray {
+    border-top: 1px solid var(--color-border);
+    padding: 0.75rem 1rem;
+    background: rgba(10, 14, 26, 0.6);
+}
+
+.drag-tray-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.1rem;
+}
+
+.drag-tray-icon {
+    --sds-c-icon-color-foreground-default: #f59e0b;
+    flex-shrink: 0;
+}
+
+.drag-tray-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0;
+    color: #f59e0b;
+    flex: 1;
+}
+
+.drag-tray-add-btn {
+    --sds-c-button-icon-color-foreground: #f59e0b;
+}
+
+.drag-tray-hint {
+    font-size: 0.65rem;
+    color: var(--color-text-dim);
+    margin: 0 0 0.5rem;
+}
+
+.drag-tray-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.drag-tray-empty {
+    font-size: 0.7rem;
+    color: var(--color-text-dim);
+    text-align: center;
+    margin: 0.5rem 0;
+}
+
+.drag-tray-save-btn {
+    width: 100%;
+}
+
+/* ── Banner de solicitud aprobada ── */
+.solicitud-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.6rem;
+    margin-bottom: 0.5rem;
+    border-radius: var(--radius);
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.solicitud-banner-icon {
+    --slds-c-icon-color-foreground-default: #10b981;
+    flex-shrink: 0;
+}
+
+.solicitud-banner-text {
+    font-size: 0.72rem;
+    color: #10b981;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+/* ── Mensaje inline de estado (backup para toasts en Experience Cloud) ── */
+.inline-msg {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.35rem;
+    padding: 0.45rem 0.6rem;
+    margin-top: 0.5rem;
+    border-radius: var(--radius);
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.3;
+    word-break: break-word;
+}
+.inline-msg--success {
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: #10b981;
+    --slds-c-icon-color-foreground-default: #10b981;
+}
+.inline-msg--error {
+    background: rgba(220, 38, 38, 0.1);
+    border: 1px solid rgba(220, 38, 38, 0.35);
+    color: #dc2626;
+    --slds-c-icon-color-foreground-default: #dc2626;
+}
+.inline-msg--info {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #3b82f6;
+    --slds-c-icon-color-foreground-default: #3b82f6;
+}
+
+/* ── Tarjeta de chincheta en la bandeja ── */
+.drag-pin-card {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: rgba(245, 158, 11, 0.08);
+    cursor: grab;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    user-select: none;
+}
+
+.drag-pin-card:hover {
+    background: rgba(245, 158, 11, 0.15);
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+    transform: translateY(-1px);
+}
+
+.drag-pin-card:active {
+    cursor: grabbing;
+    transform: scale(0.97);
+}
+
+.drag-pin-thumb {
+    width: 48px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+    border: 1px solid var(--color-border);
+}
+
+.drag-pin-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+}
+
+.drag-pin-name {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.drag-pin-video-label {
+    font-size: 0.6rem;
+    color: var(--color-text-dim);
+}
+
+.drag-pin-close {
+    --sds-c-button-icon-color-foreground: var(--color-text-dim);
+    flex-shrink: 0;
+}
+
+/* ── Chincheta soltada en el mapa ── */
+.dropped-pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    overflow: visible;
+    cursor: grab;
+    z-index: 15;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dropped-pin:hover {
+    transform: translate(-50%, -50%) scale(1.15);
+    z-index: 16;
+}
+
+.dropped-pin:active {
+    cursor: grabbing;
+}
+
+.dropped-pin-thumb {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #f59e0b;
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+    pointer-events: none;
+}
+
+.dropped-pin-label {
+    position: absolute;
+    bottom: -1.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: #f59e0b;
+    white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    pointer-events: none;
+}
+
+.dropped-pin-remove {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-danger);
+    color: #fff;
+    border: none;
+    font-size: 0.55rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    z-index: 17;
+    padding: 0;
+}
+
+.dropped-pin:hover .dropped-pin-remove {
+    opacity: 1;
+}
+
+.dropped-pin-pulse {
+    width: 120%;
+    height: 120%;
+    border-color: #f59e0b;
+}

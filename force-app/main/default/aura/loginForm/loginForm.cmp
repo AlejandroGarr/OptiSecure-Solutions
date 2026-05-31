@@ -1,0 +1,130 @@
+<!-- add implements="forceCommunity:availableForAllPageTypes" to surface the component in community builder -->
+<aura:component controller="LightningLoginFormController">
+    <aura:attribute name="showError" type="Boolean" required="true" description="" default="false" access="private"/>
+    <aura:attribute name="errorMessage" type="String" required="false" description="" access="private"/>
+    <aura:attribute name="startUrl" type="String" required="false" description="The url you go to after a successful login" />
+    <aura:attribute name="usernameLabel" type="String" required="false" default="Username"/>
+    <aura:attribute name="passwordLabel" type="String" required="false" default="Password"/>
+    <aura:attribute name="loginButtonLabel" type="String" required="false" default="Log in"/>
+    <aura:attribute name="expid" type="String" required="false" description="The branding experience ID" />        
+    
+    <aura:attribute name="forgotPasswordLabel" type="String" required="false" default="Forgot your password?"/>
+    <aura:attribute name="selfRegisterLabel" type="String" required="false" default="Not a member?"/>
+    <aura:attribute name="forgotPasswordUrl" type="String" required="false" default="/ForgotPassword"/>
+    <aura:attribute name="selfRegisterUrl" type="String" required="false" default="/SelfRegister"/>
+    
+    <aura:attribute name="isUsernamePasswordEnabled" type="Boolean" access="private"/>
+    <aura:attribute name="isSelfRegistrationEnabled" type="Boolean" access="private"/>
+    <aura:attribute name="communityForgotPasswordUrl" type="String" access="private"/>
+    <aura:attribute name="communitySelfRegisterUrl" type="String" access="private"/>
+    
+    <aura:registerevent name="sitePropagatedStartUrl" type="c:setStartUrl"/>
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
+    <aura:dependency resource="c:setStartUrl" type="EVENT"/>
+    <!-- Please uncomment
+    <aura:dependency resource="siteforce:registerQueryEventMap" type="EVENT"/>
+    -->
+    <aura:handler event="c:setStartUrl" action="{!c.setStartUrl}"/>
+    <aura:handler event="c:setExpId" action="{!c.setExpId}"/>    
+    <aura:dependency resource="c:setExpId" type="EVENT"/>  
+    
+    <!-- ═══════════════════════════════════════════════════
+         OPTISECURE SOLUTIONS — Login
+    ═══════════════════════════════════════════════════ -->
+    <div class="os-login-wrapper">
+
+        <!-- Panel izquierdo: Branding -->
+        <div class="os-brand-panel">
+            <div class="os-brand-bg"></div>
+            <div class="os-brand-content">
+                <div class="os-shield-icon">
+                    <lightning:icon iconName="utility:shield" size="large" alternativeText="Security" class="os-shield-lightning"/>
+                </div>
+                <h1 class="os-brand-title">OptiSecure</h1>
+                <p class="os-brand-subtitle">Solutions</p>
+                <div class="os-brand-divider"></div>
+                <p class="os-brand-tagline">Sistema de Seguridad Inteligente</p>
+                <div class="os-brand-features">
+                    <div class="os-feature">
+                        <span class="os-feature-icon">&#9670;</span>
+                        <span>Monitorización 24/7</span>
+                    </div>
+                    <div class="os-feature">
+                        <span class="os-feature-icon">&#9670;</span>
+                        <span>Cámaras en tiempo real</span>
+                    </div>
+                    <div class="os-feature">
+                        <span class="os-feature-icon">&#9670;</span>
+                        <span>Alertas inteligentes</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Decoraciones animadas -->
+            <div class="os-circle os-circle-1"></div>
+            <div class="os-circle os-circle-2"></div>
+            <div class="os-circle os-circle-3"></div>
+        </div>
+
+        <!-- Panel derecho: Formulario -->
+        <div class="os-form-panel">
+            <aura:renderIf isTrue="{!v.isUsernamePasswordEnabled}">
+                <div class="os-form-container">
+                    <div class="os-form-header">
+                        <div class="os-lock-icon">
+                            <lightning:icon iconName="utility:lock" size="medium" alternativeText="Login" class="os-lock-lightning"/>
+                        </div>
+                        <h2 class="os-form-title">Iniciar Sesión</h2>
+                        <p class="os-form-desc">Accede al panel de seguridad</p>
+                    </div>
+
+                    <!-- Error -->
+                    <aura:renderIf isTrue="{!v.showError}">
+                        <div class="os-error">
+                            <span class="os-error-icon">&#9888;</span>
+                            <ui:outputRichText value="{!v.errorMessage}"/>
+                        </div>
+                    </aura:renderIf>
+
+                    <!-- Username -->
+                    <div class="os-input-group">
+                        <label class="os-input-label">Usuario</label>
+                        <div class="os-input-wrapper">
+                            <span class="os-input-icon">
+                                <lightning:icon iconName="utility:user" size="xx-small" alternativeText="User" class="os-icon-dim"/>
+                            </span>
+                            <ui:inputText value="" aura:id="username" placeholder="{!v.usernameLabel}" keyup="{!c.onKeyUp}" class="os-input" label="{!v.usernameLabel}" labelClass="assistiveText"/>
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="os-input-group">
+                        <label class="os-input-label">Contraseña</label>
+                        <div class="os-input-wrapper">
+                            <span class="os-input-icon">
+                                <lightning:icon iconName="utility:lock" size="xx-small" alternativeText="Password" class="os-icon-dim"/>
+                            </span>
+                            <ui:inputSecret value="" aura:id="password" placeholder="{!v.passwordLabel}" keyup="{!c.onKeyUp}" class="os-input" label="{!v.passwordLabel}" labelClass="assistiveText"/>
+                        </div>
+                    </div>
+
+                    <!-- Login button -->
+                    <ui:button aura:id="submitButton" label="{!v.loginButtonLabel}" press="{!c.handleLogin}" class="os-btn-login"/>
+
+                    <!-- Links -->
+                    <div class="os-links">
+                        <a href="{!if(v.communityForgotPasswordUrl == null, v.forgotPasswordUrl, v.communityForgotPasswordUrl)}" class="os-link">{!v.forgotPasswordLabel}</a>
+                        <aura:renderIf isTrue="{!v.isSelfRegistrationEnabled}">
+                            <a href="{!if(v.communitySelfRegisterUrl == null, v.selfRegisterUrl, v.communitySelfRegisterUrl)}" class="os-link os-link-register">{!v.selfRegisterLabel}</a>
+                        </aura:renderIf>
+                    </div>
+
+                    <!-- Footer branding -->
+                    <div class="os-form-footer">
+                        <span class="os-footer-shield">&#128737;</span>
+                        <span>Protegido por OptiSecure Solutions</span>
+                    </div>
+                </div>
+            </aura:renderIf>
+        </div>
+    </div>
+</aura:component>

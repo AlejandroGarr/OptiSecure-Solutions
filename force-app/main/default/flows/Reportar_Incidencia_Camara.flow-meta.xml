@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Flujo de pantalla que permite a los usuarios de Experience Cloud reportar incidencias en las cámaras de seguridad. Embebe el componente LWC cameraIncidentReport para crear un caso (Case) vinculado a la cámara afectada.</description>
+    <environments>Default</environments>
+    <interviewLabel>Reportar Incidencia Cámara {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Reportar Incidencia Cámara</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <screens>
+        <name>Pantalla_Reporte_Incidencia</name>
+        <label>Reportar Incidencia de Cámara</label>
+        <locationX>176</locationX>
+        <locationY>158</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>LWC_CameraIncidentReport</name>
+            <extensionName>c:cameraIncidentReport</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Pantalla_Reporte_Incidencia</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+</Flow>

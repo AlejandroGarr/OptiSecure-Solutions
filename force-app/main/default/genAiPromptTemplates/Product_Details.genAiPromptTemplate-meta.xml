@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPromptTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Information about product</description>
+    <developerName>Product_Details</developerName>
+    <masterLabel>Product Details</masterLabel>
+    <templateVersions>
+        <content>Escriba una descripción del producto detallada utilizando esta información:
+El nombre de la cuenta es {!$Input:Account_Info.Name}
+La información del producto es {!$Input:Asset_Info.Description}
+La información del contacto es {!$Input:Contact_Info.Name}
+
+</content>
+        <inputs>
+            <apiName>Account_Info</apiName>
+            <definition>SOBJECT://Account</definition>
+            <masterLabel>Account Info</masterLabel>
+            <referenceName>Input:Account_Info</referenceName>
+            <required>true</required>
+        </inputs>
+        <inputs>
+            <apiName>Asset_Info</apiName>
+            <definition>SOBJECT://Asset</definition>
+            <masterLabel>Asset Info</masterLabel>
+            <referenceName>Input:Asset_Info</referenceName>
+            <required>true</required>
+        </inputs>
+        <inputs>
+            <apiName>Contact_Info</apiName>
+            <definition>SOBJECT://Contact</definition>
+            <masterLabel>Contact Info</masterLabel>
+            <referenceName>Input:Contact_Info</referenceName>
+            <required>true</required>
+        </inputs>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Draft</status>
+        <versionIdentifier>F0+mF+pd+um56+Tv/RmZ0X3w4AV+5eWoN7A00yOzbzQ=_1</versionIdentifier>
+    </templateVersions>
+    <type>einstein_gpt__flex</type>
+    <visibility>Global</visibility>
+</GenAiPromptTemplate>

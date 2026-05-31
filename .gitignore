@@ -42,6 +42,9 @@ $RECYCLE.BIN/
 # Local environment variables
 .env
 
+# API Keys — no subir al repo
+force-app/main/default/labels/CustomLabels.labels-meta.xml
+
 # Python Salesforce Functions
 **/__pycache__/
 **/.venv/

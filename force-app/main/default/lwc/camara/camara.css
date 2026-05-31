@@ -1,0 +1,516 @@
+/* ═══════════════════════════════════════════════════════════════
+   OPTISECURE — CENTRO DE VIGILANCIA CCTV
+   Monitor profesional con pantalla dividida en 4 cuadrantes
+   Cada cuadrante contiene 4 cámaras (16 total)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Contenedor principal ─── */
+.camera-monitor {
+    background: #0a0a0f;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Courier New', 'Consolas', monospace;
+    color: #c8d6e5;
+    overflow: hidden;
+}
+
+/* ─── HEADER ─── */
+.monitor-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: linear-gradient(180deg, #111118 0%, #0d0d14 100%);
+    border-bottom: 2px solid #1a3a5c;
+    box-shadow: 0 2px 12px rgba(0, 120, 255, 0.08);
+    flex-shrink: 0;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.shield-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #0d47a1, #1565c0);
+    box-shadow: 0 0 10px rgba(21, 101, 192, 0.5);
+}
+
+.header-icon {
+    --lwc-colorTextIconDefault: #4fc3f7;
+}
+
+.header-titles {
+    display: flex;
+    flex-direction: column;
+}
+
+.monitor-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #e0e6ed;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.monitor-subtitle {
+    font-size: 11px;
+    color: #5a6d80;
+    letter-spacing: 1px;
+    margin: 2px 0 0 0;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.live-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(211, 47, 47, 0.15);
+    border: 1px solid #d32f2f;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #ef5350;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d32f2f;
+    animation: pulse-red 1.2s ease-in-out infinite;
+    box-shadow: 0 0 6px #d32f2f;
+}
+
+@keyframes pulse-red {
+    0%, 100% { opacity: 1; box-shadow: 0 0 4px #d32f2f; }
+    50% { opacity: 0.4; box-shadow: 0 0 10px #d32f2f; }
+}
+
+.datetime-badge {
+    font-size: 13px;
+    font-weight: 600;
+    color: #4fc3f7;
+    background: rgba(79, 195, 247, 0.08);
+    border: 1px solid rgba(79, 195, 247, 0.2);
+    padding: 4px 14px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    font-family: 'Courier New', monospace;
+}
+
+.fullscreen-btn {
+    --sds-c-button-neutral-color-background: transparent;
+    --sds-c-button-neutral-color-border: #1a3a5c;
+    --sds-c-icon-color-foreground-default: #4fc3f7;
+}
+
+/* ─── GRID DE CUADRANTES (2×2) ─── */
+.quadrant-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 6px;
+    padding: 6px;
+    flex: 1;
+    min-height: 0;
+    background: #060609;
+}
+
+.quadrant-block {
+    display: flex;
+    flex-direction: column;
+    background: #0c0c14;
+    border: 1px solid #1a2a3a;
+    border-radius: 4px;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* Cabecera de cada cuadrante / sector */
+.quadrant-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 12px;
+    background: linear-gradient(90deg, #0d1520, #0a1018);
+    border-bottom: 1px solid #1a2a3a;
+    flex-shrink: 0;
+}
+
+.quadrant-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #4fc3f7;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.quadrant-status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 9px;
+    font-weight: 600;
+    color: #66bb6a;
+    letter-spacing: 1px;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #66bb6a;
+    box-shadow: 0 0 4px #66bb6a;
+    animation: pulse-green 2s ease-in-out infinite;
+}
+
+@keyframes pulse-green {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ─── 4 cámaras dentro de cada cuadrante (grid 2×2) ─── */
+.quad-cameras {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 3px;
+    padding: 3px;
+    flex: 1;
+    min-height: 0;
+}
+
+/* Cada celda de cámara individual */
+.cam-cell {
+    position: relative;
+    background: #000;
+    border: 1px solid #1a2a3a;
+    border-radius: 2px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+}
+
+/* Stream de vídeo - llena toda la celda */
+.cam-stream {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: none;
+    z-index: 1;
+}
+
+/* ─── Overlays de cámara ─── */
+.cam-overlay-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 8px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, transparent 100%);
+    z-index: 10;
+    pointer-events: none;
+}
+
+.cam-id {
+    font-size: 9px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 1.5px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+}
+
+.rec-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 8px;
+    font-weight: 700;
+    color: #ef5350;
+    letter-spacing: 1px;
+}
+
+.rec-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #ef5350;
+    animation: blink-rec 1s step-end infinite;
+    box-shadow: 0 0 4px #ef5350;
+}
+
+@keyframes blink-rec {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.cam-overlay-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 8px;
+    background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, transparent 100%);
+    z-index: 10;
+    pointer-events: none;
+}
+
+.cam-zone {
+    font-size: 8px;
+    color: #b0bec5;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+}
+
+.cam-status-badge {
+    font-size: 7px;
+    font-weight: 700;
+    color: #66bb6a;
+    background: rgba(102, 187, 106, 0.15);
+    padding: 1px 6px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+}
+
+/* ─── Esquinas decorativas tipo cámara de seguridad ─── */
+.corner {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.corner-tl {
+    top: 0;
+    left: 0;
+    border-top: 2px solid rgba(79, 195, 247, 0.5);
+    border-left: 2px solid rgba(79, 195, 247, 0.5);
+}
+
+.corner-tr {
+    top: 0;
+    right: 0;
+    border-top: 2px solid rgba(79, 195, 247, 0.5);
+    border-right: 2px solid rgba(79, 195, 247, 0.5);
+}
+
+.corner-bl {
+    bottom: 0;
+    left: 0;
+    border-bottom: 2px solid rgba(79, 195, 247, 0.5);
+    border-left: 2px solid rgba(79, 195, 247, 0.5);
+}
+
+.corner-br {
+    bottom: 0;
+    right: 0;
+    border-bottom: 2px solid rgba(79, 195, 247, 0.5);
+    border-right: 2px solid rgba(79, 195, 247, 0.5);
+}
+
+/* Efecto scanline sutil en cada cámara */
+.cam-cell::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.03) 2px,
+        rgba(0, 0, 0, 0.03) 4px
+    );
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* ─── FOOTER ─── */
+.monitor-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 24px;
+    background: linear-gradient(0deg, #111118 0%, #0d0d14 100%);
+    border-top: 1px solid #1a2a3a;
+    flex-shrink: 0;
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    color: #5a6d80;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.lock-icon {
+    --lwc-colorTextIconDefault: #5a6d80;
+}
+
+.footer-right {
+    font-size: 10px;
+    color: #3a4a5a;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1200px) {
+    .quadrant-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .cam-cell {
+        aspect-ratio: 16 / 10;
+    }
+}
+
+/* ─── MODAL CÁMARA AMPLIADA ─── */
+.cam-expanded-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cam-expanded-modal {
+    width: 90vw;
+    max-width: 1280px;
+    background: #0a0a0f;
+    border: 2px solid #1a3a5c;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(0, 120, 255, 0.25);
+}
+
+.cam-expanded-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: #111118;
+    border-bottom: 1px solid #1a3a5c;
+}
+
+.cam-expanded-label {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: #4fc3f7;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.cam-expanded-close {
+    background: transparent;
+    border: 1px solid #3a4a5a;
+    color: #c8d6e5;
+    font-size: 16px;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+}
+
+.cam-expanded-close:hover {
+    background: #c0392b;
+    color: #fff;
+    border-color: #c0392b;
+}
+
+.cam-expanded-stream {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    display: block;
+    border: none;
+}
+
+.cam-expanded-footer {
+    padding: 8px 16px;
+    background: #111118;
+    border-top: 1px solid #1a2a3a;
+}
+
+.cam-expanded-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    color: #5a6d80;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-family: 'Courier New', monospace;
+}
+
+/* Cursor pointer en celdas de cámara para indicar que son clicables */
+.cam-cell {
+    cursor: pointer;
+}
+.cam-cell:hover .cam-overlay-top {
+    background: linear-gradient(180deg, rgba(0, 80, 160, 0.7) 0%, transparent 100%);
+}
+
+@media (max-width: 768px) {
+    .monitor-header {
+        flex-direction: column;
+        gap: 8px;
+        padding: 8px 12px;
+    }
+
+    .header-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .monitor-title {
+        font-size: 14px;
+        letter-spacing: 1.5px;
+    }
+
+    .quad-cameras {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+}

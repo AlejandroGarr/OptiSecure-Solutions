@@ -1,0 +1,2688 @@
+================================================================================
+
+                    TRABAJO FIN DE GRADO
+
+          OPTISECURE SOLUTIONS: PLATAFORMA DE GESTIÓN DE SEGURIDAD
+           DOMÉSTICA Y EMPRESARIAL SOBRE SALESFORCE CON INTEGRACIÓN
+                    DE INTELIGENCIA ARTIFICIAL
+
+================================================================================
+
+Autor:            Alejandro Garrido Navarro
+Plataforma:       Salesforce (Lightning Experience + Experience Cloud)
+Tecnologías:      Apex · LWC · SOQL · REST API · Google Gemini · Flask · Ngrok
+Versión API:      65.0
+Entorno:          Sandbox (test.salesforce.com)
+Org alias:        alejandrogn559@gmail.com.tfg
+
+================================================================================
+
+
+Elementos adicionales — Lista de Acrónimos
+───────────────────────────────────────────
+
+En esta lista se recogen los acrónimos empleados a lo largo de la documentación,
+indicando su significado y contexto de uso.
+
+CRM       Customer Relationship Management (Gestión de Relaciones con el Cliente)
+LWC       Lightning Web Components
+LWR       Lightning Web Runtime
+SOQL      Salesforce Object Query Language
+SFDX      Salesforce Developer Experience
+DML       Data Manipulation Language
+FLS       Field-Level Security
+API       Application Programming Interface (Interfaz de Programación de Aplicaciones)
+REST      Representational State Transfer
+NLP       Natural Language Processing (Procesamiento de Lenguaje Natural)
+IA        Inteligencia Artificial
+SaaS      Software as a Service
+MJPEG     Motion JPEG
+HTTP      Hypertext Transfer Protocol
+HTTPS     HTTP Secure
+JSON      JavaScript Object Notation
+CSS       Cascading Style Sheets
+HTML      HyperText Markup Language
+DOM       Document Object Model
+CLI       Command Line Interface
+RPM       Requests Per Minute
+IoT       Internet of Things
+SDK       Software Development Kit
+CDN       Content Delivery Network
+RTSP      Real Time Streaming Protocol
+
+
+================================================================================
+                             CONTENIDO
+================================================================================
+
+Capítulo 1.  Introducción .................................................. 
+    1.1  Motivación
+    1.2  Objetivos
+    1.3  Estructura de la documentación
+
+Capítulo 2.  Estado del Arte ..............................................
+    2.1  Plataformas CRM y desarrollo low-code
+    2.2  Salesforce como plataforma de desarrollo
+    2.3  Seguridad doméstica inteligente
+    2.4  Inteligencia Artificial aplicada a servicios empresariales
+    2.5  Streaming de vídeo local en aplicaciones cloud
+
+Capítulo 3.  Metodología ..................................................
+    3.1  Planificación y fases del desarrollo
+    3.2  Metodología de desarrollo aplicada
+    3.3  Herramientas de gestión
+
+Capítulo 4.  Tecnologías utilizadas ......................................
+    4.1  Salesforce Platform
+    4.2  Apex
+    4.3  Lightning Web Components (LWC)
+    4.4  SOQL
+    4.5  Experience Cloud
+    4.6  Google Gemini API
+    4.7  Web Speech API
+    4.8  Flask (Python)
+    4.9  Ngrok
+    4.10 OpenCV
+    4.11 Herramientas de desarrollo
+    4.12 Otros
+
+Capítulo 5.  Análisis del Sistema ........................................
+    5.1  Descripción general
+    5.2  Modelo de negocio
+    5.3  Requisitos funcionales
+    5.4  Requisitos no funcionales
+
+Capítulo 6.  Especificación del Sistema ..................................
+    6.1  Casos de Uso
+    6.2  Flujo de información entre módulos
+
+Capítulo 7.  Diseño del Sistema ..........................................
+    7.1  Arquitectura general
+    7.2  Modelo de datos
+    7.3  Estructura del módulo Backend (Apex)
+    7.4  Estructura del módulo Frontend (LWC)
+    7.5  Arquitectura de streaming de vídeo local
+
+Capítulo 8.  Implementación ..............................................
+    8.1  Clases Apex — Lógica de negocio
+    8.2  Componentes LWC — Interfaz de usuario
+    8.3  Experience Cloud — Portal del cliente
+    8.4  Integración con Google Gemini
+    8.5  Integración de streaming de vídeo local
+    8.6  Modelo de seguridad
+    8.7  Recursos estáticos
+
+Capítulo 9.  Pruebas .....................................................
+    9.1  Pruebas unitarias Apex
+    9.2  Patrones de testing
+    9.3  Cobertura de código
+
+Capítulo 10. Conclusiones y Trabajo Futuro ...............................
+    10.1 Resumen de los logros alcanzados
+    10.2 Limitaciones y mejoras para futuras versiones
+
+Capítulo 11. Manual de Instalación .......................................
+    11.1 Requerimientos
+    11.2 Pasos de instalación
+
+Capítulo 12. Manual de Usuario ...........................................
+    12.1 Inicio de sesión en el portal
+    12.2 Página principal — Mapa de seguridad
+    12.3 Gestión de cámaras
+    12.4 Contratación de nuevas cámaras
+    12.5 Sistema de soporte y chat
+    12.6 Asistente de voz con IA
+    12.7 Streaming de vídeo en vivo
+
+Capítulo 13. Referencias bibliográficas ..................................
+    13.1 Fuentes utilizadas, estándares y documentación técnica
+
+
+================================================================================
+================================================================================
+
+              CAPÍTULO 1. INTRODUCCIÓN
+
+================================================================================
+
+
+1.1. Motivación
+───────────────
+
+El sector de la seguridad doméstica y empresarial se encuentra en un proceso
+de transformación digital acelerado. Las empresas de este ámbito necesitan
+herramientas que les permitan gestionar de forma centralizada su parque de
+cámaras de vigilancia, atender las solicitudes de contratación de nuevos
+dispositivos, resolver incidencias técnicas y, al mismo tiempo, ofrecer a sus
+clientes un canal de autoservicio donde puedan supervisar sus instalaciones
+de forma autónoma.
+
+Tradicionalmente, la construcción de un sistema con estas características
+requiere abordar múltiples disciplinas de ingeniería de software de forma
+simultánea: diseño de bases de datos, desarrollo de un servidor backend,
+implementación de una interfaz web, configuración de infraestructura en la
+nube, sistemas de autenticación y control de acceso, y despliegue continuo.
+Este enfoque, si bien ofrece plena libertad arquitectónica, conlleva plazos
+de desarrollo prolongados y costes de mantenimiento elevados.
+
+La plataforma Salesforce ofrece una alternativa que permite concentrar el
+esfuerzo de desarrollo en la lógica de negocio, al proporcionar de forma
+nativa un motor de base de datos, un entorno de ejecución server-side, un
+framework de componentes web, un portal de clientes con autenticación
+integrada y un sistema de permisos granular. Esta premisa constituye la
+motivación principal de este Trabajo Fin de Grado: demostrar que es posible
+construir una aplicación de dominio específico completa sobre Salesforce,
+reduciendo drásticamente el tiempo de desarrollo sin sacrificar funcionalidad
+ni calidad del producto.
+
+Adicionalmente, el proyecto integra capacidades de inteligencia artificial
+mediante la API de Google Gemini y un sistema de streaming de vídeo local
+mediante Flask, Ngrok y OpenCV, ampliando el alcance funcional de la
+plataforma más allá de las capacidades nativas de Salesforce.
+
+
+1.2. Objetivos
+──────────────
+
+El presente Trabajo Fin de Grado persigue los siguientes objetivos:
+
+  1. Diseñar e implementar una aplicación completa de gestión de seguridad
+     sobre la plataforma Salesforce, abarcando desde el modelo de datos hasta
+     el portal de clientes.
+
+  2. Demostrar que Salesforce es viable como plataforma de desarrollo de
+     aplicaciones de dominio específico, más allá de su uso convencional
+     como CRM.
+
+  3. Integrar inteligencia artificial externa (Google Gemini) con Salesforce
+     para el procesamiento de comandos de voz en lenguaje natural.
+
+  4. Desarrollar una interfaz de usuario moderna y funcional mediante
+     Lightning Web Components, aprovechando estándares web actuales.
+
+  5. Implementar un sistema de streaming de vídeo en tiempo real que permita
+     visualizar cámaras de seguridad locales desde el portal web de
+     Salesforce mediante Flask, OpenCV y Ngrok.
+
+  6. Cubrir el código backend con pruebas unitarias automatizadas,
+     incluyendo simulaciones de llamadas a APIs externas.
+
+  7. Aplicar un modelo de seguridad robusto basado en perfiles, permisos y
+     verificaciones programáticas server-side.
+
+
+1.3. Estructura de la documentación
+────────────────────────────────────
+
+La presente documentación se organiza en trece capítulos. A continuación se
+describe brevemente el contenido de cada uno de ellos:
+
+  - Capítulo 1 — Introducción: Presenta la motivación, los objetivos del
+    proyecto y la estructura de esta documentación.
+
+  - Capítulo 2 — Estado del Arte: Analiza el contexto tecnológico actual en
+    el ámbito de las plataformas CRM, la seguridad doméstica inteligente, la
+    inteligencia artificial aplicada a servicios empresariales y el streaming
+    de vídeo en entornos cloud.
+
+  - Capítulo 3 — Metodología: Describe la planificación, las fases de
+    desarrollo y la metodología aplicada durante la construcción del proyecto.
+
+  - Capítulo 4 — Tecnologías utilizadas: Detalla cada una de las tecnologías,
+    lenguajes, frameworks y herramientas empleados en el desarrollo.
+
+  - Capítulo 5 — Análisis del Sistema: Define la descripción general del
+    sistema, el modelo de negocio, los requisitos funcionales y los requisitos
+    no funcionales.
+
+  - Capítulo 6 — Especificación del Sistema: Recoge los casos de uso y los
+    flujos de información entre los distintos módulos del sistema.
+
+  - Capítulo 7 — Diseño del Sistema: Presenta la arquitectura general, el
+    modelo de datos, la estructura del backend y del frontend, así como la
+    arquitectura de streaming de vídeo.
+
+  - Capítulo 8 — Implementación: Documenta en detalle la implementación de
+    cada clase Apex, componente LWC, integración externa y configuración de
+    la plataforma.
+
+  - Capítulo 9 — Pruebas: Describe las pruebas unitarias, los patrones de
+    testing aplicados y la cobertura de código alcanzada.
+
+  - Capítulo 10 — Conclusiones y Trabajo Futuro: Resume los logros alcanzados
+    y plantea las líneas de mejora y evolución del proyecto.
+
+  - Capítulo 11 — Manual de Instalación: Recoge los requisitos previos y los
+    pasos necesarios para desplegar el proyecto en un entorno Salesforce.
+
+  - Capítulo 12 — Manual de Usuario: Guía funcional de la aplicación desde la
+    perspectiva del usuario final, tanto cliente como administrador.
+
+  - Capítulo 13 — Referencias bibliográficas: Lista las fuentes consultadas y
+    la documentación técnica de referencia.
+
+
+================================================================================
+
+              CAPÍTULO 2. ESTADO DEL ARTE
+
+================================================================================
+
+───────────────────────────────────────────
+
+El mercado de las plataformas de Customer Relationship Management ha
+experimentado un crecimiento sostenido durante la última década. Según los
+informes sectoriales más recientes, Salesforce mantiene la posición de
+liderazgo con una cuota de mercado superior al 23 %, seguida de Microsoft
+Dynamics 365, SAP CRM y Oracle CX Cloud.
+
+La evolución de estas plataformas ha trascendido la gestión comercial pura
+para convertirse en entornos de desarrollo de aplicaciones empresariales
+completas. El paradigma low-code/no-code permite reducir los ciclos de
+desarrollo al proporcionar componentes reutilizables, motores de
+automatización visual y modelos de datos configurables. Sin embargo, para
+aplicaciones que requieren lógica de negocio compleja, integraciones con
+servicios externos o interfaces de usuario personalizadas, el desarrollo
+programático sigue siendo imprescindible.
+
+La principal ventaja competitiva de Salesforce como plataforma de desarrollo
+reside en que proporciona, de forma nativa, un motor de base de datos
+multi-tenant, un sistema de permisos granular, un framework de componentes
+web (LWC), un portal de clientes (Experience Cloud), una API REST/SOAP
+automática y un entorno de ejecución server-side (Apex). Esto permite al
+desarrollador concentrarse exclusivamente en la lógica de negocio específica
+de su dominio.
+
+
+2.1 Salesforce como plataforma de desarrollo
+──────────────────────────────────────────────
+
+Salesforce ofrece un ecosistema de desarrollo que cubre las necesidades
+habituales de una aplicación empresarial:
+
+  - Base de datos incluida: Los objetos personalizados (Custom Objects)
+    funcionan como tablas con campos, relaciones, validaciones y reglas de
+    cálculo. No se requiere instalación ni configuración de ningún motor
+    de base de datos externo.
+
+  - Backend incluido: Apex es el lenguaje de programación server-side de
+    Salesforce, similar a Java en su sintaxis. Permite escribir
+    controladores, ejecutar consultas SOQL, realizar llamadas HTTP a APIs
+    externas y gestionar transacciones atómicas.
+
+  - Portal de clientes incluido: Experience Cloud proporciona un sitio web
+    listo para el registro, la autenticación y el acceso seguro de los
+    clientes a sus datos. Implementar una funcionalidad equivalente con
+    React y Auth0 requiere un esfuerzo significativamente mayor.
+
+  - Seguridad integrada: Perfiles, Permission Sets, Sharing Rules y
+    Field-Level Security conforman un modelo de seguridad declarativo que
+    se complementa con las directivas with sharing / without sharing en Apex.
+
+  - Despliegue y versionado: Salesforce CLI (sf) permite la extracción y
+    el despliegue de código y metadatos. El proyecto se versiona con Git
+    siguiendo las prácticas estándar de la industria.
+
+  - Integraciones: Apex puede realizar llamadas HTTP a APIs externas y
+    Salesforce expone automáticamente sus datos mediante API REST/SOAP.
+
+
+2.3. Seguridad doméstica inteligente
+─────────────────────────────────────
+
+El mercado de la seguridad doméstica inteligente se encuentra en plena
+expansión, impulsado por la adopción masiva de dispositivos IoT (cámaras IP,
+sensores de movimiento, cerraduras inteligentes) y por la creciente demanda
+de los usuarios de controlar y supervisar sus hogares de forma remota.
+
+Las soluciones existentes en el mercado (Ring, Arlo, Nest, Ajax Systems) se
+centran en el hardware y proporcionan aplicaciones móviles propias para la
+gestión del usuario final. Sin embargo, las empresas de seguridad que
+comercializan e instalan estos dispositivos carecen, en muchos casos, de
+herramientas centralizadas para:
+
+  - Gestionar el inventario de cámaras desplegadas en múltiples clientes.
+  - Tramitar de forma ordenada las solicitudes de contratación de nuevos
+    dispositivos.
+  - Ofrecer soporte técnico con trazabilidad y seguimiento de casos.
+  - Proporcionar a cada cliente un acceso individualizado y seguro a su
+    equipamiento.
+
+OptiSecure Solutions aborda esta carencia ofreciendo una plataforma
+centralizada que cubre tanto las necesidades operativas de la empresa de
+seguridad como las necesidades de autoservicio de sus clientes.
+
+
+2.4. Inteligencia Artificial aplicada a servicios empresariales
+───────────────────────────────────────────────────────────────
+
+La integración de modelos de lenguaje de gran escala (LLM) en aplicaciones
+empresariales ha dejado de ser una tendencia emergente para convertirse en
+una práctica habitual. Modelos como GPT-4, Claude o Gemini permiten
+incorporar capacidades de procesamiento de lenguaje natural en flujos de
+trabajo existentes sin necesidad de entrenar modelos propios.
+
+En el contexto de OptiSecure Solutions, la IA se emplea para interpretar
+comandos de voz de los clientes y convertirlos en acciones concretas dentro
+de Salesforce (apertura de casos de soporte, consulta de estado de cámaras).
+El modelo utilizado es Google Gemini 2.0 Flash, seleccionado por su velocidad
+de respuesta, su capacidad de procesamiento en español y su disponibilidad
+gratuita dentro del tier de uso personal.
+
+
+2.5. Streaming de vídeo local en aplicaciones cloud
+────────────────────────────────────────────────────
+
+Uno de los desafíos técnicos del proyecto consiste en permitir la
+visualización de cámaras de seguridad locales dentro de un portal web alojado en la nube pública
+(Salesforce Experience Cloud).
+
+Las soluciones de streaming convencionales (WebRTC, RTSP) requieren una
+infraestructura de servidores de relay o TURN servers que encarecen y
+complican la arquitectura. Para este proyecto se ha optado por una solución
+ligera basada en tres componentes:
+
+  - Un servidor de streaming local implementado en Python con Flask y
+    OpenCV, que captura los fotogramas de la cámara y los emite como flujo
+    MJPEG a través de una URL HTTP local.
+
+  - Un túnel seguro proporcionado por Ngrok, que expone la URL local en
+    una URL HTTPS pública accesible desde cualquier punto de Internet.
+
+  - Un componente LWC en Salesforce que consume la URL pública de Ngrok
+    mediante una etiqueta <img> con el flujo MJPEG, mostrando el vídeo
+    en tiempo real dentro del portal del cliente.
+
+Esta arquitectura permite demostrar el concepto de streaming de cámaras reales
+sin requerir infraestructura de servidores intermedios, y resulta extensible
+a escenarios de producción mediante sustitución de Ngrok por una solución de
+tunneling empresarial o por streaming WebRTC directo.
+
+
+================================================================================
+
+              CAPÍTULO 3. METODOLOGÍA
+
+================================================================================
+
+
+3.1. Planificación y fases del desarrollo
+─────────────────────────────────────────
+
+El desarrollo de OptiSecure Solutions se ha estructurado en las siguientes
+fases:
+
+  Fase 1 — Análisis y diseño:
+    Definición del modelo de negocio, identificación de requisitos
+    funcionales y no funcionales, diseño del modelo de datos (objetos
+    personalizados Camara__c y Solicitud_Camara__c) y diseño de la
+    arquitectura por capas.
+
+  Fase 2 — Configuración del entorno:
+    Creación del proyecto SFDX, configuración del Sandbox, definición de
+    perfiles y permisos, creación de la estructura de directorios y
+    configuración de herramientas de desarrollo (VS Code, Salesforce CLI,
+    Jest, ESLint).
+
+  Fase 3 — Desarrollo del backend (Apex):
+    Implementación de los controladores Apex (8 clases funcionales y 4
+    clases de test), incluyendo la integración con la API de Google Gemini.
+
+  Fase 4 — Desarrollo del frontend (LWC):
+    Construcción de los 10 componentes Lightning Web Components funcionales,
+    con sus respectivos archivos HTML, JavaScript, CSS y metadatos.
+
+  Fase 5 — Configuración del portal:
+    Despliegue y configuración del sitio Experience Cloud (LWR), incluyendo
+    branding, perfiles de acceso, componentes expuestos y página de login
+    personalizada.
+
+  Fase 6 — Integración de streaming de vídeo:
+    Desarrollo del servidor Flask con OpenCV para captura y emisión de
+    vídeo local, configuración de Ngrok como túnel público e integración
+    con el componente LWC del mapa de seguridad.
+
+  Fase 7 — Pruebas y documentación:
+    Ejecución de pruebas unitarias Apex, validación funcional del portal
+    y redacción de esta documentación.
+
+
+3.2. Metodología de desarrollo aplicada
+───────────────────────────────────────
+
+El proyecto se ha desarrollado siguiendo un enfoque iterativo-incremental,
+realizando entregas funcionales al final de cada fase. Cada iteración ha
+incluido un ciclo completo de diseño, implementación, prueba y validación.
+
+Se ha utilizado Git como sistema de control de versiones, con un
+repositorio único que contiene tanto el código fuente de Salesforce (SFDX)
+como los scripts de Python para el servidor de streaming.
+
+
+3.3. Herramientas de gestión
+────────────────────────────
+
+  - Visual Studio Code: Editor principal de desarrollo con Salesforce
+    Extension Pack.
+  - Salesforce CLI (sf): Herramienta de línea de comandos para despliegue
+    y recuperación de metadatos.
+  - Git / GitHub: Control de versiones y alojamiento del código fuente.
+  - Jest: Framework de testing para componentes LWC.
+  - ESLint: Herramienta de análisis estático de código JavaScript.
+  - Prettier: Formateador automático de código.
+
+
+================================================================================
+
+              CAPÍTULO 4. TECNOLOGÍAS UTILIZADAS
+
+================================================================================
+
+
+4.1. Salesforce Platform
+────────────────────────
+
+Salesforce es una plataforma cloud de desarrollo de aplicaciones empresariales
+que proporciona un entorno multi-tenant con base de datos integrada, motor de
+ejecución server-side, sistema de permisos granular y portal de clientes. En
+este proyecto se emplea como infraestructura completa del sistema, cubriendo
+las capas de datos, lógica de negocio, presentación y seguridad.
+
+  - Edición utilizada: Developer Edition (Sandbox)
+  - URL de login: test.salesforce.com
+  - Versión de API: 65.0 (componentes individuales), 59.0 (proyecto SFDX)
+
+
+4.2. Apex
+─────────
+
+Apex es el lenguaje de programación propietario de Salesforce, de tipado
+fuerte y sintaxis similar a Java. Se ejecuta en el servidor de Salesforce y
+permite implementar lógica de negocio, controladores para componentes LWC,
+triggers, pruebas unitarias y callouts a APIs externas.
+
+En OptiSecure Solutions, Apex se utiliza para implementar 8 clases de
+controlador y 4 clases de prueba unitaria.
+
+
+4.3. Lightning Web Components (LWC)
+────────────────────────────────────
+
+Lightning Web Components es el framework de desarrollo de interfaces de
+usuario de Salesforce, basado en estándares web (Web Components, Shadow DOM,
+Custom Elements, ES Modules). A diferencia del framework Aura (su predecesor),
+LWC se apoya directamente en las APIs nativas del navegador, lo que mejora
+el rendimiento y la interoperabilidad.
+
+El proyecto consta de 10 componentes LWC funcionales que implementan la
+totalidad de la interfaz de usuario, tanto para el portal de clientes como
+para los paneles de administración internos.
+
+
+4.4. SOQL (Salesforce Object Query Language)
+────────────────────────────────────────────
+
+SOQL es el lenguaje de consultas de Salesforce, similar a SQL pero
+específicamente diseñado para el modelo de objetos de la plataforma. Soporta
+consultas con relaciones padre-hijo, filtros de seguridad (WITH
+SECURITY_ENFORCED), y campos de fórmula.
+
+Se emplea en todos los controladores Apex del proyecto para la lectura de
+datos de cámaras, solicitudes, casos y usuarios.
+
+
+4.5. Experience Cloud
+─────────────────────
+
+Experience Cloud (anteriormente Community Cloud) es la solución de Salesforce
+para la creación de portales web destinados a usuarios externos (clientes,
+partners, proveedores). Proporciona un sistema de registro/login, gestión de
+licencias, branding personalizable y la posibilidad de exponer componentes
+LWC en páginas públicas o autenticadas.
+
+En este proyecto se utiliza la plantilla LWR (Lightning Web Runtime), que
+ofrece un rendimiento superior al de las plantillas Aura clásicas, aunque con
+la limitación de no soportar componentes Aura en las áreas de cabecera.
+
+
+4.6. Google Gemini API
+──────────────────────
+
+Google Gemini es una familia de modelos de inteligencia artificial generativa
+desarrollados por Google DeepMind. El proyecto utiliza el modelo gemini-2.0-
+flash, seleccionado por los siguientes criterios:
+
+  - Velocidad de respuesta: Optimizado para latencia baja.
+  - Soporte de español: Capacidad nativa de procesamiento en castellano.
+  - Coste: Gratuito dentro del tier de uso personal (hasta 15 RPM).
+  - Formato de salida: Capacidad de generar JSON estructurado.
+
+La API se invoca desde Apex mediante callouts HTTP POST al endpoint:
+  https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
+
+
+4.7. Web Speech API
+───────────────────
+
+La Web Speech API es una interfaz del navegador que permite la transcripción
+de voz a texto (Speech-to-Text) sin necesidad de servicios externos. En
+OptiSecure Solutions se utiliza la interfaz SpeechRecognition, configurada
+para reconocimiento continuo en español (es-ES), con resultados intermedios
+habilitados para mostrar la transcripción en tiempo real.
+
+Es compatible con los navegadores Chrome, Edge y Safari.
+
+
+4.8. Flask (Python)
+───────────────────
+
+Flask es un microframework de desarrollo web para Python. En este proyecto
+se utiliza como servidor de streaming de vídeo local, encargado de capturar
+los fotogramas de la cámara conectada al equipo del usuario y emitirlos como
+un flujo MJPEG (multipart/x-mixed-replace) a través de una ruta HTTP.
+
+El servidor Flask actúa como un puente entre el hardware local (cámara USB o
+integrada) y la aplicación web en la nube (Salesforce).
+
+
+4.9. Ngrok
+──────────
+
+Ngrok es una herramienta de tunneling que expone servicios locales en URLs
+públicas seguras (HTTPS). En el contexto de OptiSecure Solutions, Ngrok toma
+la URL local del servidor Flask (por ejemplo, http://localhost:5000/video) y
+genera una URL pública (por ejemplo, https://xxxx.ngrok-free.app/video)
+accesible desde cualquier punto de Internet, incluido el portal de Salesforce.
+
+Esta herramienta resuelve el problema fundamental de conectar un recurso
+local (la cámara del usuario) con una aplicación cloud (Salesforce) sin
+necesidad de configurar routers, firewalls ni servidores intermedios.
+
+
+4.10. OpenCV
+────────────
+
+OpenCV (Open Source Computer Vision Library) es una biblioteca de visión por
+computador para Python y C++. En este proyecto se emplea la interfaz
+cv2.VideoCapture para acceder a la cámara del equipo y capturar fotogramas
+en tiempo real, que posteriormente se codifican como JPEG y se emiten a
+través del servidor Flask.
+
+
+4.11. Herramientas de desarrollo
+────────────────────────────────
+
+  - Visual Studio Code + Salesforce Extension Pack: Entorno de desarrollo
+    principal con soporte de autocompletado, despliegue y depuración para
+    Apex y LWC.
+
+  - Salesforce CLI (sf): Herramienta de línea de comandos para la gestión
+    del proyecto SFDX, despliegue de metadatos y ejecución de scripts Apex.
+
+  - Jest + @salesforce/sfdx-lwc-jest: Framework de pruebas unitarias para
+    componentes Lightning Web Components.
+
+  - ESLint + @lwc/eslint-plugin-lwc: Análisis estático de código con reglas
+    específicas para el framework LWC.
+
+  - Prettier: Formateador automático de código JavaScript, HTML y CSS.
+
+  - Git: Sistema de control de versiones distribuido.
+
+  - Python 3.x: Intérprete para el servidor de streaming Flask.
+
+  - pip: Gestor de paquetes de Python para la instalación de Flask, OpenCV
+    y dependencias.
+
+
+4.12. Otros
+───────────
+
+  - HTML5 / CSS3 / JavaScript ES6+: Tecnologías web estándar utilizadas
+    dentro del framework LWC.
+
+  - JSON: Formato de intercambio de datos empleado en las comunicaciones
+    entre LWC y Apex, en las respuestas de Google Gemini y en el detalle
+    de las solicitudes de contratación.
+
+  - MJPEG: Formato de streaming de vídeo basado en la transmisión
+    secuencial de fotogramas JPEG individuales, utilizado por el servidor
+    Flask para emitir el flujo de la cámara.
+
+
+================================================================================
+
+              CAPÍTULO 5. ANÁLISIS DEL SISTEMA
+
+================================================================================
+
+
+5.1. Descripción general
+────────────────────────
+
+OptiSecure Solutions es una aplicación de gestión de seguridad doméstica y
+empresarial desarrollada sobre la plataforma Salesforce. El nombre del
+producto combina «Opti» (optimizar) con «Secure» (seguridad), reflejando su
+propósito de optimizar la gestión de servicios de seguridad.
+
+El sistema se dirige a empresas del sector de la seguridad que necesitan
+gestionar de forma centralizada las cámaras de vigilancia de sus clientes,
+tramitar las solicitudes de contratación de nuevos dispositivos, resolver
+incidencias técnicas y ofrecer a cada cliente un portal web donde pueda
+supervisar su instalación, solicitar servicios y comunicarse con el equipo
+técnico.
+
+La aplicación se compone de dos ámbitos de usuario diferenciados:
+
+  - Ámbito de administración (CRM interno): Los operadores de la empresa
+    de seguridad utilizan Salesforce Lightning Experience para gestionar
+    el inventario de cámaras, aprobar o rechazar solicitudes de contratación,
+    atender casos de soporte y supervisar la actividad del sistema.
+
+  - Ámbito de cliente (portal web): Los clientes finales acceden a un
+    sitio Experience Cloud donde visualizan el mapa interactivo de su
+    vivienda con las cámaras posicionadas, solicitan la instalación de
+    nuevas cámaras, reportan incidencias, se comunican con el equipo de
+    soporte mediante chat y emiten comandos de voz procesados por IA.
+
+
+5.2. Modelo de negocio
+──────────────────────
+
+OptiSecure Solutions se plantea como un producto SaaS (Software as a Service)
+dirigido a empresas de seguridad. Las funcionalidades clave del modelo de
+negocio son:
+
+  - Gestión del inventario de cámaras de seguridad desplegadas en los
+    domicilios de los clientes.
+
+  - Autoservicio de contratación: los clientes solicitan la instalación
+    de nuevas cámaras a través del portal; el administrador revisa,
+    aprueba o rechaza la solicitud; si se aprueba, el cliente posiciona
+    las nuevas cámaras sobre el plano de su vivienda.
+
+  - Soporte técnico con trazabilidad: los clientes abren casos de
+    soporte, reportan incidencias vinculadas a cámaras específicas y se
+    comunican con el equipo técnico mediante un chat basado en
+    CaseComments de Salesforce.
+
+  - Asistente de voz con IA: los clientes pueden interactuar con el
+    sistema mediante comandos de voz en español, que son procesados por
+    Google Gemini para ejecutar acciones automáticas.
+
+  - Streaming de vídeo en vivo: los clientes pueden visualizar la
+    imagen en tiempo real de sus cámaras locales dentro del portal web
+    de Salesforce, sin necesidad de aplicaciones externas.
+
+El modelo multi-tenant de Salesforce garantiza el aislamiento de datos entre
+clientes de forma nativa mediante perfiles y sharing rules, sin necesidad de
+programar la separación de datos de forma manual.
+
+
+5.3. Requisitos funcionales
+───────────────────────────
+
+  RF-01  El sistema debe permitir la visualización de un mapa interactivo
+         de la vivienda del cliente con las cámaras de seguridad
+         posicionadas.
+
+  RF-02  El sistema debe permitir a los administradores crear, mover y
+         eliminar cámaras sobre el plano de la vivienda mediante drag
+         and drop.
+
+  RF-03  El sistema debe mostrar el stream de vídeo en tiempo real al
+         hacer clic en una cámara del mapa.
+
+  RF-04  El sistema debe permitir a los clientes solicitar la
+         contratación de nuevas cámaras mediante un formulario.
+
+  RF-05  El sistema debe permitir a los administradores aprobar o
+         rechazar las solicitudes de contratación.
+
+  RF-06  Cuando una solicitud sea aprobada, el cliente debe poder
+         posicionar las nuevas cámaras sobre el plano de su vivienda.
+
+  RF-07  El sistema debe permitir a los clientes reportar incidencias
+         vinculadas a una cámara específica, generando un caso de
+         soporte automáticamente.
+
+  RF-08  El sistema debe proporcionar un sistema de chat entre el
+         cliente y el equipo de soporte, basado en comentarios de caso.
+
+  RF-09  El sistema debe ofrecer un asistente de voz con IA capaz de
+         interpretar comandos en español y ejecutar acciones en
+         Salesforce.
+
+  RF-10  El sistema debe permitir a los clientes renombrar sus cámaras
+         desde la interfaz del portal.
+
+  RF-11  El sistema debe mostrar un perfil de usuario completo con
+         datos de cuenta, SLA, dirección y estadísticas de cámaras.
+
+  RF-12  El sistema debe permitir la visualización de vídeo en vivo
+         desde cámaras locales conectadas al equipo del cliente, a
+         través de un servidor de streaming Python y un túnel Ngrok.
+
+  RF-13  El sistema debe permitir al administrador visualizar el
+         historial completo de solicitudes de contratación, con filtros
+         por estado.
+
+
+5.4. Requisitos no funcionales
+──────────────────────────────
+
+  RNF-01  Seguridad: El acceso a los datos debe estar controlado por
+          perfiles y permisos de Salesforce. Los usuarios del portal
+          solo deben acceder a sus propios registros.
+
+  RNF-02  Rendimiento: Las consultas Apex deben utilizar límites
+          (LIMIT) y filtros de índice para evitar superar los governor
+          limits de Salesforce.
+
+  RNF-03  Usabilidad: La interfaz debe ser responsive y funcional en
+          dispositivos de escritorio, tablet y móvil.
+
+  RNF-04  Mantenibilidad: El código debe seguir los patrones de
+          diseño estándar de Salesforce (MVC, Wrapper, Helper) y
+          contar con cobertura de pruebas unitarias.
+
+  RNF-05  Disponibilidad: La aplicación debe estar disponible durante
+          las horas de operación del servicio de Salesforce (SLA
+          99.9 % de la plataforma).
+
+  RNF-06  Escalabilidad: La arquitectura debe soportar la adición de
+          nuevos módulos funcionales sin requerir cambios estructurales.
+
+
+================================================================================
+
+              CAPÍTULO 6. ESPECIFICACIÓN DEL SISTEMA
+
+================================================================================
+
+
+6.1. Casos de Uso
+─────────────────
+
+A continuación se recogen los casos de uso identificados para el sistema,
+clasificados por actor.
+
+
+ACTOR: Cliente del portal (Experience Cloud)
+
+┌──────┬──────────────────────────┬──────────────────────────────────────────────┐
+│  ID  │ Título                   │ Descripción                                  │
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU01 │ Iniciar sesión en el     │ El cliente accede al portal mediante su email│
+│      │ portal                   │ y contraseña. El sistema valida las           │
+│      │                          │ credenciales y redirige al mapa de seguridad. │
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU02 │ Visualizar el mapa       │ El cliente visualiza el plano de su vivienda  │
+│      │ de seguridad             │ con las cámaras posicionadas como chinchetas. │
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU03 │ Ver vídeo en vivo        │ El cliente hace clic en una cámara del mapa y │
+│      │                          │ se abre un visor en pantalla completa con el  │
+│      │                          │ stream de vídeo (YouTube embed o MJPEG local).│
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU04 │ Solicitar contratación   │ El cliente rellena un formulario indicando el │
+│      │ de cámaras               │ número de cámaras y detalles. Se genera una   │
+│      │                          │ solicitud con estado «Pendiente».             │
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU05 │ Consultar estado de      │ El cliente accede al historial de sus          │
+│      │ solicitudes              │ solicitudes y visualiza el estado de cada una. │
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU06 │ Posicionar cámaras       │ Cuando una solicitud es aprobada, el cliente   │
+│      │ aprobadas                │ arrastra las nuevas cámaras sobre el plano y   │
+│      │                          │ las guarda. La solicitud pasa a «Completada». │
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU07 │ Reportar incidencia      │ El cliente selecciona una cámara con           │
+│      │ en cámara                │ problemas, describe la incidencia y genera un  │
+│      │                          │ caso de soporte con prioridad y categoría.     │
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU08 │ Abrir y consultar        │ El cliente visualiza sus casos de soporte y    │
+│      │ casos de soporte         │ accede al detalle de cada uno.                 │
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU09 │ Comunicarse mediante     │ El cliente envía y recibe mensajes dentro del  │
+│      │ chat de soporte          │ caso, basados en CaseComments.                 │
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU10 │ Emitir comando de voz    │ El cliente activa el micrófono, dicta un       │
+│      │                          │ comando en español y el sistema (vía Gemini)   │
+│      │                          │ ejecuta la acción correspondiente.             │
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU11 │ Renombrar cámara         │ El cliente edita el nombre de una de sus       │
+│      │                          │ cámaras desde la sidebar del mapa.             │
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU12 │ Consultar perfil         │ El cliente accede a su perfil con datos de     │
+│      │ de usuario               │ usuario, cuenta, SLA y estadísticas de cámaras.│
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU13 │ Ver streaming local      │ El cliente visualiza la imagen en tiempo real   │
+│      │ de cámara                │ de una cámara conectada a su equipo, mediante  │
+│      │                          │ el puente Flask + Ngrok.                       │
+└──────┴──────────────────────────┴──────────────────────────────────────────────┘
+
+
+ACTOR: Administrador (System Administrator)
+
+┌──────┬──────────────────────────┬──────────────────────────────────────────────┐
+│  ID  │ Título                   │ Descripción                                  │
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU14 │ Crear cámaras mediante   │ El administrador arrastra chinchetas desde el │
+│      │ drag and drop            │ tray lateral y las suelta sobre el plano.      │
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU15 │ Eliminar cámaras         │ El administrador hace clic derecho sobre una   │
+│      │                          │ chincheta y selecciona «Eliminar cámara».      │
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU16 │ Aprobar solicitud        │ El administrador revisa una solicitud           │
+│      │ de contratación          │ pendiente y la aprueba, permitiendo al cliente  │
+│      │                          │ posicionar las cámaras en el mapa.             │
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU17 │ Rechazar solicitud       │ El administrador rechaza una solicitud          │
+│      │ de contratación          │ pendiente. El estado cambia a «Rechazada».     │
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU18 │ Consultar historial      │ El administrador accede al listado completo    │
+│      │ de solicitudes           │ de solicitudes con filtros por estado.          │
+├──────┼──────────────────────────┼──────────────────────────────────────────────┤
+│ CU19 │ Responder casos          │ El administrador responde a los casos de los   │
+│      │ de soporte               │ clientes mediante el panel de chat del CRM.    │
+└──────┴──────────────────────────┴──────────────────────────────────────────────┘
+
+
+6.2. Flujo de información entre módulos
+───────────────────────────────────────
+
+El sistema se articula en torno a los siguientes flujos de información:
+
+Flujo 1 — Visualización del mapa de seguridad:
+  Cliente → Portal Experience Cloud → LWC houseSecurityMap →
+  Apex HouseMapController.getCamaras() → SOQL Camara__c →
+  Respuesta JSON → Renderizado de chinchetas sobre el plano.
+
+Flujo 2 — Contratación de cámaras:
+  Cliente → LWC cameraContractRequest → Apex ContratacionCamaraController
+  .crearSolicitud() → Insert Solicitud_Camara__c (estado: Pendiente) →
+  Admin → LWC contractApproval → Apex .aprobarSolicitud() → Update
+  estado: Aprobada → Cliente → LWC houseSecurityMap (drag & drop) →
+  Apex .saveCamarasContratadas() → CameraInsertHelper (insert Camara__c
+  + update solicitud a Completada).
+
+Flujo 3 — Reporte de incidencia:
+  Cliente → LWC cameraIncidentReport → Apex CameraIncidentController
+  .createCameraIncident() → Insert Case (Type: Mechanical, Origin: Web).
+
+Flujo 4 — Chat de soporte:
+  Cliente → LWC caseViewer → Apex CaseViewerController
+  .getCaseComments() / .addCaseComment() → SOQL/Insert CaseComment.
+
+Flujo 5 — Asistente de voz IA:
+  Cliente → LWC voiceAssistant → Web Speech API (transcripción) →
+  Apex VoiceCommandController.processVoiceCommand() → HTTP POST
+  Google Gemini → JSON {accion, parametros} → Ejecución DML
+  (insert Case / consulta Camara__c) → Respuesta JSON al LWC.
+
+Flujo 6 — Streaming de vídeo local:
+  Cámara física → OpenCV (cv2.VideoCapture) → Flask (servidor MJPEG) →
+  http://localhost:5000/video → Ngrok (túnel HTTPS) →
+  https://xxxx.ngrok-free.app/video → LWC houseSecurityMap (<img src>) →
+  Visualización en el portal del cliente.
+
+
+================================================================================
+
+              CAPÍTULO 7. DISEÑO DEL SISTEMA
+
+================================================================================
+
+
+7.1. Arquitectura general
+─────────────────────────
+
+La arquitectura de OptiSecure Solutions se organiza en cuatro capas
+principales, complementadas por dos integraciones externas:
+
+┌─────────────────────────────────────────────────────────────────────┐
+│                      CAPA DE PRESENTACIÓN                         │
+│                                                                     │
+│  Experience Cloud (LWR — Lightning Web Runtime)                     │
+│  ├── Página de Login personalizada (Two-column layout)              │
+│  ├── Header: customUserMenu (menú de usuario personalizado)        │
+│  ├── Home: houseSecurityMap (mapa interactivo de seguridad)        │
+│  └── Componentes auxiliares:                                        │
+│      ├── cameraContractRequest (solicitud de contratación)         │
+│      ├── cameraIncidentReport (reporte de incidencias)             │
+│      ├── caseChatPanel (chat de soporte en CRM)                    │
+│      ├── caseViewer (visor de casos del portal)                    │
+│      ├── contractApproval (panel de aprobación admin)              │
+│      ├── contractHistory (historial de solicitudes)                │
+│      └── voiceAssistant (asistente de voz con IA)                  │
+├─────────────────────────────────────────────────────────────────────┤
+│                      CAPA DE LÓGICA                               │
+│                                                                     │
+│  Controladores Apex:                                                │
+│  ├── UserMenuController        (perfil de usuario + cámaras)       │
+│  ├── HouseMapController        (mapa + drag and drop)              │
+│  ├── ContratacionCamaraController (ciclo de vida de solicitudes)   │
+│  ├── CameraIncidentController  (incidencias de cámaras)            │
+│  ├── CaseViewerController      (casos de soporte + chat)           │
+│  ├── VoiceCommandController    (procesamiento IA + Gemini)         │
+│  ├── CameraInsertHelper        (operaciones DML sin sharing)       │
+│  └── AccountController         (placeholder)                       │
+├─────────────────────────────────────────────────────────────────────┤
+│                      CAPA DE DATOS                                │
+│                                                                     │
+│  Objetos Personalizados:                                            │
+│  ├── Camara__c              (cámaras de seguridad)                 │
+│  └── Solicitud_Camara__c    (solicitudes de contratación)          │
+│                                                                     │
+│  Objetos Estándar:                                                  │
+│  ├── Account    (cuentas de clientes)                              │
+│  ├── Contact    (contactos / usuarios del portal)                  │
+│  ├── Case       (casos de soporte técnico)                         │
+│  ├── CaseComment (comentarios / mensajes de chat)                  │
+│  ├── User       (usuarios del sistema)                             │
+│  ├── Profile    (perfiles de seguridad)                            │
+│  └── Task       (tareas de seguimiento)                            │
+├─────────────────────────────────────────────────────────────────────┤
+│                  INTEGRACIONES EXTERNAS                            │
+│                                                                     │
+│  ├── Google Gemini API (generativelanguage.googleapis.com)          │
+│  │   Modelo: gemini-2.0-flash                                      │
+│  │   Uso: NLP para comandos de voz → acciones en Salesforce        │
+│  │                                                                  │
+│  ├── Web Speech API (navegador)                                    │
+│  │   Reconocimiento de voz en español (es-ES)                      │
+│  │                                                                  │
+│  └── Servidor de streaming local                                   │
+│      Python (Flask + OpenCV) → Ngrok (túnel HTTPS)                 │
+│      Captura y emisión de vídeo MJPEG desde cámaras locales        │
+└─────────────────────────────────────────────────────────────────────┘
+
+
+Patrones de diseño aplicados:
+
+  - MVC (Model-View-Controller): Separación entre objetos de datos (Model),
+    plantillas LWC (View) y controladores Apex (Controller).
+
+  - Wrapper Pattern: Clases internas en Apex (CaseInfo, ChatMessage,
+    UserProfileData, SolicitudAprobada, CameraData) para encapsular y
+    transportar datos entre el controlador y la vista.
+
+  - Helper Pattern: CameraInsertHelper como clase auxiliar without sharing
+    para realizar operaciones DML con elevación de privilegios controlada.
+
+  - Observer Pattern: CustomEvents en LWC para la comunicación
+    desacoplada entre componentes (evento voicecommand desde
+    voiceAssistant hacia houseSecurityMap).
+
+  - Optimistic UI: Actualización inmediata de la interfaz antes de
+    recibir la confirmación del servidor (reposicionamiento de cámaras
+    en el mapa, eliminación de chinchetas).
+
+
+7.2. Modelo de datos
+────────────────────
+
+El modelo de datos de OptiSecure Solutions se compone de dos objetos
+personalizados y siete objetos estándar de Salesforce.
+
+
+7.2.1. Objeto: Camara__c (Cámara de seguridad)
+
+Representa una cámara de seguridad física instalada en la vivienda del
+cliente. Cada registro contiene las coordenadas de posición (en porcentaje
+sobre el plano), una URL de streaming de vídeo y la zona de la vivienda
+en la que se encuentra instalada.
+
+Configuración del objeto:
+  - Label: Cámara / Cámaras
+  - Deployment Status: Deployed
+  - Sharing Model: ReadWrite
+  - External Sharing Model: Read
+  - Name Field: Text (editable)
+
+Campos:
+
+┌─────────────────┬────────────┬──────────┬─────────────────────────────────────┐
+│ Campo           │ Tipo       │ Required │ Descripción                         │
+├─────────────────┼────────────┼──────────┼─────────────────────────────────────┤
+│ Name            │ Text       │ Sí       │ Nombre descriptivo de la cámara.    │
+│ Activa__c       │ Checkbox   │ —        │ Estado activo/inactivo. Default:    │
+│                 │            │          │ true. Las cámaras inactivas no se   │
+│                 │            │          │ muestran en el mapa.                │
+│ Contacto__c     │ Lookup     │ No       │ Relación con Contact. Vincula la    │
+│                 │ (Contact)  │          │ cámara al cliente propietario.      │
+│ Posicion_X__c   │ Number     │ No       │ Coordenada X (0-100 %). Posición    │
+│                 │ (5,2)      │          │ horizontal sobre el plano.          │
+│ Posicion_Y__c   │ Number     │ No       │ Coordenada Y (0-100 %). Posición    │
+│                 │ (5,2)      │          │ vertical sobre el plano.            │
+│ Video_URL__c    │ URL        │ No       │ URL del stream de vídeo embed       │
+│                 │            │          │ (YouTube, MJPEG vía Ngrok, etc.).   │
+│ Zone__c         │ Picklist   │ No       │ Zona de la vivienda. Valores:       │
+│                 │            │          │ Salón, Cocina, Jardín, Entrada,     │
+│                 │            │          │ Dormitorio. Restricted picklist.    │
+└─────────────────┴────────────┴──────────┴─────────────────────────────────────┘
+
+Regla de validación — Coordenadas_Dentro_De_Limites:
+  Condición: OR(Posicion_X__c < 0, Posicion_X__c > 100,
+                Posicion_Y__c < 0, Posicion_Y__c > 100)
+  Mensaje: «Las coordenadas X e Y deben ser un porcentaje entre 0 y 100
+  para situarse dentro del mapa.»
+
+
+7.2.2. Objeto: Solicitud_Camara__c (Solicitud de contratación)
+
+Registra las solicitudes de contratación de nuevas cámaras realizadas por
+los clientes a través del portal. Cada solicitud sigue un ciclo de vida
+definido por los estados: Pendiente → En Revisión → Aprobada/Rechazada →
+Completada.
+
+Configuración del objeto:
+  - Label: Solicitud de Cámara / Solicitudes de Cámaras
+  - Deployment Status: Deployed
+  - Sharing Model: ReadWrite
+  - Name Field: AutoNumber (formato SOL-{0000})
+
+Campos:
+
+┌──────────────────────────┬──────────────┬──────────┬──────────────────────────┐
+│ Campo                    │ Tipo         │ Required │ Descripción              │
+├──────────────────────────┼──────────────┼──────────┼──────────────────────────┤
+│ Name                     │ AutoNumber   │ Auto     │ Identificador secuencial │
+│                          │ SOL-{0000}   │          │ automático.              │
+│ Contacto__c              │ Lookup       │ No       │ Contacto del portal que  │
+│                          │ (Contact)    │          │ realizó la solicitud.    │
+│ Cuenta__c                │ Lookup       │ No       │ Cuenta asociada al       │
+│                          │ (Account)    │          │ solicitante.             │
+│ Detalle_Camaras__c       │ LongTextArea │ No       │ Detalle de cada cámara   │
+│                          │ (5000)       │          │ solicitada (JSON/texto). │
+│ Email_Solicitante__c     │ Email        │ Sí       │ Email del solicitante.   │
+│ Estado__c                │ Picklist     │ No       │ Estado del ciclo de vida │
+│                          │              │          │ (Pendiente, En Revisión, │
+│                          │              │          │ Aprobada, Rechazada,     │
+│                          │              │          │ Completada).             │
+│ Fecha_Solicitud__c       │ DateTime     │ No       │ Fecha/hora de creación.  │
+│ Nombre_Solicitante__c    │ Text (255)   │ Sí       │ Nombre del solicitante.  │
+│ Numero_Camaras__c        │ Number (2,0) │ Sí       │ Cantidad de cámaras      │
+│                          │              │          │ solicitadas (máximo 99). │
+│ Telefono_Solicitante__c  │ Phone        │ No       │ Teléfono de contacto.    │
+└──────────────────────────┴──────────────┴──────────┴──────────────────────────┘
+
+Flujo de estados:
+
+  ┌──────────┐    Admin revisa     ┌─────────────┐
+  │Pendiente │ ─────────────────── │ En Revisión │
+  └──────────┘                     └──────┬──────┘
+                                          │
+                              ┌───────────┴───────────┐
+                              │                       │
+                        ┌─────┴─────┐          ┌──────┴──────┐
+                        │ Aprobada  │          │ Rechazada   │
+                        └─────┬─────┘          └─────────────┘
+                              │
+                   Cliente posiciona cámaras
+                     en el mapa
+                              │
+                        ┌─────┴──────┐
+                        │ Completada │
+                        └────────────┘
+
+
+7.3. Estructura del módulo Backend (Apex)
+─────────────────────────────────────────
+
+El backend se compone de 12 clases Apex organizadas en tres categorías:
+controladores, helpers y clases de prueba.
+
+┌──────────────────────────────────────┬──────────────┬─────────────────────────┐
+│ Clase                                │ Sharing      │ Propósito               │
+├──────────────────────────────────────┼──────────────┼─────────────────────────┤
+│ AccountController                    │ with sharing │ Clase placeholder       │
+│ CameraIncidentController             │ without sh.  │ Incidencias de cámaras  │
+│ CameraInsertHelper                   │ without sh.  │ Helper DML elevado      │
+│ CaseViewerController                 │ with sharing │ Casos de soporte + chat │
+│ ContratacionCamaraController         │ with sharing │ Ciclo de contratación   │
+│ HouseMapController                   │ without sh.  │ Mapa de cámaras         │
+│ UserMenuController                   │ without sh.  │ Perfil de usuario       │
+│ VoiceCommandController               │ with sharing │ Asistente de voz IA     │
+│ CameraIncidentControllerTest         │ @isTest      │ Tests de incidencias    │
+│ ContratacionCamaraControllerTest     │ @isTest      │ Tests de contratación   │
+│ HouseMapControllerTest               │ @isTest      │ Tests del mapa          │
+│ VoiceCommandControllerTest           │ @isTest      │ Tests de voz/IA         │
+└──────────────────────────────────────┴──────────────┴─────────────────────────┘
+
+Directiva with sharing vs without sharing:
+  - with sharing: respeta las reglas de compartición del usuario actual.
+    Se aplica en controladores que acceden a datos sensibles donde el
+    usuario solo debe ver sus propios registros.
+  - without sharing: ignora las reglas de compartición. Se emplea cuando
+    los usuarios del portal necesitan acceder a datos que no podrían ver
+    directamente (cámaras, perfil de usuario). La seguridad se implementa
+    programáticamente en el código Apex (filtrado server-side).
+
+
+7.4. Estructura del módulo Frontend (LWC)
+─────────────────────────────────────────
+
+El proyecto contiene 14 componentes LWC, de los cuales 10 son componentes
+funcionales y 4 son scaffolds vacíos generados durante la fase inicial de
+desarrollo.
+
+Componentes funcionales:
+  1. cameraContractRequest — Modal de solicitud de contratación de cámaras.
+  2. cameraIncidentReport — Formulario de reporte de incidencias.
+  3. caseChatPanel — Panel de chat de soporte en la ficha de Caso (CRM).
+  4. caseViewer — Visor de casos del portal con chat integrado.
+  5. contractApproval — Panel de aprobación de solicitudes (admin).
+  6. contractHistory — Historial completo de solicitudes con filtros.
+  7. customUserMenu — Menú de usuario con perfil y contratación.
+  8. houseSecurityMap — Mapa interactivo de seguridad (componente principal).
+  9. voiceAssistant — Asistente de voz con inteligencia artificial.
+
+Componentes scaffold (no utilizados):
+  10. letter — Placeholder para notificaciones.
+  11. map — Placeholder para mapa genérico.
+  12. webCam — Placeholder para webcam.
+  13. camara — Componente de prueba no integrado.
+
+Estructura de archivos de cada componente funcional:
+  componentName/
+  ├── componentName.js           — Lógica JavaScript (controlador LWC)
+  ├── componentName.html         — Plantilla HTML
+  ├── componentName.css          — Estilos CSS
+  └── componentName.js-meta.xml  — Metadatos de configuración
+
+
+7.5. Arquitectura de streaming de vídeo local
+──────────────────────────────────────────────
+
+Para resolver el desafío de mostrar la imagen de una cámara de seguridad
+conectada físicamente al equipo del cliente dentro del portal web de
+Salesforce (alojado en la nube pública), se ha diseñado la siguiente
+arquitectura de tres componentes:
+
+┌─────────────────────────────────────────────────────────────────────┐
+│                   EQUIPO LOCAL DEL CLIENTE                         │
+│                                                                     │
+│  ┌──────────────┐    ┌──────────────────┐    ┌──────────────────┐  │
+│  │  Cámara USB  │───▶│  Python + OpenCV │───▶│  Flask Server    │  │
+│  │  o integrada │    │  cv2.VideoCapture│    │  localhost:5000   │  │
+│  └──────────────┘    └──────────────────┘    └────────┬─────────┘  │
+│                                                       │             │
+│                                          http://localhost:5000/video │
+│                                                       │             │
+│                                               ┌───────┴─────────┐  │
+│                                               │  Ngrok Client   │  │
+│                                               │  (túnel HTTPS)  │  │
+│                                               └───────┬─────────┘  │
+└───────────────────────────────────────────────────────┼─────────────┘
+                                                        │
+                                    https://xxxx.ngrok-free.app/video
+                                                        │
+┌───────────────────────────────────────────────────────┼─────────────┐
+│                   SALESFORCE (NUBE)                    │             │
+│                                                       │             │
+│  ┌──────────────────────────────┐                     ▼             │
+│  │  LWC houseSecurityMap       │  ◀──── <img src="https://...">    │
+│  │  (Portal Experience Cloud)  │                                    │
+│  └──────────────────────────────┘                                   │
+└─────────────────────────────────────────────────────────────────────┘
+
+Descripción del flujo:
+
+  1. Python captura la cámara: El script utiliza OpenCV
+     (cv2.VideoCapture) para acceder a la cámara conectada al equipo y
+     leer fotogramas en tiempo real.
+
+  2. Flask emite el streaming: El servidor Flask expone una ruta
+     /video que entrega los fotogramas codificados como JPEG en un flujo
+     MJPEG (multipart/x-mixed-replace). La URL local resultante es
+     http://localhost:5000/video.
+
+  3. Ngrok crea el túnel público: Ngrok toma la URL local y genera una
+     URL pública segura (HTTPS), por ejemplo
+     https://1a2b3c4d.ngrok-free.app/video. Esta URL es accesible desde
+     cualquier dispositivo conectado a Internet.
+
+  4. El LWC consume el streaming: En el componente houseSecurityMap de
+     Salesforce, se utiliza una etiqueta <img> cuyo atributo src apunta
+     a la URL de Ngrok. El navegador del cliente recibe los fotogramas
+     MJPEG y los muestra como vídeo en tiempo real dentro del portal.
+
+Esta arquitectura resuelve el problema de conectar un recurso local
+(cámara del usuario) con una aplicación cloud pública (Salesforce) sin
+necesidad de servidores intermedios permanentes, configuración de firewall
+ni infraestructura de WebRTC.
+
+
+================================================================================
+
+              CAPÍTULO 8. IMPLEMENTACIÓN
+
+================================================================================
+
+
+8.1. Clases Apex — Lógica de negocio
+─────────────────────────────────────
+
+A continuación se documenta la implementación de cada clase Apex funcional
+del proyecto.
+
+
+8.1.1. AccountController
+
+  Archivo: force-app/main/default/classes/AccountController.cls
+  Sharing: with sharing
+
+Clase placeholder generada durante la configuración inicial del proyecto.
+No contiene lógica de negocio y no se utiliza en ningún componente.
+
+
+8.1.2. CameraIncidentController
+
+  Archivo: force-app/main/default/classes/CameraIncidentController.cls
+  Sharing: without sharing
+
+Controlador para el componente de reporte de incidencias de cámaras.
+Permite a los usuarios del portal crear casos (Case) asociados a una
+cámara que presenta fallos.
+
+Métodos:
+
+  getCameraOptions() — @AuraEnabled(cacheable=true)
+    Retorna la lista de cámaras activas formateada como opciones para un
+    selector (picklist). Si el usuario es del portal (tiene ContactId),
+    devuelve únicamente las cámaras vinculadas a su contacto. Si es
+    administrador, devuelve todas las cámaras activas.
+
+  createCameraIncident(Id cameraId, String subject, String description,
+                       String priority) — @AuraEnabled
+    Crea un registro Case enriquecido con la información de la cámara
+    afectada (nombre y zona). Los campos del caso se establecen con
+    Status: New, Origin: Web, Type: Mechanical.
+
+
+8.1.3. CameraInsertHelper
+
+  Archivo: force-app/main/default/classes/CameraInsertHelper.cls
+  Sharing: without sharing
+
+Clase auxiliar que realiza operaciones DML con elevación de privilegios.
+Se invoca exclusivamente desde ContratacionCamaraController, después de
+que este haya validado la propiedad y el estado de la solicitud.
+
+Métodos:
+
+  insertCameras(List<Camara__c> cameras)
+    Inserta una lista de cámaras en bulk.
+
+  completarSolicitud(Id solicitudId)
+    Actualiza el estado de la solicitud a «Completada».
+
+
+8.1.4. CaseViewerController
+
+  Archivo: force-app/main/default/classes/CaseViewerController.cls
+  Sharing: with sharing
+
+Controlador para los componentes caseViewer y caseChatPanel. Gestiona la
+lectura de casos del usuario, la obtención de comentarios (chat) y el
+envío de nuevos mensajes.
+
+Clases internas (wrappers):
+  - CaseInfo: id, caseNumber, subject, status, priority, createdDate,
+    description, contactName, contactEmail.
+  - ChatMessage: id, body, createdByName, createdDate, isCurrentUser.
+
+Métodos:
+
+  getUserCases() — @AuraEnabled(cacheable=true)
+    Devuelve los casos del usuario actual (filtrados por ContactId si es
+    portal, por OwnerId si es interno). Límite: 50 casos.
+
+  getCaseComments(Id caseId) — @AuraEnabled
+    Obtiene los comentarios de un caso, ordenados cronológicamente.
+
+  addCaseComment(Id caseId, String body) — @AuraEnabled
+    Añade un comentario público al caso (IsPublished=true).
+
+
+8.1.5. ContratacionCamaraController
+
+  Archivo: force-app/main/default/classes/ContratacionCamaraController.cls
+  Sharing: with sharing
+
+Controlador principal para el flujo de contratación de cámaras. Gestiona
+el ciclo de vida completo de las solicitudes.
+
+Clase interna:
+  - SolicitudAprobada: solicitudId, nombre, numeroCamaras, contactId.
+
+Métodos:
+
+  getContactIdUsuarioActual() — @AuraEnabled(cacheable=true)
+    Identifica si el usuario actual es portal o interno.
+
+  crearSolicitud(Integer numeroCamaras, String detalle) — @AuraEnabled
+    Crea una solicitud con estado «Pendiente», vinculada al usuario actual.
+
+  getMisSolicitudes() — @AuraEnabled
+    Devuelve las solicitudes del usuario portal actual (máximo 20).
+
+  getSolicitudesPendientes() — @AuraEnabled
+    Para administradores: devuelve las solicitudes pendientes o en revisión.
+
+  aprobarSolicitud(Id solicitudId) — @AuraEnabled
+    Cambia el estado a «Aprobada».
+
+  rechazarSolicitud(Id solicitudId) — @AuraEnabled
+    Cambia el estado a «Rechazada».
+
+  getSolicitudAprobadaActiva() — @AuraEnabled
+    Busca si el usuario portal tiene una solicitud aprobada pendiente de
+    finalizar.
+
+  completarSolicitud(Id solicitudId) — @AuraEnabled
+    Marca la solicitud como «Completada».
+
+  saveCamarasContratadas(Id solicitudId, String camarasJson) — @AuraEnabled
+    Guarda las cámaras posicionadas por el cliente. Valida la propiedad de
+    la solicitud y emplea CameraInsertHelper para el DML.
+
+  getAllSolicitudes() — @AuraEnabled
+    Para administradores: devuelve todas las solicitudes (máximo 200).
+
+
+8.1.6. HouseMapController
+
+  Archivo: force-app/main/default/classes/HouseMapController.cls
+  Sharing: without sharing
+
+Controlador para el mapa interactivo de cámaras. Gestiona la lectura de
+cámaras, la verificación de perfil de administrador, la creación de cámaras
+por drag and drop, la eliminación y la actualización de posiciones.
+
+Métodos:
+
+  getCamaras(Id contactId) — @AuraEnabled(cacheable=false)
+    Obtiene las cámaras activas con seguridad server-side: los usuarios
+    portal siempre ven únicamente sus propias cámaras (ignorando el
+    parámetro contactId); los administradores pueden filtrar por contactId
+    o ver todas las cámaras.
+
+  isSystemAdmin() — @AuraEnabled(cacheable=true)
+    Verifica si el usuario actual tiene perfil «System Administrator» o
+    «Administrador del sistema».
+
+  saveDraggedCamera(String name, Decimal posX, Decimal posY, String videoUrl)
+    — @AuraEnabled
+    Crea una cámara nueva a partir de una operación de drag and drop.
+
+  deleteCamera(Id cameraId) — @AuraEnabled
+    Elimina una cámara existente.
+
+  updateCameraPosition(Id cameraId, Decimal newX, Decimal newY) — @AuraEnabled
+    Actualiza las coordenadas de posición de una cámara.
+
+
+8.1.7. UserMenuController
+
+  Archivo: force-app/main/default/classes/UserMenuController.cls
+  Sharing: without sharing
+
+Controlador para el componente customUserMenu. Proporciona datos
+completos del perfil del usuario y funciones de gestión de cámaras.
+
+Clases internas:
+  - UserProfileData: 26 campos @AuraEnabled con datos de usuario, cuenta,
+    SLA, dirección de facturación y estadísticas de cámaras.
+  - CameraData: wrapper ligero con id, name, zone, active.
+
+Métodos:
+
+  getUserProfileData() — @AuraEnabled
+    Recopila todos los datos del perfil: usuario, cuenta, cámaras y
+    estadísticas.
+
+  deleteCamera(Id cameraId) — @AuraEnabled
+    Elimina una cámara. Solo accesible para administradores.
+
+  createSolicitudCamara(String camerasJson) — @AuraEnabled
+    Crea una solicitud de contratación a partir de un JSON.
+
+  renameCamera(Id cameraId, String newName) — @AuraEnabled
+    Renombra una cámara con validación de acceso (los usuarios portal
+    solo pueden renombrar sus propias cámaras).
+
+
+8.1.8. VoiceCommandController
+
+  Archivo: force-app/main/default/classes/VoiceCommandController.cls
+  Sharing: with sharing
+
+Controlador para el asistente de voz con IA. Recibe texto transcrito del
+LWC, lo envía a Google Gemini para procesamiento de lenguaje natural y
+ejecuta acciones en Salesforce.
+
+Configuración de la integración:
+  - Modelo: gemini-2.0-flash
+  - API Key: almacenada en Custom Label «Gemini_API_Key»
+  - Temperature: 0.2 (respuestas deterministas)
+  - Max Output Tokens: 500
+
+Acciones reconocidas:
+  - crear_caso: Genera un caso de soporte con asunto, descripción,
+    prioridad y tipo extraídos por la IA.
+  - consultar_camaras: Devuelve un resumen de las cámaras activas.
+  - no_reconocido: Indica que la intención del usuario no ha podido
+    ser interpretada.
+
+Métodos:
+
+  processVoiceCommand(String userText) — @AuraEnabled
+    Método principal. Valida el texto, invoca la API de Gemini, parsea la
+    respuesta JSON y ejecuta la acción correspondiente.
+
+
+8.2. Componentes LWC — Interfaz de usuario
+───────────────────────────────────────────
+
+A continuación se describen los componentes funcionales del proyecto.
+
+
+8.2.1. houseSecurityMap (Mapa de Seguridad Interactivo)
+
+Componente principal de la aplicación. Muestra el plano de la vivienda
+del cliente con las cámaras posicionadas como chinchetas interactivas.
+
+Funcionalidades:
+  - Visualización del plano con cámaras posicionadas (coordenadas X/Y).
+  - Visor de vídeo en pantalla completa al hacer clic en una cámara
+    (YouTube embed o MJPEG vía Ngrok).
+  - Sidebar con lista de cámaras, estado ONLINE y renombrado inline.
+  - Footer con fecha/hora en tiempo real y acceso a componentes hijos.
+  - Drag and drop de chinchetas nuevas (admin y solicitudes aprobadas).
+  - Menú contextual (clic derecho) para eliminación (solo admin).
+  - Integración con ContratacionCamaraController para cámaras contratadas.
+  - Diseño responsive con breakpoints para tablet, móvil y landscape.
+
+Layout CSS Grid:
+  grid-template-columns: 1fr 280px;
+  grid-template-areas: 'map sidebar' 'footer footer';
+
+Composición de componentes hijos:
+  <c-camera-contract-request>   — Solicitud de contratación
+  <c-case-viewer>               — Visor de casos de soporte
+  <c-voice-assistant>           — Asistente de voz IA
+  <c-camera-incident-report>    — Reporte de incidencias
+
+Imports Apex: getCamaras, isSystemAdmin, saveDraggedCamera,
+  updateCameraPosition, deleteCamera, renameCamera,
+  getSolicitudAprobadaActiva, completarSolicitud,
+  saveCamarasContratadas, getContactIdUsuarioActual.
+
+Import de recurso estático: PLANO_CASA (imagen del plano de la vivienda).
+
+Sistema de Drag and Drop:
+  El administrador (o usuario con solicitud aprobada) arrastra chinchetas
+  desde un tray lateral y las suelta sobre el plano. Las coordenadas se
+  calculan como porcentaje del ancho y alto del contenedor del mapa.
+  Las chinchetas soltadas se pueden reposicionar arrastrándolas de nuevo.
+  Al guardar, las chinchetas se persisten como registros Camara__c.
+
+
+8.2.2. voiceAssistant (Asistente de Voz con IA)
+
+Componente que permite la interacción por comandos de voz con el sistema.
+
+Flujo de ejecución:
+  1. El usuario pulsa el botón de micrófono.
+  2. Se solicita acceso al micrófono (MediaStream API).
+  3. SpeechRecognition transcribe el audio en tiempo real.
+  4. El usuario revisa/edita la transcripción.
+  5. Se envía a Apex (VoiceCommandController.processVoiceCommand).
+  6. El controlador invoca Google Gemini.
+  7. Se ejecuta la acción detectada (crear caso, consultar cámaras).
+  8. Se muestra el resultado al usuario.
+
+Eventos personalizados:
+  - voicecommand: Emitido al completar un comando con éxito, con la
+    acción y el recordId generado.
+
+
+8.2.3. customUserMenu (Menú de Usuario)
+
+Componente del header de Experience Cloud que sustituye al menú de
+usuario estándar de LWR (incompatible con componentes Aura). Incluye:
+  - Menú desplegable con opciones de Perfil, Contratar y Cerrar sesión.
+  - Modal de perfil con datos de usuario, cuenta, SLA y cámaras.
+  - Modal de contratación con formulario dinámico (hasta 5 cámaras).
+  - Gestión inline de cámaras (renombrar, eliminar).
+  - Inyección de estilos globales para resolver conflictos de z-index
+    entre modales y chinchetas del mapa.
+
+
+8.2.4. cameraContractRequest (Solicitud de Contratación)
+
+Modal con dos pestañas: formulario de nueva solicitud e historial de
+solicitudes propias. Cada solicitud muestra un badge visual con color
+según su estado (Pendiente, En Revisión, Aprobada, Rechazada, Completada).
+
+
+8.2.5. cameraIncidentReport (Reporte de Incidencias)
+
+Formulario modal para reportar fallos en cámaras. Incluye selector de
+cámara (cargado vía @wire), campo de asunto, descripción, prioridad y
+validación de campos obligatorios.
+
+
+8.2.6. caseViewer (Visor de Casos del Portal)
+
+Componente con patrón lista/detalle dentro de un modal. Muestra los
+casos de soporte del cliente con badges de prioridad y estado. Incluye
+chat integrado basado en CaseComments con scroll automático, envío con
+Enter y diferenciación visual de mensajes propios/ajenos.
+
+
+8.2.7. caseChatPanel (Panel de Chat de Casos)
+
+Componente CRM para la ficha de Caso (Record Page). Muestra el chat
+de comentarios del caso y permite al administrador enviar respuestas.
+Diseñado para incrustarse en la Record Page del objeto Case.
+
+
+8.2.8. contractApproval (Aprobación de Contratos)
+
+Panel de administración que muestra las solicitudes pendientes de
+aprobación. Permite al administrador aprobar o rechazar cada solicitud
+con confirmación mediante toast.
+
+
+8.2.9. contractHistory (Historial de Solicitudes)
+
+Panel con el historial completo de todas las solicitudes de contratación,
+con filtros por estado (Todos, Pendiente, En Revisión, Aprobada,
+Rechazada, Completada) y contadores de resultados.
+
+
+8.3. Experience Cloud — Portal del cliente
+──────────────────────────────────────────
+
+El portal de clientes se implementa como un sitio Experience Cloud con
+la siguiente configuración:
+
+  - Template: LWR (Lightning Web Runtime)
+  - Estado: Live (publicado y activo)
+  - Branding: Color primario #232564, fuente Source Sans Pro
+  - Licencias: Customer Community Plus Login (5 totales, 3 en uso)
+  - Perfil de usuario: «Perfil Cliente OptiSecure»
+
+Estructura de páginas:
+
+  1. Página de Login — Diseño de dos columnas con formulario de inicio
+     de sesión y banner corporativo.
+
+  2. Página principal (Home) — El componente houseSecurityMap ocupa la
+     totalidad de la página con el customUserMenu en el header.
+
+Componentes expuestos en Experience Cloud:
+  houseSecurityMap, customUserMenu, voiceAssistant,
+  cameraContractRequest, cameraIncidentReport, caseChatPanel,
+  contractApproval, contractHistory, caseViewer.
+
+Permisos del cliente:
+  - Visualización y gestión de sus cámaras (Camara__c).
+  - Creación y seguimiento de solicitudes (Solicitud_Camara__c).
+  - Creación y consulta de casos de soporte (Case).
+  - Uso del mapa interactivo y del asistente de voz.
+
+Permisos del administrador:
+  - Acceso completo a todos los registros.
+  - Drag and drop de cámaras en el mapa.
+  - Eliminación de cámaras (menú contextual).
+  - Aprobación/rechazo de solicitudes.
+  - Chat de soporte desde la ficha de Caso.
+
+
+8.4. Integración con Google Gemini
+───────────────────────────────────
+
+Configuración:
+  - Remote Site Setting: Google_Gemini_API
+    (https://generativelanguage.googleapis.com)
+  - Custom Label: Gemini_API_Key (almacenamiento seguro de la clave API)
+
+Flujo de la integración:
+  1. El usuario dicta un comando de voz en el componente voiceAssistant.
+  2. La transcripción se envía a VoiceCommandController.processVoiceCommand.
+  3. El controlador construye un prompt con instrucciones contextuales
+     que define las acciones posibles y los parámetros esperados.
+  4. Se realiza un HTTP POST a la API de Gemini con el prompt del
+     sistema y el texto del usuario.
+  5. Gemini analiza la intención y devuelve un JSON estructurado.
+  6. El controlador parsea la respuesta y ejecuta la operación DML
+     correspondiente (crear Case, consultar cámaras).
+  7. Se devuelve al LWC un JSON con el resultado de la operación.
+
+Seguridad de la integración:
+  - La API key se almacena como Custom Label, separada del código fuente.
+  - Las llamadas HTTP se realizan desde Apex (server-side), sin exponer
+    la clave en el navegador del cliente.
+  - Remote Site Settings limita los dominios contactables desde Apex.
+
+
+8.5. Integración de streaming de vídeo local
+─────────────────────────────────────────────
+
+La integración de streaming de vídeo local permite a los clientes
+visualizar la imagen en tiempo real de cámaras de seguridad conectadas
+físicamente a su equipo, directamente dentro del portal web de Salesforce.
+
+Componentes de la solución:
+
+  1. Servidor de streaming (Python + Flask + OpenCV):
+     El script de Python utiliza OpenCV para acceder a la cámara del
+     equipo (cv2.VideoCapture(0)) y capturar fotogramas en tiempo real.
+     Flask expone una ruta /video que emite los fotogramas como flujo
+     MJPEG mediante la cabecera Content-Type: multipart/x-mixed-replace.
+
+  2. Túnel público (Ngrok):
+     Ngrok se ejecuta en el equipo local y crea un túnel seguro que
+     expone la URL local del servidor Flask en una URL HTTPS pública.
+     El comando de ejecución es:
+       ngrok http 5000
+
+  3. Componente LWC (houseSecurityMap):
+     El campo Video_URL__c de la cámara se configura con la URL de Ngrok.
+     En el componente, se utiliza una etiqueta <img> o <iframe> cuyo
+     atributo src apunta a dicha URL. El navegador recibe el flujo MJPEG
+     y lo renderiza como vídeo en tiempo real.
+
+Ventajas de la arquitectura:
+  - No requiere servidores intermedios permanentes.
+  - No requiere configuración de firewall ni router.
+  - El túnel Ngrok proporciona cifrado HTTPS de extremo a extremo.
+  - Es extensible: Ngrok puede sustituirse por soluciones empresariales
+    de tunneling o por streaming WebRTC directo.
+
+
+8.6. Modelo de seguridad
+────────────────────────
+
+El modelo de seguridad se implementa en tres niveles:
+
+
+8.6.1. Perfiles y permisos
+
+  System Administrator:
+    - Acceso completo a todos los objetos y funcionalidades.
+    - Drag and drop de cámaras, eliminación (menú contextual).
+    - Aprobación/rechazo de solicitudes de contratación.
+
+  Perfil Cliente OptiSecure (Community Plus Login):
+    - Lectura/escritura en Camara__c (solo registros vinculados).
+    - Creación de Solicitud_Camara__c.
+    - Creación de Case.
+    - Sin acceso a funciones de administración.
+
+
+8.6.2. Verificaciones en Apex
+
+  - HouseMapController.isSystemAdmin(): Verifica el perfil del usuario
+    para habilitar o deshabilitar controles de administrador en el
+    frontend.
+
+  - HouseMapController.getCamaras(): Aplica filtrado server-side por
+    ContactId, impidiendo que un usuario del portal acceda a cámaras
+    de otro cliente.
+
+  - ContratacionCamaraController.saveCamarasContratadas(): Valida que
+    la solicitud pertenece al usuario actual y se encuentra en estado
+    «Aprobada» antes de ejecutar la operación.
+
+  - UserMenuController.renameCamera(): Verifica que el usuario tiene
+    acceso a la cámara antes de permitir el renombrado.
+
+
+8.6.3. Seguridad de la API externa
+
+  - La API key de Google Gemini se almacena como Custom Label, accesible
+    únicamente por administradores.
+  - Las llamadas HTTP se ejecutan desde Apex (server-side).
+  - Remote Site Settings restringe los dominios externos contactables.
+
+
+8.7. Recursos estáticos
+───────────────────────
+
+  - Plano_Casa_1: Imagen del plano de la vivienda utilizada como fondo
+    del mapa interactivo. Se referencia desde LWC mediante:
+      import PLANO_CASA from '@salesforce/resourceUrl/Plano_Casa_1';
+
+  - ImagenCliente: Content Asset con imagen corporativa utilizada en la
+    interfaz del portal.
+
+
+================================================================================
+
+              CAPÍTULO 9. PRUEBAS
+
+================================================================================
+
+
+9.1. Pruebas unitarias Apex
+───────────────────────────
+
+El proyecto incluye 4 clases de prueba que cubren la funcionalidad de los
+controladores backend.
+
+
+9.1.1. CameraIncidentControllerTest
+
+  - setupTestData(): Crea 3 cámaras de prueba (2 activas, 1 inactiva).
+  - testGetCameraOptions(): Verifica que solo se devuelven las 2 cámaras
+    activas con el formato correcto.
+  - testCreateCameraIncident(): Verifica la creación de un Case con los
+    campos Subject, Priority, Status, Origin y Type correctos.
+  - testCreateCameraIncidentInvalidId(): Verifica que un ID inválido
+    lanza una excepción controlada.
+
+
+9.1.2. ContratacionCamaraControllerTest
+
+  - setup(): Crea una Account y un Contact vinculados.
+  - testGetSolicitudesPendientes(): Verifica la obtención de solicitudes
+    con estado «Pendiente».
+  - testAprobarSolicitud(): Verifica que el estado cambia a «Aprobada».
+  - testRechazarSolicitud(): Verifica que el estado cambia a «Rechazada».
+  - testCompletarSolicitud(): Verifica que el estado cambia a «Completada».
+  - testGetSolicitudAprobadaActiva(): Verifica que un administrador
+    (sin ContactId) recibe null.
+  - testGetMisSolicitudes(): Verifica que un administrador recibe una
+    lista vacía.
+
+
+9.1.3. HouseMapControllerTest
+
+  - setupTestData(): Crea 3 cámaras de prueba.
+  - testGetCameras(): Verifica la obtención de 2 cámaras activas.
+  - testIsSystemAdmin(): Verifica el resultado de la comprobación de
+    perfil de administrador.
+  - testSaveDraggedCamera(): Verifica la creación de una cámara nueva
+    con los campos Name, Posicion_X__c, Posicion_Y__c, Activa__c y
+    Zone__c correctos.
+  - testUpdateCameraPosition(): Verifica la actualización de coordenadas
+    de una cámara existente.
+
+
+9.1.4. VoiceCommandControllerTest
+
+  Utiliza clases mock internas (HttpCalloutMock) para simular las
+  respuestas de Google Gemini:
+
+  - GeminiMockCrearCaso: Simula intención «crear_caso» con prioridad High.
+  - GeminiMockConsultarCamaras: Simula intención «consultar_camaras».
+  - GeminiMockNoReconocido: Simula intención «no_reconocido».
+  - GeminiMockError: Simula error HTTP 500.
+
+  Tests:
+  - testCrearCasoExitoso(): Verifica la creación del Case y sus campos.
+  - testConsultarCamaras(): Verifica que la respuesta incluye las 2
+    cámaras activas.
+  - testComandoNoReconocido(): Verifica exito=false.
+  - testTextoVacio(): Verifica respuesta de error sin callout.
+  - testTextoNulo(): Verifica respuesta de error sin callout.
+  - testErrorGemini(): Verifica que un error HTTP lanza
+    AuraHandledException.
+
+
+9.2. Patrones de testing
+────────────────────────
+
+Los tests siguen las convenciones estándar de Salesforce:
+
+  - @IsTest: Anotación obligatoria en clases y métodos de prueba.
+  - @TestSetup: Método de creación de datos compartidos entre tests.
+  - Test.startTest() / Test.stopTest(): Delimitadores de contexto que
+    resetean los governor limits.
+  - System.assert / System.assertEquals: Verificaciones de resultados.
+  - Test.setMock(HttpCalloutMock.class, ...): Simulación de callouts
+    HTTP a APIs externas.
+
+Patrón de datos de test:
+  1. Crear Account.
+  2. Crear Contact vinculado.
+  3. Crear registros secundarios (Camara__c, Solicitud_Camara__c, Case).
+  4. Ejecutar métodos del controlador.
+  5. Verificar resultados con assertions.
+
+
+9.3. Cobertura de código
+────────────────────────
+
+Las 4 clases de test proporcionan cobertura sobre los 8 controladores
+funcionales del proyecto. Los escenarios de prueba incluyen:
+
+  - Flujos exitosos (happy path).
+  - Flujos de error (IDs inválidos, excepciones controladas).
+  - Verificaciones de seguridad (filtrado por usuario).
+  - Simulación de integraciones externas (mock de Gemini API).
+
+
+================================================================================
+
+              CAPÍTULO 10. CONCLUSIONES Y TRABAJO FUTURO
+
+================================================================================
+
+
+10.1. Resumen de los logros alcanzados
+──────────────────────────────────────
+
+OptiSecure Solutions demuestra que la plataforma Salesforce permite
+construir una aplicación de dominio específico completa — desde el modelo
+de datos hasta el portal de clientes — aprovechando las capacidades nativas
+de la plataforma para reducir significativamente el esfuerzo de desarrollo.
+
+Los logros alcanzados en el proyecto son:
+
+  - Portal de clientes funcional con registro, autenticación y acceso
+    individualizado a los datos de cada cliente.
+
+  - Mapa interactivo de seguridad con posicionamiento de cámaras por
+    coordenadas, drag and drop, menú contextual y visor de vídeo en
+    pantalla completa.
+
+  - Flujo de contratación completo con solicitud desde el portal,
+    aprobación/rechazo por el administrador y posicionamiento de las
+    cámaras aprobadas por el cliente.
+
+  - Sistema de soporte técnico con casos, chat basado en CaseComments y
+    reporte de incidencias vinculadas a cámaras.
+
+  - Asistente de voz con inteligencia artificial que procesa comandos en
+    español y ejecuta acciones en Salesforce mediante Google Gemini.
+
+  - Streaming de vídeo local que permite visualizar cámaras físicas
+    conectadas al equipo del cliente dentro del portal web, mediante una
+    arquitectura Flask + OpenCV + Ngrok.
+
+  - Cobertura de pruebas unitarias automatizadas del backend con
+    simulación de APIs externas.
+
+  - Modelo de seguridad basado en perfiles, permisos y verificaciones
+    programáticas server-side.
+
+Salesforce ha permitido concentrar el esfuerzo de desarrollo en la lógica
+de negocio de OptiSecure, delegando en la plataforma la gestión de la base
+de datos, la autenticación, el control de acceso, el portal de clientes y
+la API REST. No obstante, la plataforma impone sus propias restricciones
+(governor limits en SOQL, Shadow DOM en LWC, limitaciones de la plantilla
+LWR) que han requerido soluciones técnicas específicas documentadas en esta
+memoria.
+
+
+10.2. Limitaciones y mejoras para futuras versiones
+────────────────────────────────────────────────────
+
+Se identifican las siguientes líneas de mejora para futuras versiones:
+
+  1. Planos por cuenta: Permitir que cada Account disponga de su propio
+     plano de vivienda, en lugar de utilizar una imagen estática global.
+
+  2. Streaming WebRTC: Sustituir la arquitectura MJPEG + Ngrok por un
+     protocolo WebRTC que permita baja latencia y comunicación
+     bidireccional.
+
+  3. Grabación y almacenamiento: Implementar la grabación de segmentos
+     de vídeo y su almacenamiento en Salesforce Files o en un servicio
+     de almacenamiento externo (Amazon S3, Google Cloud Storage).
+
+  4. Notificaciones push: Avisar a los clientes cuando una cámara
+     detecte movimiento o se pierda la conexión del dispositivo.
+
+  5. Dashboard analítico: Panel con métricas de uptime de cámaras,
+     incidencias por zona y tiempos de respuesta de soporte.
+
+  6. Integración IoT: Conectar sensores de movimiento, apertura de
+     puertas y humo para ampliar el sistema de seguridad.
+
+  7. Aplicación móvil: Desarrollar una app nativa con Salesforce Mobile
+     SDK para acceder al mapa y a las cámaras desde dispositivos móviles.
+
+  8. Multi-idioma: Utilizar Translation Workbench para soportar varios
+     idiomas (actualmente el sistema opera exclusivamente en español).
+
+  9. Múltiples cámaras simultáneas: Permitir la visualización de varias
+     cámaras en cuadrícula (vista multiplex) dentro del portal.
+
+  10. Detección de anomalías con IA: Aplicar modelos de visión por
+      computador para detectar movimiento o intrusión en los flujos
+      de vídeo de las cámaras.
+
+
+================================================================================
+
+              CAPÍTULO 11. MANUAL DE INSTALACIÓN
+
+================================================================================
+
+
+11.1. Requerimientos
+────────────────────
+
+Para desplegar OptiSecure Solutions se necesitan los siguientes requisitos:
+
+  - Salesforce CLI (sf): Versión actual. Instalación desde
+    https://developer.salesforce.com/tools/salesforcecli.
+
+  - Visual Studio Code con Salesforce Extension Pack.
+
+  - Org de Salesforce: Sandbox o Developer Edition con Experience Cloud
+    habilitado y licencias Customer Community Plus Login disponibles.
+
+  - Node.js y npm: Para la ejecución de tests Jest y ESLint.
+
+  - Python 3.x con pip: Para el servidor de streaming de vídeo.
+
+  - Ngrok: Cuenta gratuita y cliente instalado desde https://ngrok.com.
+
+  - Git: Para clonar el repositorio del proyecto.
+
+
+11.2. Pasos de instalación
+──────────────────────────
+
+  1. Clonar el repositorio:
+       git clone <url-del-repositorio>
+       cd OptiSecure-Solutions
+
+  2. Autenticarse en la org de Salesforce:
+       sf org login web --alias miOrg --instance-url https://test.salesforce.com
+
+  3. Desplegar los metadatos:
+       sf project deploy start --source-dir force-app -o miOrg
+
+  4. Asignar permisos:
+     Desde Setup, asignar los Permission Sets necesarios y configurar
+     los perfiles de Experience Cloud.
+
+  5. Configurar Custom Label:
+     En Setup → Custom Labels, crear «Gemini_API_Key» con la API key
+     de Google Gemini.
+
+  6. Configurar Remote Site Setting:
+     En Setup → Remote Site Settings, crear «Google_Gemini_API» con URL
+     https://generativelanguage.googleapis.com.
+
+  7. Subir el recurso estático:
+     Subir la imagen del plano de la vivienda como Static Resource con
+     nombre «Plano_Casa_1».
+
+  8. Publicar el sitio Experience Cloud:
+     En Setup → Digital Experiences → All Sites, publicar el sitio
+     OptiSecure Solutions.
+
+  9. Instalar dependencias del servidor de streaming:
+       pip install flask opencv-python
+
+  10. Instalar Ngrok:
+      Descargar e instalar desde https://ngrok.com.
+      Autenticarse: ngrok config add-authtoken <tu-token>
+
+  11. Instalar dependencias Node.js (opcional, para tests):
+        npm install
+
+
+================================================================================
+
+              CAPÍTULO 12. MANUAL DE USUARIO
+
+================================================================================
+
+
+12.1. Inicio de sesión en el portal
+────────────────────────────────────
+
+El cliente accede al portal de OptiSecure Solutions a través de la URL del
+sitio Experience Cloud. Se presenta una página de login con dos columnas:
+el formulario de autenticación a la izquierda y un banner corporativo a la
+derecha. Tras introducir sus credenciales y pulsar «Iniciar sesión», el
+sistema valida la autenticación y redirige al mapa de seguridad.
+
+
+12.2. Página principal — Mapa de seguridad
+──────────────────────────────────────────
+
+Al iniciar sesión, el cliente visualiza el mapa interactivo de su vivienda.
+El plano ocupa la mayor parte de la pantalla, con chinchetas que representan
+las cámaras de seguridad instaladas. A la derecha se muestra una sidebar con
+la lista de cámaras y su estado. En el footer se encuentran los botones de
+acceso a los demás módulos (contratación, casos, asistente de voz,
+incidencias) y la fecha/hora en tiempo real.
+
+
+12.3. Gestión de cámaras
+─────────────────────────
+
+  - Ver vídeo en vivo: El cliente hace clic en una chincheta del mapa.
+    Se abre un visor en pantalla completa con el stream de la cámara
+    (YouTube embed o MJPEG local) y un badge «EN VIVO».
+
+  - Renombrar cámara: En la sidebar, el cliente pulsa el icono de lápiz
+    junto al nombre de una cámara, introduce el nuevo nombre y confirma.
+
+  - Administradores: Pueden arrastrar nuevas chinchetas desde el tray
+    lateral y soltarlas sobre el plano. También pueden eliminar cámaras
+    mediante clic derecho → «Eliminar cámara».
+
+
+12.4. Contratación de nuevas cámaras
+─────────────────────────────────────
+
+  1. El cliente pulsa «Contratar» en el footer.
+  2. Se abre un modal con dos pestañas: «Nueva solicitud» e
+     «Mis solicitudes».
+  3. En «Nueva solicitud», indica el número de cámaras y los detalles.
+  4. Al enviar, se genera una solicitud con estado «Pendiente».
+  5. El administrador revisa la solicitud en el panel de aprobación y
+     la aprueba o rechaza.
+  6. Si la solicitud es aprobada, al cliente le aparece un tray de
+     chinchetas en el mapa. Arrastra cada cámara al plano y pulsa
+     «Guardar cámaras». La solicitud pasa a «Completada».
+
+
+12.5. Sistema de soporte y chat
+───────────────────────────────
+
+  - Reportar incidencia: El cliente pulsa el botón de incidencias,
+    selecciona la cámara afectada, describe el problema, indica la
+    prioridad y envía. Se genera un caso de soporte automáticamente.
+
+  - Consultar casos: El cliente pulsa el botón de casos para ver la
+    lista de sus casos de soporte con badges de estado y prioridad.
+
+  - Chat: Dentro del detalle de un caso, el cliente puede enviar y
+    recibir mensajes. Los mensajes propios se muestran en burbujas
+    azules a la derecha; los del equipo de soporte, en burbujas grises
+    a la izquierda.
+
+
+12.6. Asistente de voz con IA
+─────────────────────────────
+
+  1. El cliente pulsa el icono de micrófono en el footer.
+  2. Se abre un modal con un micrófono central.
+  3. Al pulsar el micrófono, se inicia la grabación de voz.
+  4. La transcripción aparece en tiempo real en un área de texto.
+  5. El cliente puede editar la transcripción si lo desea.
+  6. Al pulsar «Enviar Comando», el texto se procesa con Google Gemini.
+  7. Si la IA interpreta un comando válido (abrir caso, consultar
+     cámaras), se ejecuta la acción y se muestra el resultado.
+
+
+12.7. Streaming de vídeo en vivo
+────────────────────────────────
+
+Para visualizar una cámara local conectada al equipo:
+
+  1. Iniciar el servidor de streaming en el equipo local:
+       python stream_server.py
+
+  2. Iniciar el túnel Ngrok:
+       ngrok http 5000
+
+  3. Copiar la URL pública generada por Ngrok (por ejemplo,
+     https://1a2b3c4d.ngrok-free.app/video).
+
+  4. Configurar el campo Video_URL__c de la cámara correspondiente
+     en Salesforce con dicha URL.
+
+  5. Al hacer clic en la cámara del mapa, el portal muestra la imagen
+     en tiempo real transmitida desde el equipo local.
+
+
+================================================================================
+
+              CAPÍTULO 13. REFERENCIAS BIBLIOGRÁFICAS
+
+================================================================================
+
+
+13.1. Fuentes utilizadas, estándares y documentación técnica
+────────────────────────────────────────────────────────────
+
+  [1]  Salesforce. «Apex Developer Guide».
+       https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/
+
+  [2]  Salesforce. «Lightning Web Components Developer Guide».
+       https://developer.salesforce.com/docs/component-library/documentation/en/lwc
+
+  [3]  Salesforce. «SOQL and SOSL Reference».
+       https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/
+
+  [4]  Salesforce. «Experience Cloud Developer Guide».
+       https://developer.salesforce.com/docs/atlas.en-us.communities_dev.meta/communities_dev/
+
+  [5]  Salesforce. «Salesforce CLI Command Reference».
+       https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/
+
+  [6]  Google. «Gemini API Documentation».
+       https://ai.google.dev/docs
+
+  [7]  MDN Web Docs. «Web Speech API — SpeechRecognition».
+       https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition
+
+  [8]  MDN Web Docs. «MediaStream API».
+       https://developer.mozilla.org/en-US/docs/Web/API/MediaStream
+
+  [9]  MDN Web Docs. «HTML Drag and Drop API».
+       https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API
+
+  [10] Flask. «Flask Documentation».
+       https://flask.palletsprojects.com/
+
+  [11] OpenCV. «OpenCV-Python Documentation».
+       https://docs.opencv.org/
+
+  [12] Ngrok. «Ngrok Documentation».
+       https://ngrok.com/docs
+
+  [13] Jest. «Jest Testing Framework».
+       https://jestjs.io/docs/getting-started
+
+  [14] ESLint. «ESLint User Guide».
+       https://eslint.org/docs/user-guide/
+
+
+================================================================================
+
+              ESTRUCTURA DEL PROYECTO (SFDX)
+
+================================================================================
+
+OptiSecure-Solutions/
+├── sfdx-project.json             Configuración del proyecto SFDX
+├── package.json                  Dependencias Node.js (Jest, ESLint)
+├── jest.config.js                Configuración de pruebas Jest (LWC)
+├── eslint.config.js              Configuración de linting
+├── README.md                     Documentación del repositorio
+├── stream_server.py              Servidor de streaming Flask + OpenCV
+│
+├── config/
+│   └── project-scratch-def.json  Definición de scratch org
+│
+├── manifest/
+│   └── package.xml               Manifiesto de metadatos para despliegue
+│
+├── scripts/
+│   ├── apex/
+│   │   ├── hello.apex            Script de ejemplo
+│   │   ├── seedCameras.apex      Script para insertar cámaras de prueba
+│   │   └── testProfile.apex      Script para verificar perfiles
+│   └── soql/
+│       └── account.soql          Consulta SOQL de ejemplo
+│
+└── force-app/
+    └── main/
+        └── default/
+            ├── classes/          12 archivos .cls + .cls-meta.xml
+            ├── lwc/              14 componentes LWC
+            ├── objects/          2 objetos personalizados
+            ├── labels/           Custom Labels (Gemini_API_Key)
+            ├── remoteSiteSettings/ Remote Site Settings
+            ├── staticresources/  Recursos estáticos
+            ├── permissionsets/   Permission Sets
+            ├── profiles/        Perfiles de seguridad
+            ├── applications/    Aplicaciones Lightning
+            ├── layouts/         Page Layouts
+            ├── tabs/            Custom Tabs
+            ├── flexipages/      Lightning Pages
+            ├── digitalExperiences/       Páginas del sitio
+            ├── digitalExperienceConfigs/ Configuración del sitio
+            ├── networks/        Redes de comunidad
+            ├── sites/           Sites
+            ├── networkBranding/ Branding del portal
+            └── ...              Otros metadatos estándar
+
+
+Archivo sfdx-project.json:
+
+  {
+      "packageDirectories": [
+          { "path": "force-app", "default": true }
+      ],
+      "name": "OptiSecure-Solutions",
+      "namespace": "",
+      "sfdcLoginUrl": "https://login.salesforce.com",
+      "sourceApiVersion": "59.0"
+  }
+
+
+================================================================================
+      AMPLIACIÓN DOCUMENTAL PARA INCORPORAR EN LOS CAPÍTULOS EXISTENTES
+================================================================================
+
+La presente ampliación se incorpora al final de la memoria para recoger las
+funcionalidades desarrolladas con posterioridad a la redacción principal. No
+se plantea como un nuevo capítulo, sino como un conjunto de bloques listos
+para integrarse en los capítulos ya definidos. Por este motivo, cada epígrafe
+indica expresamente el capítulo y apartado al que pertenece dentro de la
+estructura original del Trabajo Fin de Grado.
+
+
+Capítulo 4.10 y 4.12. Tecnologías utilizadas — ampliación de la capa de visión
+artificial e integración Python-Salesforce
+───────────────────────────────────────────────────────────────────────────────
+
+La evolución reciente del proyecto amplía la pila tecnológica inicialmente
+descrita con la incorporación de un subsistema de visión artificial en el
+borde (edge computing). A las tecnologías ya documentadas para streaming
+local, concretamente Flask, OpenCV y Ngrok, se añaden dos elementos de gran
+relevancia técnica: por un lado, el modelo YOLOv8 de Ultralytics, utilizado
+para la detección de personas en tiempo real sobre los fotogramas capturados
+por la cámara; por otro, la librería simple-salesforce, empleada para
+establecer la comunicación autenticada entre el servidor Python y la org de
+Salesforce.
+
+Esta ampliación modifica de forma significativa el papel del servidor local.
+Deja de ser un mero emisor de vídeo MJPEG para convertirse en un agente capaz
+de analizar la escena, tomar decisiones automáticas, registrar evidencias y
+sincronizar eventos con la plataforma CRM. Desde el punto de vista académico,
+esta incorporación resulta especialmente relevante porque demuestra la
+viabilidad de una arquitectura híbrida en la que el procesamiento intensivo de
+imagen se ejecuta cerca de la fuente de datos, mientras que Salesforce asume
+la trazabilidad de negocio, la persistencia documental y la interacción con el
+usuario final.
+
+
+Capítulo 5.3. Requisitos funcionales — ampliación
+──────────────────────────────────────────────────
+
+  RF-14  El sistema debe detectar automáticamente la presencia de personas
+         en el flujo de vídeo de una cámara local y disparar un evento de
+         seguridad cuando la detección supere un umbral de confianza
+         configurable.
+
+  RF-15  El sistema debe generar, tras una detección válida, una
+         notificación automática en Salesforce vinculada a la cámara y al
+         contacto propietario, incorporando referencia temporal y acceso al
+         clip de evidencia asociado.
+
+  RF-16  El sistema debe permitir al usuario consultar desde el portal las
+         notificaciones recientes de detección y reproducir el clip generado
+         para cada evento de seguridad.
+
+  RF-17  El asistente de voz debe interpretar órdenes orientadas a la
+navegación operativa del sistema, incluyendo la apertura de una
+cámara concreta, la apertura de la última notificación o el recuento
+de detecciones registradas durante la jornada.
+
+
+Capítulo 5.4. Requisitos no funcionales — ampliación
+─────────────────────────────────────────────────────
+
+  RNF-07  Baja latencia operativa: El análisis de vídeo debe realizarse en el
+equipo local para reducir el retardo entre la detección y la
+generación del evento, evitando transferir continuamente vídeo bruto
+a servicios externos para su procesamiento.
+
+  RNF-08  Trazabilidad: Cada detección relevante debe quedar registrada como
+evidencia consultable, tanto a nivel de actividad de negocio
+(notificación) como a nivel de artefacto multimedia asociado a la
+cámara correspondiente.
+
+  RNF-09  Resiliencia: El subsistema de videovigilancia debe tolerar fallos
+transitorios de la cámara, disponer de mecanismos de reconexión y
+limitar la generación masiva de alertas repetidas mediante políticas
+de enfriamiento configurables.
+
+  RNF-10  Seguridad de la integración: La comunicación entre el servidor de
+seguridad y Salesforce debe realizarse mediante credenciales
+gestionadas fuera del código fuente, conexiones HTTPS y validaciones
+server-side que impidan el acceso cruzado entre clientes.
+
+
+Capítulo 6.1. Casos de uso — ampliación
+───────────────────────────────────────
+
+Actor adicional: Subsistema de seguridad con IA (servidor Python externo)
+
+  CU20  Detectar persona y generar alerta
+        El servidor local analiza el flujo de vídeo en tiempo real. Cuando
+        identifica una persona con confianza suficiente, inicia la captura de
+        un clip de evidencia y comunica el evento a Salesforce.
+
+  CU21  Consultar notificaciones de detección
+        El cliente accede desde el portal al listado de alertas recientes
+        generadas automáticamente por el sistema de videovigilancia.
+
+  CU22  Reproducir clip de seguridad asociado a una alerta
+        A partir de una notificación concreta, el usuario abre el clip de
+        evidencia y revisa el evento detectado por la cámara.
+
+  CU23  Abrir cámaras y notificaciones mediante voz
+        El cliente dicta una orden en lenguaje natural y el sistema interpreta
+        si debe mostrar una cámara específica, abrir la última notificación o
+        contabilizar las detecciones registradas.
+
+
+Capítulo 6.2. Flujo de información entre módulos — ampliación
+──────────────────────────────────────────────────────────────
+
+La incorporación del subsistema de seguridad con IA introduce un nuevo flujo
+de información transversal que conecta la capa física de captura de vídeo con
+los módulos de interacción y seguimiento del portal. El flujo ampliado puede
+describirse del siguiente modo:
+
+  1. La cámara conectada al equipo local proporciona fotogramas al servidor
+     Python mediante OpenCV.
+
+  2. El proceso de análisis ejecuta inferencias con YOLOv8 sobre cada frame y
+     determina si existe una detección de persona con una confianza superior
+     al umbral definido.
+
+  3. Cuando la detección es válida y no existe una alerta reciente dentro del
+     periodo de enfriamiento, el sistema inicia la grabación automática de un
+     clip corto de evidencia y lo conserva temporalmente en almacenamiento
+     local.
+
+  4. Una vez finalizada la grabación, el servidor genera una URL pública del
+     clip a través de Ngrok y realiza una llamada HTTP al endpoint Apex REST
+     responsable de registrar la alerta en Salesforce.
+
+  5. Salesforce crea una actividad de tipo Task vinculada al contacto de la
+     cámara, incluyendo en su descripción la referencia temporal del evento y
+     el enlace estructurado al clip capturado.
+
+  6. En paralelo, el propio servidor Python sube la evidencia multimedia a
+     Salesforce Files y la relaciona con el registro Camara__c correspondiente,
+     consolidando así la trazabilidad técnica y documental del evento.
+
+  7. Finalmente, los componentes LWC del portal consultan estas alertas y
+     evidencias para mostrarlas al usuario, mientras que el asistente de voz
+     puede invocar su apertura directa mediante comandos en lenguaje natural.
+
+Este flujo extiende el sistema desde una lógica puramente reactiva basada en
+interacción del usuario hacia un modelo proactivo de supervisión, en el que
+la plataforma no solo muestra información, sino que detecta eventos,
+construye evidencias y genera acciones de seguimiento dentro del ecosistema
+Salesforce.
+
+
+Capítulo 7.1, 7.3, 7.4 y 7.5. Diseño del sistema — ampliación de la
+arquitectura de vigilancia inteligente
+───────────────────────────────────────────────────────────────────────────────
+
+Desde el punto de vista del diseño, el proyecto evoluciona hacia una
+arquitectura híbrida edge-cloud organizada en tres niveles claramente
+diferenciados. En primer lugar, la capa de adquisición y análisis local, que
+engloba la cámara física, OpenCV, el modelo YOLOv8 y la lógica de grabación de
+clips. En segundo lugar, la capa de exposición segura, formada por Flask y el
+túnel Ngrok, responsable de publicar tanto el streaming en vivo como los clips
+generados. En tercer lugar, la capa cloud sobre Salesforce, donde residen la
+lógica de integración Apex, la persistencia de notificaciones y evidencias, y
+los componentes LWC consumidos desde Experience Cloud.
+
+Esta distribución de responsabilidades permite situar el cálculo intensivo en
+el borde, cerca de la fuente de datos, y reservar la plataforma Salesforce
+para las funciones de negocio: identificación de propietarios, control de
+acceso, consulta de histórico, trazabilidad documental y presentación de la
+información al usuario. Se trata de una decisión arquitectónica especialmente
+adecuada para un TFG de estas características, ya que combina el valor de una
+plataforma empresarial SaaS con técnicas de visión por computador ejecutadas
+fuera de la nube.
+
+En lo relativo al módulo backend, la ampliación introduce una separación clara
+entre controladores de integración y controladores de consulta. El endpoint
+REST recibe eventos desde el mundo físico y los traduce a entidades de
+negocio, mientras que el controlador de clips y alertas recupera y filtra la
+información para los distintos perfiles de usuario. En paralelo, el módulo
+frontend se enriquece con nuevos componentes especializados en consumo de
+evidencias y notificaciones, manteniendo la coherencia visual y funcional del
+portal original.
+
+
+Capítulo 8.1. Clases Apex — lógica de negocio (ampliación)
+───────────────────────────────────────────────────────────
+
+PersonDetectionController
+
+Se ha incorporado un endpoint Apex REST específicamente diseñado para recibir
+eventos de detección procedentes del servidor Python. Su responsabilidad
+principal consiste en deserializar el cuerpo JSON recibido, localizar la
+cámara afectada, resolver el contacto asociado y generar una actividad de tipo
+Task en Salesforce. Dicha actividad actúa como notificación persistente del
+evento de seguridad y queda ligada al propietario de la cámara, lo que permite
+su consulta posterior desde el portal Experience Cloud.
+
+Una decisión de diseño destacable reside en la forma de encapsular la URL del
+clip dentro de la descripción de la actividad mediante marcadores explícitos.
+Esta estrategia simplifica la extracción posterior del enlace sin necesidad de
+introducir un objeto personalizado adicional, preservando al mismo tiempo la
+compatibilidad con la estructura estándar de Salesforce.
+
+SecurityClipController
+
+Junto al endpoint REST se ha implementado un controlador Apex orientado a la
+consulta de evidencias multimedia y alertas de detección. Este controlador
+proporciona métodos para recuperar clips asociados a una cámara concreta, al
+conjunto de cámaras de un contacto o al usuario autenticado, así como para
+obtener las alertas recientes derivadas de las detecciones automáticas.
+
+La clase adopta un enfoque orientado a wrappers, devolviendo estructuras de
+datos específicas para clips y notificaciones. Además, incorpora un helper
+interno sin sharing para facilitar a usuarios de portal el acceso controlado a
+las actividades de alerta, manteniendo la lógica de filtrado por contacto y
+la separación entre usuarios internos y externos. Desde la perspectiva del
+diseño software, esta aproximación favorece la reutilización del código y la
+claridad contractual entre backend y frontend.
+
+VoiceCommandController — ampliación funcional
+
+El controlador del asistente de voz ya no se limita a crear casos o consultar
+cámaras activas. La integración actual amplía el catálogo de acciones para
+permitir la apertura directa de una cámara concreta, la apertura de una
+notificación determinada y el recuento de detecciones registradas durante el
+día. Esta evolución convierte al asistente en un mecanismo real de navegación
+operativa sobre la aplicación, y no únicamente en una interfaz de entrada de
+datos.
+
+
+Capítulo 8.2. Componentes LWC — interfaz de usuario (ampliación)
+──────────────────────────────────────────────────────────────────
+
+clipNotifications
+
+Se ha desarrollado un componente LWC encargado de presentar al usuario el
+listado de notificaciones recientes de detección. Cada alerta muestra la
+cámara afectada, la fecha y hora del evento y el contacto asociado cuando
+procede. Desde la propia tarjeta es posible abrir el clip de seguridad o
+eliminar la alerta del listado una vez revisada. Este componente traduce un
+evento técnico de detección en un elemento de interfaz comprensible, trazable
+y accionable para el usuario final.
+
+securityClipViewer
+
+Como complemento al visor de notificaciones, se ha añadido un componente LWC
+específico para consultar clips de seguridad vinculados a las cámaras. El
+usuario puede acceder a un histórico ordenado cronológicamente, reproducir el
+contenido almacenado y descargar la evidencia si resulta necesario. Este
+componente refuerza el papel del sistema no solo como herramienta de
+monitorización en vivo, sino también como repositorio de evidencias de
+seguridad.
+
+voiceAssistant — ampliación de comportamiento
+
+El componente de asistente de voz mantiene la captura de audio mediante Web
+Speech API y la posterior interpretación semántica por parte de Gemini, pero
+amplía su repertorio funcional con acciones orientadas a la navegación. En la
+versión extendida, el usuario puede formular órdenes como «abre la cámara del
+jardín», «abre la última notificación» o «cuántas notificaciones ha habido
+hoy», obteniendo una respuesta inmediata sobre la propia interfaz. Esta
+evolución mejora la accesibilidad y reduce la fricción de uso en escenarios
+de supervisión rápida.
+
+
+Capítulo 8.4. Integración con Google Gemini — ampliación del asistente de voz
+───────────────────────────────────────────────────────────────────────────────
+
+La integración con Google Gemini ha evolucionado hacia un esquema de
+orquestación más robusto y determinista. En lugar de limitarse a interpretar
+intenciones genéricas, el sistema define un prompt estructurado que obliga al
+modelo a devolver un JSON con acciones cerradas y parámetros concretos. Este
+contrato minimiza ambigüedades, simplifica el parseo en Apex y reduce el riesgo
+de respuestas libres difíciles de explotar de forma segura.
+
+La ampliación introduce nuevas acciones semánticas relacionadas con la capa de
+videovigilancia: apertura de cámaras por nombre, zona o referencia numérica;
+apertura de notificaciones por criterio temporal; y recuento de detecciones
+diarias. De este modo, la inteligencia artificial deja de operar únicamente
+como un parser de incidencias y pasa a funcionar como una interfaz conversacional
+de control sobre los activos de seguridad y sus eventos asociados.
+
+Conviene destacar, además, que esta integración sigue un principio de diseño
+seguro: el audio no se envía directamente a Gemini. La voz del usuario se
+transcribe previamente en el navegador y únicamente el texto resultante viaja
+a Apex para su posterior envío al modelo. Esta separación reduce exposición de
+datos, simplifica la arquitectura y aprovecha las capacidades nativas del
+navegador para la fase de reconocimiento de voz.
+
+
+Capítulo 8.5. Integración de streaming de vídeo local — evolución hacia un
+servidor de seguridad con IA
+───────────────────────────────────────────────────────────────────────────────
+
+La implementación del servidor Python ha experimentado un salto cualitativo.
+La versión actual no se limita a exponer el stream de la cámara, sino que
+incorpora un ciclo completo de supervisión: captura de fotogramas, inferencia
+con YOLOv8, anotación visual de detecciones, grabación automática de clips,
+publicación segura de evidencias y sincronización con Salesforce.
+
+En el plano interno, la solución mantiene un hilo de procesamiento continuo
+que lee frames desde la cámara, dibuja bounding boxes sobre las detecciones y
+actualiza el frame anotado que consume el streaming MJPEG. Cuando se detecta
+una persona, el sistema genera un clip corto de evidencia y aplica un periodo
+de enfriamiento configurable para evitar la multiplicación de alertas frente a
+una misma presencia prolongada. Esta medida resulta importante tanto para la
+estabilidad operativa como para la utilidad real de las notificaciones.
+
+Otro aspecto reseñable es la preocupación por la robustez de ejecución. El
+servidor controla fallos consecutivos de lectura desde la cámara e intenta la
+reconexión automática del dispositivo cuando detecta pérdida de señal. Del
+mismo modo, separa en hilos de fondo las tareas potencialmente más lentas,
+como la notificación a Salesforce o la subida del clip, evitando bloquear el
+proceso principal de captura y análisis. Desde una perspectiva de ingeniería,
+esta decisión permite mantener la continuidad del streaming incluso cuando se
+producen operaciones de integración con servicios externos.
+
+Finalmente, la publicación de rutas específicas para estado, listado de clips,
+stream en vivo y reproducción del clip proporciona una interfaz de servicio
+clara, que facilita tanto la depuración técnica como la integración con el
+portal. La solución resultante demuestra una transición madura desde un
+prototipo de visualización hacia un auténtico servidor de seguridad con IA.
+
+
+Capítulo 10.1 y 10.2. Conclusiones y trabajo futuro — actualización tras la
+ampliación funcional
+───────────────────────────────────────────────────────────────────────────────
+
+La funcionalidad añadida confirma una de las ideas centrales del proyecto:
+Salesforce puede actuar como núcleo de una solución empresarial compleja, aun
+cuando parte del procesamiento especializado se ejecute fuera de la propia
+plataforma. La incorporación del subsistema de detección automática de
+personas, las notificaciones de seguridad y la navegación conversacional sobre
+cámaras y alertas eleva el proyecto desde un portal de gestión y visualización
+hacia una plataforma de supervisión inteligente con capacidad de reacción.
+
+Asimismo, esta ampliación materializa parcialmente una de las líneas de mejora
+que en la redacción original se situaban como trabajo futuro: la aplicación de
+técnicas de visión por computador al dominio de la seguridad. En la versión
+actual ya existe un prototipo funcional centrado en la detección de personas y
+en la generación de evidencias automáticas. No obstante, siguen abiertas varias
+líneas de evolución, como la calibración avanzada de falsos positivos, la
+detección de múltiples clases de eventos, la normalización del almacenamiento
+multimedia, la ejecución de pruebas end-to-end y la sustitución de Ngrok por
+una solución de exposición segura más adecuada para producción.
+
+
+Capítulo 11.1 y 11.2. Manual de instalación — dependencias y configuración
+adicional para la capa de IA y notificaciones
+───────────────────────────────────────────────────────────────────────────────
+
+La ampliación funcional introduce requisitos adicionales en el entorno Python.
+Además de Flask y OpenCV, es necesario disponer de las librerías de inferencia
+YOLOv8 y de integración con Salesforce. En términos prácticos, el entorno debe
+incluir dependencias equivalentes a ultralytics, simple-salesforce y el resto
+de paquetes auxiliares requeridos por el servidor de seguridad. Igualmente,
+debe asegurarse la disponibilidad del modelo ligero de YOLOv8 empleado en el
+prototipo y del directorio destinado al almacenamiento temporal de clips.
+
+La configuración del servicio exige también la definición de variables de
+entorno para las credenciales de Salesforce, el dominio de autenticación, el
+identificador de la cámara, el contacto asociado y la URL base de Ngrok. Esta
+decisión es coherente con las buenas prácticas de despliegue, ya que separa la
+configuración sensible del código fuente y facilita la adaptación del sistema a
+distintos entornos de ejecución.
+
+Desde el lado de Salesforce, la instalación debe contemplar el despliegue del
+endpoint REST de detección, del controlador de clips y alertas, y de los
+componentes LWC encargados de mostrar notificaciones y evidencias. Del mismo
+modo, resulta necesario mantener configurado el dominio expuesto por Ngrok como
+origen de confianza para el portal, así como verificar que los perfiles y
+permission sets permitan el acceso controlado a las clases Apex y a los datos
+derivados de las detecciones.
+
+
+Capítulo 12.6 y 12.7. Manual de usuario — ampliación del uso del asistente y
+de la gestión de notificaciones de seguridad
+───────────────────────────────────────────────────────────────────────────────
+
+La versión ampliada del asistente de voz permite una interacción más rica que
+la documentada inicialmente. Además de reportar incidencias o consultar el
+estado general del sistema, el usuario puede emplear órdenes como «abre la
+cámara de la entrada», «muéstrame la cámara dos», «abre la última
+notificación» o «cuántas notificaciones ha habido hoy». El sistema interpreta
+la orden, ejecuta la acción correspondiente y muestra de forma directa la
+cámara o el clip de seguridad solicitado, reduciendo el número de pasos
+manuales necesarios para acceder a la información relevante.
+
+En paralelo, el portal incorpora un nuevo flujo de consulta de eventos de
+seguridad. Cuando el sistema detecta una persona, la notificación aparece en
+el módulo correspondiente junto con la marca temporal y la referencia de la
+cámara. El usuario puede abrir el clip asociado para revisar la escena o, una
+vez atendido el evento, eliminar la alerta del listado. Este comportamiento
+introduce una experiencia más próxima a la de una plataforma de vigilancia
+operativa real, donde la detección, la revisión de evidencias y la gestión del
+evento forman parte de un mismo ciclo de uso.
+
+Por último, el concepto de «streaming en vivo» deja de entenderse únicamente
+como visualización pasiva. La cámara conectada al equipo sigue pudiendo verse
+en tiempo real desde el mapa, pero ahora esa misma señal alimenta un proceso
+de análisis automático que puede generar eventos y evidencias sin intervención
+del usuario. Esta evolución refuerza el valor del sistema como herramienta de
+supervisión inteligente y no solo como visor remoto de cámaras.
+
+
+================================================================================
+                        FIN DEL DOCUMENTO
+================================================================================
+
+Documentación del proyecto OptiSecure Solutions — Trabajo Fin de Grado.
+Autor: Alejandro Garrido Navarro.
+
+Resumen del proyecto:
+  - Aplicación Salesforce orientada a la gestión integral de cámaras,
+    incidencias y atención al cliente.
+  - Portal Experience Cloud con mapa interactivo, contratación, casos,
+    chat de soporte y asistente de voz.
+  - Integración conversacional con Google Gemini para interpretar órdenes
+    en lenguaje natural y ejecutar acciones sobre la interfaz.
+  - Servidor de seguridad local con Flask, OpenCV, YOLOv8 y exposición
+    segura mediante Ngrok.
+  - Generación automática de notificaciones de detección y evidencias
+    multimedia vinculadas a Salesforce.
+  - Componentes específicos para consultar alertas y clips de seguridad
+    desde el portal.
+  - Arquitectura híbrida edge-cloud con modelo de seguridad multi-nivel.
+
+================================================================================
+-

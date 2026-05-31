@@ -1,0 +1,386 @@
+/* ═══════════════════════════════════════════════════
+   OPTISECURE SOLUTIONS — Register Styles
+═══════════════════════════════════════════════════ */
+
+/* ── Wrapper: split layout ── */
+.THIS .os-register-wrapper {
+    display: flex;
+    min-height: 100vh;
+    font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0e1a;
+}
+
+/* ═══ BRAND PANEL (left) ═══ */
+.THIS .os-brand-panel {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0a0e1a 0%, #111827 50%, #0f172a 100%);
+}
+
+.THIS .os-brand-bg {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 30% 60%, rgba(59,130,246,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 30%, rgba(34,197,94,0.06) 0%, transparent 50%);
+}
+
+.THIS .os-brand-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 3rem;
+}
+
+.THIS .os-shield-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.THIS .os-brand-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: #e2e8f0;
+    margin: 0;
+    line-height: 1.1;
+}
+
+.THIS .os-brand-subtitle {
+    font-size: 1.3rem;
+    font-weight: 300;
+    color: #3b82f6;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin: 0.25rem 0 0;
+}
+
+.THIS .os-brand-divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #22c55e);
+    margin: 1.5rem auto;
+    border-radius: 3px;
+}
+
+.THIS .os-brand-tagline {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    margin: 0 0 2.5rem;
+    letter-spacing: 0.02em;
+}
+
+/* ── Registration steps ── */
+.THIS .os-brand-steps {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+.THIS .os-step {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.THIS .os-step-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(59,130,246,0.15);
+    border: 1.5px solid rgba(59,130,246,0.4);
+    color: #3b82f6;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.THIS .os-step-text {
+    color: #94a3b8;
+    font-size: 0.82rem;
+}
+
+.THIS .os-step-connector {
+    width: 1.5px;
+    height: 20px;
+    background: rgba(59,130,246,0.2);
+    margin-left: 15px;
+}
+
+/* Decoraciones */
+.THIS .os-circle {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(59,130,246,0.1);
+}
+
+.THIS .os-circle-1 {
+    width: 300px;
+    height: 300px;
+    top: -80px;
+    right: -80px;
+    animation: spin 25s linear infinite;
+}
+
+.THIS .os-circle-2 {
+    width: 200px;
+    height: 200px;
+    bottom: -50px;
+    left: -50px;
+    border-color: rgba(34,197,94,0.08);
+    animation: spin 20s linear infinite reverse;
+}
+
+.THIS .os-hex {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 1px solid rgba(59,130,246,0.06);
+    transform: rotate(45deg);
+    border-radius: 4px;
+}
+
+.THIS .os-hex-1 {
+    top: 15%;
+    left: 10%;
+    animation: float 6s ease-in-out infinite;
+}
+
+.THIS .os-hex-2 {
+    bottom: 20%;
+    right: 15%;
+    border-color: rgba(34,197,94,0.06);
+    animation: float 5s ease-in-out infinite 1s;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ═══ FORM PANEL (right) ═══ */
+.THIS .os-form-panel {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, #111827 0%, #0f172a 100%);
+    padding: 2rem;
+}
+
+.THIS .os-form-container {
+    width: 100%;
+    max-width: 480px;
+    background: rgba(30, 41, 59, 0.5);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(59,130,246,0.15);
+    border-radius: 1rem;
+    padding: 2.5rem;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+}
+
+/* ── Form header ── */
+.THIS .os-form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.THIS .os-user-icon {
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 1rem;
+    background: rgba(59,130,246,0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.THIS .os-form-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    margin: 0 0 0.35rem;
+}
+
+.THIS .os-form-desc {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* ── Error ── */
+.THIS .os-error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.25rem;
+    color: #fca5a5;
+    font-size: 0.82rem;
+}
+
+.THIS .os-error-icon {
+    color: #ef4444;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+/* ── Input row (side by side) ── */
+.THIS .os-input-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.THIS .os-input-row .os-input-group {
+    flex: 1;
+}
+
+/* ── Inputs ── */
+.THIS .os-input-group {
+    margin-bottom: 1.1rem;
+}
+
+.THIS .os-input-label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.35rem;
+}
+
+.THIS .os-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: rgba(15,23,42,0.6);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 0.5rem;
+    padding: 0 0.75rem;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.THIS .os-input-wrapper:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+
+.THIS .os-input-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    margin-right: 0.5rem;
+}
+
+.THIS .os-input-wrapper input,
+.THIS .os-input input {
+    flex: 1;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    color: #e2e8f0 !important;
+    font-size: 0.88rem;
+    padding: 0.7rem 0;
+    width: 100%;
+    margin: 0 !important;
+    -webkit-appearance: none;
+    box-shadow: none !important;
+}
+
+.THIS .os-input-wrapper input::placeholder {
+    color: #475569;
+}
+
+/* ── Register button ── */
+.THIS button.os-btn-register {
+    width: 100%;
+    margin-top: 0.75rem;
+    padding: 0.85rem 1rem;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+    letter-spacing: 0.03em;
+}
+
+.THIS button.os-btn-register:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(59,130,246,0.35);
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+.THIS button.os-btn-register .label {
+    color: #fff;
+}
+
+/* ── Footer ── */
+.THIS .os-form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(59,130,246,0.1);
+    font-size: 0.7rem;
+    color: #475569;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.THIS .os-footer-shield {
+    font-size: 0.85rem;
+}
+
+/* ── Lightning icon color overrides ── */
+.THIS .os-shield-lightning {
+    --sds-c-icon-color-foreground-default: #3b82f6;
+}
+
+.THIS .os-user-lightning {
+    --sds-c-icon-color-foreground-default: #3b82f6;
+}
+
+.THIS .os-icon-dim {
+    --sds-c-icon-color-foreground-default: #64748b;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 768px) {
+    .THIS .os-register-wrapper {
+        flex-direction: column;
+    }
+    .THIS .os-brand-panel {
+        min-height: 200px;
+        flex: 0;
+    }
+    .THIS .os-brand-title { font-size: 1.8rem; }
+    .THIS .os-brand-subtitle { font-size: 1rem; }
+    .THIS .os-brand-steps { display: none; }
+    .THIS .os-form-container { padding: 1.5rem; }
+    .THIS .os-input-row { flex-direction: column; gap: 0; }
+}

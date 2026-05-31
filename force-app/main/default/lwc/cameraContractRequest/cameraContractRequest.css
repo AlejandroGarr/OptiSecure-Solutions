@@ -1,0 +1,225 @@
+/* ─── Botón de contratación ─── */
+.contract-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.85rem;
+    border: 1px solid #00b894;
+    border-radius: 6px;
+    background: transparent;
+    color: #00b894;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.contract-btn:hover {
+    background: #00b894;
+    color: #fff;
+}
+.contract-btn-icon {
+    --sds-c-icon-color-foreground-default: currentColor;
+}
+
+/* ─── Modal ─── */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9100;
+    animation: fadeIn 0.2s ease;
+}
+.modal-container {
+    background: #1a1a2e;
+    border: 1px solid #0f3460;
+    border-radius: 12px;
+    width: 500px;
+    max-width: 95vw;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #0f3460;
+}
+.modal-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.modal-header-icon {
+    --sds-c-icon-color-foreground-default: #00b894;
+}
+.modal-title {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+}
+.modal-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #8a94a6;
+    padding: 0.25rem;
+}
+.modal-close-btn:hover {
+    color: #e94560;
+}
+.modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.25rem;
+}
+.modal-footer {
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid #0f3460;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* ─── Tabs ─── */
+.modal-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+.tab-btn {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #0f3460;
+    border-radius: 6px;
+    background: transparent;
+    color: #8a94a6;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.tab-btn--active {
+    background: #0f3460;
+    color: #fff;
+    border-color: #00b894;
+}
+
+/* ─── Form ─── */
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.form-label {
+    color: #a0aec0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+/* ─── Lista de solicitudes ─── */
+.solicitudes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.solicitud-card {
+    background: rgba(15, 52, 96, 0.3);
+    border: 1px solid #0f3460;
+    border-radius: 8px;
+    padding: 0.75rem;
+}
+.solicitud-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.4rem;
+}
+.solicitud-header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.delete-solicitud-btn {
+    --sds-c-icon-color-foreground-default: #8a94a6;
+    transition: color 0.2s;
+}
+.delete-solicitud-btn:hover {
+    --sds-c-icon-color-foreground-default: #ef4444;
+}
+.solicitud-name {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+.solicitud-detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #8a94a6;
+    font-size: 0.75rem;
+}
+.solicitud-camaras {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+.solicitud-icon {
+    --sds-c-icon-color-foreground-default: #00b894;
+}
+.solicitud-desc {
+    color: #a0aec0;
+    font-size: 0.75rem;
+    margin-top: 0.4rem;
+    line-height: 1.4;
+}
+
+/* ─── Badges ─── */
+.badge {
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.badge-pending   { background: #fdcb6e; color: #2d3436; }
+.badge-review    { background: #74b9ff; color: #2d3436; }
+.badge-approved  { background: #00b894; color: #fff; }
+.badge-rejected  { background: #e94560; color: #fff; }
+.badge-completed { background: #a29bfe; color: #fff; }
+
+/* ─── Empty / Loading ─── */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #8a94a6;
+}
+.empty-icon {
+    --sds-c-icon-color-foreground-default: #8a94a6;
+    margin-bottom: 0.5rem;
+}
+.loading-container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ── Móvil: botón más estrecho ── */
+@media (max-width: 480px) {
+    .contract-btn {
+        padding: 0.3rem 0.55rem;
+        font-size: 0.68rem;
+        max-width: 160px;
+    }
+}

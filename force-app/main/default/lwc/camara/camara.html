@@ -1,0 +1,116 @@
+<template>
+    <div class="camera-monitor">
+        <!-- ═══ Header del Centro de Vigilancia ═══ -->
+        <div class="monitor-header">
+            <div class="header-left">
+                <div class="shield-icon">
+                    <lightning-icon icon-name="utility:shield" size="small" class="header-icon"></lightning-icon>
+                </div>
+                <div class="header-titles">
+                    <h1 class="monitor-title">OPTISECURE — CENTRO DE VIGILANCIA</h1>
+                    <p class="monitor-subtitle">Sistema CCTV en tiempo real · {onlineCameras}/{totalCameras} cámaras activas</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <span class="live-badge">
+                    <span class="live-dot"></span>
+                    EN VIVO
+                </span>
+                <span class="datetime-badge">{currentDateTime}</span>
+                <lightning-button-icon
+                    icon-name="utility:expand"
+                    alternative-text="Pantalla completa"
+                    variant="border-filled"
+                    onclick={handleFullscreen}
+                    class="fullscreen-btn"
+                ></lightning-button-icon>
+            </div>
+        </div>
+
+        <!-- ═══ Grid de 4 cuadrantes (cada uno con 4 cámaras) ═══ -->
+        <div class="quadrant-grid">
+            <template for:each={quadrants} for:item="quad">
+                <div key={quad.id} class="quadrant-block">
+                    <!-- Título del sector -->
+                    <div class="quadrant-header">
+                        <span class="quadrant-title">{quad.title}</span>
+                        <span class="quadrant-status">
+                            <span class="status-dot"></span>
+                            ACTIVO
+                        </span>
+                    </div>
+                    <!-- 4 cámaras dentro del cuadrante -->
+                    <div class="quad-cameras">
+                        <template for:each={quad.cameras} for:item="cam">
+                            <div key={cam.id} class="cam-cell" data-id={cam.id} onclick={handleCamClick} title="Clic para ampliar">
+                                <!-- Overlay superior de la cámara -->
+                                <div class="cam-overlay-top">
+                                    <span class="cam-id">{cam.label}</span>
+                                    <span class="rec-badge">
+                                        <span class="rec-dot"></span>
+                                        REC
+                                    </span>
+                                </div>
+                                <!-- Stream de vídeo -->
+                                <iframe
+                                    src={cam.url}
+                                    title={cam.label}
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen
+                                    class="cam-stream"
+                                    loading="lazy"
+                                ></iframe>
+                                <!-- Overlay inferior -->
+                                <div class="cam-overlay-bottom">
+                                    <span class="cam-zone">{cam.zone}</span>
+                                    <span class="cam-status-badge">{cam.status}</span>
+                                </div>
+                                <!-- Esquinas decorativas estilo cámara de seguridad -->
+                                <div class="corner corner-tl"></div>
+                                <div class="corner corner-tr"></div>
+                                <div class="corner corner-bl"></div>
+                                <div class="corner corner-br"></div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <!-- ═══ Footer ═══ -->
+        <div class="monitor-footer">
+            <span class="footer-left">
+                <lightning-icon icon-name="utility:lock" size="xx-small" class="lock-icon"></lightning-icon>
+                SISTEMA PROTEGIDO — OptiSecure Solutions © 2026
+            </span>
+            <span class="footer-right">GRABACIÓN CONTINUA 24/7 · ALMACENAMIENTO SEGURO</span>
+        </div>
+    </div>
+
+    <!-- ═══ Modal: Cámara ampliada ═══ -->
+    <template lwc:if={showExpandedModal}>
+        <section class="cam-expanded-backdrop" onclick={handleCloseExpanded}>
+            <div class="cam-expanded-modal" onclick={handleCloseExpanded}>
+                <div class="cam-expanded-header">
+                    <span class="cam-expanded-label">{expandedCamera.label} — {expandedCamera.zone}</span>
+                    <button class="cam-expanded-close" onclick={handleCloseExpanded} title="Cerrar">✕</button>
+                </div>
+                <iframe
+                    src={expandedCamera.url}
+                    title={expandedCamera.label}
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    class="cam-expanded-stream"
+                ></iframe>
+                <div class="cam-expanded-footer">
+                    <span class="cam-expanded-status">
+                        <span class="rec-dot"></span>
+                        EN VIVO · {expandedCamera.location}
+                    </span>
+                </div>
+            </div>
+        </section>
+    </template>
+</template>

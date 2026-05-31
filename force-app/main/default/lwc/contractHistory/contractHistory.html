@@ -1,0 +1,82 @@
+<template>
+    <lightning-card title="Historial de Contrataciones" icon-name="utility:list">
+        <lightning-button-icon
+            slot="actions"
+            icon-name="utility:refresh"
+            alternative-text="Refrescar"
+            onclick={handleRefresh}
+        ></lightning-button-icon>
+
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+
+            <!-- Cargando -->
+            <template lwc:if={isLoading}>
+                <div class="slds-align_absolute-center slds-p-around_large">
+                    <lightning-spinner alternative-text="Cargando..." size="small"></lightning-spinner>
+                </div>
+            </template>
+
+            <template lwc:else>
+                <!-- Filtros por estado -->
+                <div class="filter-bar">
+                    <template for:each={filterOptions} for:item="opt">
+                        <button
+                            key={opt.value}
+                            class={opt.cssClass}
+                            data-value={opt.value}
+                            onclick={handleFilter}
+                        >{opt.label}</button>
+                    </template>
+                    <span class="filter-count">{filteredCount} / {totalCount}</span>
+                </div>
+
+                <!-- Lista solicitudes -->
+                <template lwc:if={hasSolicitudes}>
+                    <div class="history-list">
+                        <template for:each={solicitudes} for:item="sol">
+                            <div key={sol.Id} class="history-row">
+                                <!-- Columna izquierda: nombre y estado -->
+                                <div class="history-row-left">
+                                    <span class="history-name">{sol.Name}</span>
+                                    <span class={sol.badgeClass}>{sol.Estado__c}</span>
+                                </div>
+
+                                <!-- Columna central: info -->
+                                <div class="history-row-mid">
+                                    <div class="history-field">
+                                        <lightning-icon icon-name="utility:user" size="xx-small" class="h-icon"></lightning-icon>
+                                        <span>{sol.solicitante}</span>
+                                    </div>
+                                    <div class="history-field">
+                                        <lightning-icon icon-name="utility:company" size="xx-small" class="h-icon"></lightning-icon>
+                                        <span>{sol.cuenta}</span>
+                                    </div>
+                                    <div class="history-field">
+                                        <lightning-icon icon-name="utility:video" size="xx-small" class="h-icon"></lightning-icon>
+                                        <span class="history-camaras">{sol.Numero_Camaras__c} cám.</span>
+                                    </div>
+                                </div>
+
+                                <!-- Columna derecha: fechas -->
+                                <div class="history-row-right">
+                                    <span class="history-label">Solicitada</span>
+                                    <span class="history-date">{sol.fechaFormateada}</span>
+                                    <span class="history-label">Última mod.</span>
+                                    <span class="history-date">{sol.fechaModificacion}</span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- Vacío -->
+                <template lwc:else>
+                    <div class="empty-state">
+                        <lightning-icon icon-name="utility:search" size="large" class="empty-icon"></lightning-icon>
+                        <p class="empty-text">No hay solicitudes con ese filtro</p>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

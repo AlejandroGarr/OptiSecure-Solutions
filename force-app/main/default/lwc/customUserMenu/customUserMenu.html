@@ -1,0 +1,428 @@
+<template>
+    <!-- ═══════════════════════════════════════════════════════
+         CUSTOM USER MENU — OptiSecure Solutions
+         Menú de usuario para Experience Cloud con perfil,
+         contratación y cierre de sesión.
+    ═══════════════════════════════════════════════════════════ -->
+
+    <!-- ─── MENÚ DESPLEGABLE ─── -->
+    <lightning-button-menu
+        alternative-text="Menú de usuario"
+        icon-name="utility:user"
+        label="Mi Cuenta"
+        variant="border-filled"
+        onselect={handleMenuSelect}
+        class="user-menu"
+    >
+        <lightning-menu-item
+            label="Perfil"
+            value="profile"
+            icon-name="utility:identity"
+        ></lightning-menu-item>
+
+        <lightning-menu-item
+            label="Añadir plano"
+            value="floorPlan"
+            icon-name="utility:image"
+        ></lightning-menu-item>
+
+        <div class="slds-has-divider_top-space" role="separator"></div>
+
+        <lightning-menu-item
+            label="Sign Out"
+            value="logout"
+            icon-name="utility:logout"
+        ></lightning-menu-item>
+    </lightning-button-menu>
+
+    <!-- ─── MODAL DE PERFIL ─── -->
+    <template lwc:if={isProfileModalOpen}>
+        <section
+            role="dialog"
+            tabindex="-1"
+            aria-modal="true"
+            aria-labelledby="modal-heading"
+            class="slds-modal slds-fade-in-open slds-modal_large"
+        >
+            <div class="slds-modal__container profile-modal-container">
+                <!-- Header con gradiente -->
+                <div class="profile-modal-header">
+                    <button
+                        class="profile-close-btn"
+                        onclick={handleCloseModal}
+                        aria-label="Cerrar"
+                    >&times;</button>
+
+                    <template lwc:if={profileData}>
+                        <!-- Avatar con iniciales -->
+                        <div class="profile-avatar">
+                            <span class="profile-avatar-text">{profileData.initials}</span>
+                        </div>
+                        <h1 class="profile-name">{profileData.name}</h1>
+                        <p class="profile-email">{profileData.email}</p>
+                        <template lwc:if={profileData.sla}>
+                            <span class={slaBadgeClass}>{profileData.sla}</span>
+                        </template>
+                    </template>
+                </div>
+
+                <!-- Body -->
+                <div class="profile-modal-body">
+                    <template lwc:if={profileData}>
+
+                        <!-- ═══ TARJETAS DE ESTADÍSTICAS ═══ -->
+                        <div class="profile-stats-row">
+                            <div class="profile-stat-card stat-cameras">
+                                <div class="stat-icon-wrap stat-icon-blue">
+                                    <lightning-icon icon-name="utility:video" size="small" alternative-text="Cámaras"></lightning-icon>
+                                </div>
+                                <div class="stat-value">{profileData.totalCameras}</div>
+                                <div class="stat-label">Cámaras totales</div>
+                            </div>
+
+                            <div class="profile-stat-card stat-active">
+                                <div class="stat-icon-wrap stat-icon-green">
+                                    <lightning-icon icon-name="utility:check" size="small" alternative-text="Activas"></lightning-icon>
+                                </div>
+                                <div class="stat-value">{profileData.activeCameras}</div>
+                                <div class="stat-label">Activas</div>
+                            </div>
+
+                            <div class="profile-stat-card stat-inactive">
+                                <div class="stat-icon-wrap stat-icon-red">
+                                    <lightning-icon icon-name="utility:close" size="small" alternative-text="Inactivas"></lightning-icon>
+                                </div>
+                                <div class="stat-value">{profileData.inactiveCameras}</div>
+                                <div class="stat-label">Inactivas</div>
+                            </div>
+                        </div>
+
+                        <!-- Barra de progreso de cámaras activas -->
+                        <div class="camera-progress-section">
+                            <div class="progress-header">
+                                <span class="progress-title">Cámaras operativas</span>
+                                <span class="progress-percent">{cameraPercentage}%</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill" style={cameraBarStyle}></div>
+                            </div>
+                        </div>
+
+                        <!-- ═══ GRID DE TARJETAS ═══ -->
+                        <div class="profile-cards-grid">
+
+                            <!-- TARJETA: Información Personal -->
+                            <div class="profile-card">
+                                <div class="profile-card-header">
+                                    <lightning-icon icon-name="utility:user" size="x-small" alternative-text="Personal"></lightning-icon>
+                                    <h2>Información Personal</h2>
+                                </div>
+                                <div class="profile-card-body">
+                                    <div class="profile-field">
+                                        <span class="field-label">Nombre</span>
+                                        <span class="field-value">{profileData.name}</span>
+                                    </div>
+                                    <div class="profile-field">
+                                        <span class="field-label">Correo electrónico</span>
+                                        <span class="field-value">{profileData.email}</span>
+                                    </div>
+                                    <template lwc:if={profileData.phone}>
+                                        <div class="profile-field">
+                                            <span class="field-label">Teléfono</span>
+                                            <span class="field-value">{profileData.phone}</span>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <!-- TARJETA: Datos de Cuenta -->
+                            <template lwc:if={hasAccountData}>
+                                <div class="profile-card">
+                                    <div class="profile-card-header">
+                                        <lightning-icon icon-name="utility:company" size="x-small" alternative-text="Cuenta"></lightning-icon>
+                                        <h2>Datos de Cuenta</h2>
+                                    </div>
+                                    <div class="profile-card-body">
+                                        <div class="profile-field">
+                                            <span class="field-label">Empresa</span>
+                                            <span class="field-value">{profileData.accountName}</span>
+                                        </div>
+                                        <template lwc:if={profileData.accountPhone}>
+                                            <div class="profile-field">
+                                                <span class="field-label">Teléfono empresa</span>
+                                                <span class="field-value">{profileData.accountPhone}</span>
+                                            </div>
+                                        </template>
+                                        <template lwc:if={profileData.industry}>
+                                            <div class="profile-field">
+                                                <span class="field-label">Industria</span>
+                                                <span class="field-value">{profileData.industry}</span>
+                                            </div>
+                                        </template>
+                                        <div class="profile-field">
+                                            <span class="field-label">Estado</span>
+                                            <span class={activeBadgeClass}>{activeLabel}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- TARJETA: Plan y Servicio -->
+                            <template lwc:if={hasAccountData}>
+                                <div class="profile-card">
+                                    <div class="profile-card-header">
+                                        <lightning-icon icon-name="utility:shield" size="x-small" alternative-text="Plan"></lightning-icon>
+                                        <h2>Plan y Servicio</h2>
+                                    </div>
+                                    <div class="profile-card-body">
+                                        <template lwc:if={profileData.sla}>
+                                            <div class="profile-field">
+                                                <span class="field-label">Plan SLA</span>
+                                                <span class={slaBadgeClass}>{profileData.sla}</span>
+                                            </div>
+                                        </template>
+                                        <template lwc:if={profileData.slaSerialNumber}>
+                                            <div class="profile-field">
+                                                <span class="field-label">N.º Serie SLA</span>
+                                                <span class="field-value field-mono">{profileData.slaSerialNumber}</span>
+                                            </div>
+                                        </template>
+                                        <template lwc:if={profileData.slaExpirationDate}>
+                                            <div class="profile-field">
+                                                <span class="field-label">Vencimiento SLA</span>
+                                                <span class="field-value">{profileData.slaExpirationDate}</span>
+                                            </div>
+                                        </template>
+                                        <div class="profile-field">
+                                            <span class="field-label">Prioridad cliente</span>
+                                            <span class={priorityBadgeClass}>{priorityLabel}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- TARJETA: Dirección -->
+                            <template lwc:if={formattedAddress}>
+                                <div class="profile-card">
+                                    <div class="profile-card-header">
+                                        <lightning-icon icon-name="utility:location" size="x-small" alternative-text="Dirección"></lightning-icon>
+                                        <h2>Dirección de Facturación</h2>
+                                    </div>
+                                    <div class="profile-card-body">
+                                        <div class="profile-field">
+                                            <span class="field-label">Dirección completa</span>
+                                            <span class="field-value">{formattedAddress}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                        </div>
+
+                        <!-- ═══ LISTA DE CÁMARAS (admin puede eliminar) ═══ -->
+                        <template lwc:if={hasCameras}>
+                            <div class="profile-card camera-list-card">
+                                <div class="profile-card-header">
+                                    <lightning-icon icon-name="utility:video" size="x-small" alternative-text="Cámaras"></lightning-icon>
+                                    <h2>Mis Cámaras</h2>
+                                </div>
+                                <div class="camera-list-body">
+                                    <template for:each={cameraList} for:item="cam">
+                                        <div key={cam.id} class="camera-list-row">
+                                            <div class="camera-list-info">
+                                                <span class={cam.statusClass}></span>
+                                                <template lwc:if={cam.isEditing}>
+                                                    <lightning-input
+                                                        type="text"
+                                                        value={editingCameraName}
+                                                        class="camera-rename-input"
+                                                        onchange={handleRenameInputChange}
+                                                        label=""
+                                                        variant="label-hidden"
+                                                    ></lightning-input>
+                                                </template>
+                                                <template lwc:else>
+                                                    <span class="camera-list-name">{cam.name}</span>
+                                                    <template lwc:if={cam.zone}>
+                                                        <span class="camera-list-zone">{cam.zone}</span>
+                                                    </template>
+                                                </template>
+                                            </div>
+                                            <div class="camera-list-actions">
+                                                <template lwc:if={cam.isEditing}>
+                                                    <button
+                                                        class="camera-rename-confirm-btn"
+                                                        onclick={handleConfirmRename}
+                                                        disabled={isRenaming}
+                                                        title="Guardar nombre"
+                                                    >
+                                                        <lightning-icon icon-name="utility:check" size="xx-small" alternative-text="Guardar"></lightning-icon>
+                                                    </button>
+                                                    <button
+                                                        class="camera-rename-cancel-btn"
+                                                        onclick={handleCancelRename}
+                                                        title="Cancelar"
+                                                    >
+                                                        <lightning-icon icon-name="utility:close" size="xx-small" alternative-text="Cancelar"></lightning-icon>
+                                                    </button>
+                                                </template>
+                                                <template lwc:else>
+                                                    <span class="camera-list-status">{cam.statusLabel}</span>
+                                                    <button
+                                                        class="camera-rename-btn"
+                                                        onclick={handleStartRename}
+                                                        data-id={cam.id}
+                                                        data-name={cam.name}
+                                                        title="Editar nombre"
+                                                    >
+                                                        <lightning-icon icon-name="utility:edit" size="xx-small" alternative-text="Editar"></lightning-icon>
+                                                    </button>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+
+                    </template>
+
+                    <!-- Error -->
+                    <template lwc:elseif={profileError}>
+                        <div class="profile-error">
+                            <lightning-icon icon-name="utility:error" variant="error" size="medium" alternative-text="Error"></lightning-icon>
+                            <p>No se pudieron cargar los datos del perfil.</p>
+                        </div>
+                    </template>
+
+                    <!-- Loading -->
+                    <template lwc:else>
+                        <div class="profile-loading">
+                            <lightning-spinner alternative-text="Cargando perfil..." size="medium"></lightning-spinner>
+                            <p>Cargando tu perfil...</p>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Footer -->
+                <div class="profile-modal-footer">
+                    <lightning-button
+                        label="Cerrar"
+                        variant="neutral"
+                        onclick={handleCloseModal}
+                    ></lightning-button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Backdrop -->
+        <div class="slds-backdrop slds-backdrop_open" onclick={handleCloseModal}></div>
+    </template>
+
+    <!-- ─── MODAL "AÑADIR PLANO" ─── -->
+    <template lwc:if={isFloorPlanModalOpen}>
+        <section
+            role="dialog"
+            tabindex="-1"
+            aria-modal="true"
+            aria-labelledby="floor-plan-heading"
+            class="slds-modal slds-fade-in-open slds-modal_medium"
+        >
+            <div class="slds-modal__container floor-plan-modal-container">
+                <header class="slds-modal__header floor-plan-modal-header">
+                    <button
+                        class="profile-close-btn"
+                        onclick={handleCloseFloorPlanModal}
+                        aria-label="Cerrar"
+                    >&times;</button>
+                    <h2 id="floor-plan-heading" class="slds-text-heading_medium">Añadir plano de la casa</h2>
+                    <p class="slds-text-body_small slds-m-top_x-small">
+                        Sube tu propio plano (máx. 4&nbsp;MB). Sustituirá al plano por defecto.
+                    </p>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium floor-plan-modal-body">
+
+                    <!-- Zona de drag & drop -->
+                    <div
+                        class={floorPlanDropZoneClass}
+                        ondragover={handleFloorPlanDragOver}
+                        ondragleave={handleFloorPlanDragLeave}
+                        ondrop={handleFloorPlanDrop}
+                        onclick={handleFloorPlanZoneClick}
+                    >
+                        <template lwc:if={floorPlanPreviewUrl}>
+                            <img src={floorPlanPreviewUrl} alt="Vista previa" class="floor-plan-preview" />
+                            <p class="floor-plan-filename">{floorPlanFileName}</p>
+                            <p class="floor-plan-filesize">{floorPlanFileSizeLabel}</p>
+                            <lightning-button
+                                label="Quitar"
+                                variant="neutral"
+                                onclick={handleFloorPlanClear}
+                                class="slds-m-top_small"
+                            ></lightning-button>
+                        </template>
+
+                        <template lwc:else>
+                            <lightning-icon
+                                icon-name="utility:upload"
+                                size="large"
+                                alternative-text="Subir archivo"
+                            ></lightning-icon>
+                            <p class="floor-plan-drop-title slds-m-top_small">
+                                Arrastra tu archivo aquí o haz clic para seleccionar
+                            </p>
+                            <p class="floor-plan-drop-hint">
+                                Formatos: PNG, JPG, GIF, WEBP — Máx. 4&nbsp;MB
+                            </p>
+                        </template>
+
+                        <input
+                            type="file"
+                            class="floor-plan-file-input"
+                            accept="image/*"
+                            onchange={handleFloorPlanFileChange}
+                        />
+                    </div>
+
+                    <template lwc:if={floorPlanError}>
+                        <div class="floor-plan-error slds-m-top_small">
+                            <lightning-icon
+                                icon-name="utility:error"
+                                variant="error"
+                                size="x-small"
+                                alternative-text="Error"
+                            ></lightning-icon>
+                            <span class="slds-m-left_x-small">{floorPlanError}</span>
+                        </div>
+                    </template>
+
+                    <template lwc:if={isSavingFloorPlan}>
+                        <div class="slds-is-relative slds-m-top_medium" style="height:2rem;">
+                            <lightning-spinner alternative-text="Guardando..." size="small"></lightning-spinner>
+                        </div>
+                    </template>
+
+                </div>
+
+                <footer class="slds-modal__footer">
+                    <lightning-button
+                        label="Cancelar"
+                        variant="neutral"
+                        onclick={handleCloseFloorPlanModal}
+                        disabled={isSavingFloorPlan}
+                    ></lightning-button>
+                    <lightning-button
+                        label="Guardar plano"
+                        variant="brand"
+                        class="slds-m-left_x-small"
+                        onclick={handleSaveFloorPlan}
+                        disabled={isSaveFloorPlanDisabled}
+                    ></lightning-button>
+                </footer>
+            </div>
+        </section>
+
+        <div class="slds-backdrop slds-backdrop_open" onclick={handleCloseFloorPlanModal}></div>
+    </template>
+</template>

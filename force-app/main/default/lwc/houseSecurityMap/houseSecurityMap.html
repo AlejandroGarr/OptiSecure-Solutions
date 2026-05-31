@@ -1,0 +1,357 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 05-19-2026
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+    <!-- ═══════════════════════════════════════════════════════
+         HOUSE SECURITY MAP — OptiSecure Solutions
+         Layout CSS Grid: Mapa (75%) | Sidebar (25%) | Footer
+         Drag & Drop de chinchetas solo para System Administrator
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="house-security-map">
+
+        <!-- ─── MAPA PRINCIPAL (grid-area: map) ─── -->
+        <div class="grid-area-map">
+            <div class={mapContainerClass}
+                 ondragover={handleDragOver}
+                 ondragleave={handleDragLeave}
+                 ondrop={handleDrop}>
+                <!-- Imagen de fondo del plano -->
+                <img src={floorPlanUrl} alt="Plano de la casa" class="floor-plan-img" />
+
+                <!-- Iconos de cámaras posicionados sobre el plano -->
+                <template for:each={cameras} for:item="cam">
+                    <button
+                        key={cam.Id}
+                        class="camera-pin"
+                        style={cam.positionStyle}
+                        title={cam.Name}
+                        onclick={handleCameraClick}
+                        oncontextmenu={handleCameraContextMenu}
+                        data-id={cam.Id}
+                        draggable={draggableAttr}
+                        ondragstart={handleExistingCameraDragStart}
+                    >
+                        <lightning-icon
+                            icon-name="utility:checkin"
+                            size="x-small"
+                            variant="brand"
+                            alternative-text={cam.Name}
+                            class="camera-icon"
+                        ></lightning-icon>
+                        <span class="camera-pin-pulse"></span>
+                    </button>
+                </template>
+
+                <!-- Chinchetas soltadas (drag & drop — admin) -->
+                <template lwc:if={hasDroppedPins}>
+                    <template for:each={droppedPins} for:item="pin">
+                        <div
+                            key={pin.id}
+                            class="dropped-pin"
+                            style={pin.positionStyle}
+                            draggable="true"
+                            ondragstart={handleDroppedPinDragStart}
+                            onclick={handleDroppedPinClick}
+                            data-pin-id={pin.id}
+                            title={pin.name}
+                        >
+                            <img src={pin.thumbnailUrl} alt={pin.name} class="dropped-pin-thumb" />
+                            <span class="dropped-pin-label">{pin.name}</span>
+                            <button
+                                class="dropped-pin-remove"
+                                onclick={handleRemoveDroppedPin}
+                                data-pin-id={pin.id}
+                                title="Eliminar"
+                            >✕</button>
+                            <span class="camera-pin-pulse dropped-pin-pulse"></span>
+                        </div>
+                    </template>
+                </template>
+
+                <!-- Indicador visual de zona de drop -->
+                <template lwc:if={isDragOver}>
+                    <div class="drop-zone-indicator">
+                        <lightning-icon icon-name="utility:download" size="large" class="drop-zone-icon"></lightning-icon>
+                        <span class="drop-zone-text">Soltar cámara aquí</span>
+                    </div>
+                </template>
+
+                <!-- Badge de cámaras activas -->
+                <div class="map-badge">
+                    <lightning-icon icon-name="utility:connected_apps" size="xx-small"></lightning-icon>
+                    <span class="slds-m-left_xx-small">{cameraCount} cámaras activas</span>
+                </div>
+
+                <!-- Menú contextual (clic derecho) — solo admin -->
+                <template lwc:if={contextMenuVisible}>
+                    <div class="context-menu" style={contextMenuStyle} onclick={handleDeleteCamera}>
+                        <div class="context-menu-item context-menu-item--danger">
+                            <lightning-icon icon-name="utility:delete" size="xx-small" class="context-menu-icon"></lightning-icon>
+                            <span>Eliminar cámara</span>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- ─── SIDEBAR DERECHA (grid-area: sidebar) ─── -->
+        <div class="grid-area-sidebar">
+            <div class="sidebar-header">
+                <lightning-icon icon-name="utility:list" size="small" class="slds-m-right_x-small"></lightning-icon>
+                <h2 class="sidebar-title">Cámaras</h2>
+            </div>
+
+            <div class="sidebar-list">
+                <template lwc:if={isLoading}>
+                    <div class="slds-align_absolute-center slds-p-around_large">
+                        <lightning-spinner alternative-text="Cargando..." size="small"></lightning-spinner>
+                    </div>
+                </template>
+
+                <template lwc:elseif={hasCameras}>
+                    <template for:each={cameras} for:item="cam">
+                        <div
+                            key={cam.Id}
+                            class={cam.listItemClass}
+                            onclick={handleCameraClick}
+                            data-id={cam.Id}
+                        >
+                            <div class="cam-list-left">
+                                <lightning-icon
+                                    icon-name="utility:video"
+                                    size="xx-small"
+                                    class="slds-m-right_x-small cam-list-icon"
+                                ></lightning-icon>
+                                <div class="cam-list-info">
+                                    <template lwc:if={cam.isEditing}>
+                                        <lightning-input
+                                            type="text"
+                                            value={editingCameraName}
+                                            variant="label-hidden"
+                                            label=""
+                                            class="cam-rename-input"
+                                            onchange={handleRenameInputChange}
+                                            onclick={handleRenameInputClick}
+                                        ></lightning-input>
+                                    </template>
+                                    <template lwc:else>
+                                        <span class="cam-list-name">{cam.Name}</span>
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="cam-list-actions">
+                                <template lwc:if={cam.isEditing}>
+                                    <button
+                                        class="cam-rename-confirm-btn"
+                                        onclick={handleConfirmRename}
+                                        disabled={isRenaming}
+                                        title="Guardar nombre"
+                                    >
+                                        <lightning-icon icon-name="utility:check" size="xx-small" alternative-text="Guardar"></lightning-icon>
+                                    </button>
+                                    <button
+                                        class="cam-rename-cancel-btn"
+                                        onclick={handleCancelRename}
+                                        title="Cancelar"
+                                    >
+                                        <lightning-icon icon-name="utility:close" size="xx-small" alternative-text="Cancelar"></lightning-icon>
+                                    </button>
+                                </template>
+                                <template lwc:else>
+                                    <lightning-badge label="ONLINE" class="badge-online"></lightning-badge>
+                                    <button
+                                        class="cam-rename-btn"
+                                        onclick={handleStartRename}
+                                        data-id={cam.Id}
+                                        data-name={cam.Name}
+                                        title="Editar nombre"
+                                    >
+                                        <lightning-icon icon-name="utility:edit" size="xx-small" alternative-text="Editar"></lightning-icon>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+
+                <template lwc:else>
+                    <div class="sidebar-empty">
+                        <lightning-icon icon-name="utility:info" size="small" class="slds-m-bottom_small"></lightning-icon>
+                        <p>No hay cámaras activas</p>
+                    </div>
+                </template>
+            </div>
+
+            <!-- ─── ZONA DRAG & DROP — Admins / Solicitud aprobada ─── -->
+            <template lwc:if={showDragTray}>
+                <div class="drag-tray">
+                    <!-- Banner de solicitud aprobada (solo usuarios con ticket) -->
+                    <template lwc:if={hasSolicitudAprobada}>
+                        <div class="solicitud-banner">
+                            <lightning-icon icon-name="utility:success" size="xx-small" class="solicitud-banner-icon"></lightning-icon>
+                            <span class="solicitud-banner-text">{solicitudInfoText}</span>
+                        </div>
+                    </template>
+
+                    <div class="drag-tray-header">
+                        <lightning-icon icon-name="utility:drag_and_drop" size="x-small" class="drag-tray-icon"></lightning-icon>
+                        <h3 class="drag-tray-title">Cámaras</h3>
+                        <template lwc:if={showAddPinButton}>
+                            <lightning-button-icon
+                                icon-name="utility:add"
+                                alternative-text="Añadir chincheta"
+                                size="small"
+                                onclick={handleAddPin}
+                                class="drag-tray-add-btn"
+                            ></lightning-button-icon>
+                        </template>
+                    </div>
+                    <p class="drag-tray-hint">Arrastra y suelta sobre el mapa</p>
+
+                    <div class="drag-tray-list">
+                        <template lwc:if={hasDraggablePins}>
+                            <template for:each={draggablePins} for:item="pin">
+                                <div
+                                    key={pin.id}
+                                    class="drag-pin-card"
+                                    draggable="true"
+                                    ondragstart={handleDragStart}
+                                    data-pin-id={pin.id}
+                                >
+                                    <img src={pin.thumbnailUrl} alt={pin.name} class="drag-pin-thumb" />
+                                    <div class="drag-pin-info">
+                                        <span class="drag-pin-name">{pin.name}</span>
+                                        <span class="drag-pin-video-label">YouTube Video</span>
+                                    </div>
+                                    <lightning-button-icon
+                                        icon-name="utility:close"
+                                        alternative-text="Eliminar"
+                                        size="xx-small"
+                                        onclick={handleRemoveTrayPin}
+                                        data-pin-id={pin.id}
+                                        class="drag-pin-close"
+                                    ></lightning-button-icon>
+                                </div>
+                            </template>
+                        </template>
+                        <template lwc:else>
+                            <p class="drag-tray-empty">Sin chinchetas. Pulsa + para añadir.</p>
+                        </template>
+                    </div>
+
+                    <!-- Botón Guardar chinchetas soltadas -->
+                    <template lwc:if={hasDroppedPins}>
+                        <lightning-button
+                            label={saveButtonLabel}
+                            variant="brand"
+                            icon-name="utility:save"
+                            onclick={handleSaveDroppedPins}
+                            disabled={isSaving}
+                            class="slds-m-top_small drag-tray-save-btn"
+                        ></lightning-button>
+                    </template>
+
+                    <!-- Mensaje inline de estado (backup para cuando los toasts no aparecen) -->
+                    <template lwc:if={showInlineMessage}>
+                        <div class={inlineMessageClass}>
+                            <lightning-icon
+                                icon-name={inlineMessageIcon}
+                                size="xx-small"
+                                class="slds-m-right_xx-small"
+                            ></lightning-icon>
+                            <span>{inlineMessage}</span>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <!-- Detalle de cámara seleccionada -->
+            <template lwc:if={selectedCamera}>
+                <div class="sidebar-detail">
+                    <div class="detail-header">
+                        <h3 class="detail-title">{selectedCamera.Name}</h3>
+                        <lightning-button-icon
+                            icon-name="utility:close"
+                            alternative-text="Cerrar detalle"
+                            size="small"
+                            onclick={handleCloseDetail}
+                            class="detail-close-btn"
+                        ></lightning-button-icon>
+                    </div>
+                    <dl class="detail-grid">
+                        <dt>Zona</dt>
+                        <dd>{selectedCamera.Zone__c}</dd>
+                        <dt>Posición X</dt>
+                        <dd>{selectedCamera.Posicion_X__c}%</dd>
+                        <dt>Posición Y</dt>
+                        <dd>{selectedCamera.Posicion_Y__c}%</dd>
+                    </dl>
+                    <lightning-button
+                        label="Ver en vivo"
+                        variant="brand"
+                        icon-name="utility:play"
+                        onclick={handleOpenFullscreen}
+                        data-id={selectedCamera.Id}
+                        class="slds-m-top_small detail-live-btn"
+                    ></lightning-button>
+                </div>
+            </template>
+        </div>
+
+        <!-- ─── FOOTER (grid-area: footer) ─── -->
+        <div class="grid-area-footer">
+            <div class="footer-left">
+                <lightning-icon icon-name="utility:shield" size="xx-small" class="footer-icon"></lightning-icon>
+                <span>OPTISECURE — Mapa de Seguridad Interactivo</span>
+            </div>
+            <div class="footer-right">
+                <c-camera-contract-request></c-camera-contract-request>
+                <c-case-viewer></c-case-viewer>
+                <c-voice-assistant></c-voice-assistant>
+                <c-camera-incident-report></c-camera-incident-report>
+                <span class="footer-datetime">{currentDateTime}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ MODAL — Visor de vídeo flotante ═══ -->
+    <template lwc:if={isFullscreen}>
+        <section class="slds-modal slds-fade-in-open slds-modal_large"
+                 role="dialog"
+                 aria-modal="true"
+                 aria-label="Reproductor de cámara">
+            <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        onclick={handleCloseFullscreen}>
+                    <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                    <span class="slds-assistive-text">Cerrar</span>
+                </button>
+                <div class="slds-modal__header modal-cam-header">
+                    <div class="modal-cam-title-row">
+                        <span class="fullscreen-live-badge">
+                            <span class="live-dot"></span>
+                            EN VIVO
+                        </span>
+                        <h2 class="slds-modal__title modal-cam-title">{fullscreenCameraName}</h2>
+                    </div>
+                </div>
+                <div class="slds-modal__content modal-cam-content">
+                    <!-- Stream MJPEG: usar <img> permite que el modal se
+                         adapte automáticamente al tamaño nativo del vídeo. -->
+                    <img
+                        src={fullscreenVideoUrl}
+                        alt={fullscreenCameraName}
+                        class="modal-cam-img" />
+                </div>
+                <div class="slds-modal__footer modal-cam-footer">
+                    <button class="slds-button slds-button_neutral" onclick={handleCloseFullscreen}>Cerrar</button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" onclick={handleCloseFullscreen}></div>
+    </template>
+</template>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Cuenta</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Cuentas</value>
+    </caseValues>
+    <layouts>
+        <layout>Cliente</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Fields --></label>
+            <section>Fields</section>
+        </sections>
+        <sections>
+            <label><!-- Información facturación --></label>
+            <section>Información facturación</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Cuenta Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Proveedor</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Fields --></label>
+            <section>Fields</section>
+        </sections>
+    </layouts>
+    <quickActions>
+        <label><!-- Nueva Factura --></label>
+        <name>Nueva_Factura</name>
+    </quickActions>
+    <recordTypes>
+        <label><!-- Cliente --></label>
+        <name>Cliente</name>
+    </recordTypes>
+    <recordTypes>
+        <label><!-- Proveedor --></label>
+        <name>Proveedor</name>
+    </recordTypes>
+    <recordTypes>
+        <label><!-- prueba --></label>
+        <name>prueba</name>
+    </recordTypes>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- El CIF debe tener exactamente 9 caracteres: 8 números seguidos de una letra. --></errorMessage>
+        <name>CIF</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Campo CIF no puede estar en blanco --></errorMessage>
+        <name>CIF_blanco</name>
+    </validationRules>
+</CustomObjectTranslation>

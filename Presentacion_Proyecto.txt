@@ -1,0 +1,646 @@
+OPTISECURE SOLUTIONS
+Guía de presentación del proyecto
+
+Trabajo Fin de Grado
+Versión: 1.0
+Fecha: mayo de 2026
+
+
+PROPÓSITO DE ESTE DOCUMENTO
+
+Este documento está pensado para que cualquier persona, aunque no
+conozca Salesforce ni tenga formación técnica, pueda entender qué es
+OptiSecure Solutions, qué problema resuelve, cómo funciona y por qué
+tiene sentido como propuesta de Trabajo Fin de Grado. Está redactado
+con vocabulario sencillo y con ejemplos cotidianos, evitando
+tecnicismos siempre que es posible y explicándolos brevemente cuando
+resulta imprescindible mencionarlos.
+
+La estructura del documento permite leerlo de principio a fin como una
+presentación coherente, o consultar capítulos sueltos como apoyo
+durante una explicación oral, una defensa, una entrevista o una demo.
+
+
+ÍNDICE
+
+  1. Resumen en una frase
+  2. Qué problema resuelve OptiSecure Solutions
+  3. A quién va dirigido
+  4. Qué se ha construido en el proyecto
+  5. Cómo es la experiencia del cliente, paso a paso
+  6. Cómo es la experiencia del administrador
+  7. Las piezas tecnológicas, en lenguaje claro
+  8. ¿Qué es Salesforce y por qué se ha elegido?
+  9. Cómo se conecta una cámara real con el portal
+  10. La inteligencia artificial dentro del proyecto
+  11. Seguridad y privacidad
+  12. Por qué este proyecto es convincente
+  13. Posibles ampliaciones futuras
+  14. Cómo presentarlo en 60 segundos
+  15. Cómo responder a preguntas habituales
+  16. Glosario muy básico
+
+
+1. RESUMEN EN UNA FRASE
+
+OptiSecure Solutions es un portal web profesional, hecho sobre la
+plataforma de Salesforce, que permite a los clientes de una empresa de
+seguridad ver sus cámaras, gestionar sus contratos, abrir incidencias,
+hablar con soporte y recibir alertas automáticas con inteligencia
+artificial cuando una cámara detecta una persona, todo desde un único
+sitio y desde cualquier navegador.
+
+
+2. QUÉ PROBLEMA RESUELVE OPTISECURE SOLUTIONS
+
+Una empresa de videovigilancia residencial trabaja con varios
+problemas a la vez:
+
+  - Tiene que mostrar a cada cliente las cámaras que ha contratado, sin
+    que un cliente pueda ver las de otro.
+
+  - Tiene que ofrecer un canal claro para que los clientes pidan más
+    cámaras, abran incidencias o consulten el estado de su servicio.
+
+  - Tiene que poder gestionar internamente solicitudes, aprobaciones y
+    casos de soporte sin perder información por el camino.
+
+  - Tiene que dar una experiencia moderna: el cliente no quiere
+    aprender a usar un programa; quiere abrir su navegador, ver su
+    plano y entender de un vistazo qué está pasando en su casa.
+
+  - Por último: el cliente espera que el sistema
+    "le avise" cuando ocurre algo importante, no tener que estar
+    mirando el vídeo todo el día.
+
+OptiSecure Solutions resuelve todos estos puntos juntos, en un mismo
+producto, en lugar de tener varias herramientas distintas y mal
+conectadas.
+
+
+3. A QUIÉN VA DIRIGIDO
+
+El proyecto da servicio a tres perfiles distintos:
+
+  - Cliente final: una persona que ha contratado un servicio de
+    videovigilancia para su casa. Entra al portal, ve un plano de su
+    vivienda con sus cámaras, las abre cuando quiere y revisa lo que
+    ha pasado.
+
+  - Administrador de la empresa: la persona dentro de OptiSecure que
+    aprueba o rechaza las solicitudes nuevas, atiende los casos de
+    soporte y gestiona el sistema en general.
+
+  - Cualquier interlocutor del TFG (tribunal, profesores, posibles
+    empresas interesadas): el proyecto está pensado para poder
+    enseñarse en una demo de pocos minutos y entenderse sin necesidad
+    de explicar el código.
+
+
+4. QUÉ SE HA CONSTRUIDO EN EL PROYECTO
+
+El proyecto entrega un sistema completo, no un prototipo de juguete.
+En concreto, se han construido los siguientes bloques:
+
+  - Un portal web para clientes, con login propio, donde cada uno solo
+    ve sus datos y sus cámaras.
+
+  - Un mapa interactivo: un plano de la vivienda con chinchetas que
+    representan cada cámara y que se pueden pulsar para ver el vídeo
+    en directo.
+
+  - Un módulo de contratación, donde el cliente solicita más cámaras,
+    el administrador las aprueba o las rechaza y el propio cliente
+    coloca las nuevas chinchetas en el plano.
+
+  - Un sistema de soporte con casos y chat integrado, parecido a un
+    sistema de tickets, para que cliente y empresa puedan hablar sin
+    salir del portal.
+
+  - Un asistente de voz con inteligencia artificial: el cliente habla
+    en español al micrófono y el sistema entiende qué quiere
+    (abrir una cámara, abrir un caso, ver alertas, contar
+    detecciones).
+
+  - Un subsistema de detección automática que, usando una cámara
+     del cliente, identifica cuándo aparece una
+    persona y genera una alerta y un clip de vídeo guardado como
+    prueba.
+
+  - La posibilidad de que cada cliente suba el plano real de su
+    vivienda como imagen de fondo del mapa, en lugar de usar uno
+    genérico.
+
+  - Un panel de notificaciones y un visor de clips para revisar lo que
+    ha pasado y reproducir las grabaciones generadas por las
+    detecciones.
+
+
+5. CÓMO ES LA EXPERIENCIA DEL CLIENTE, PASO A PASO
+
+Una forma muy efectiva de explicar el proyecto es contar el día a día
+de un cliente. La historia es la siguiente:
+
+  Paso 1. El cliente firma el contrato con OptiSecure y recibe un
+  correo de bienvenida con un enlace para activar su cuenta y poner
+  contraseña. No hay autoregistro abierto: la empresa controla quién
+  entra.
+
+  Paso 2. Una vez activada la cuenta, el cliente entra al portal con
+  su correo y su contraseña, igual que entraría a cualquier servicio
+  online. Lo primero que ve es un plano de su casa con chinchetas en
+  los puntos donde tiene cámaras instaladas.
+
+  Paso 3. El cliente puede subir su propio plano de su vivienda como
+  imagen de fondo (un PNG o un JPG, hasta 4 MB). Así el mapa deja de
+  ser una imagen genérica y pasa a ser literalmente su casa. Esto
+  ayuda muchísimo a la sensación de "esto es mío".
+
+  Paso 4. Si pulsa una chincheta, se abre el visor a pantalla completa
+  con el vídeo de la cámara en directo. Si la cámara está apagada,
+  la chincheta se ve atenuada y el cliente lo detecta de inmediato.
+
+  Paso 5. Si quiere más cámaras, no llama por teléfono ni manda un
+  correo: pulsa el botón de "Contratar", indica cuántas quiere y por
+  qué, y la empresa recibe la solicitud. Cuando se aprueba, el propio
+  cliente arrastra las nuevas chinchetas a su plano y guarda el
+  resultado.
+
+  Paso 6. Si una cámara falla, abre el botón de "Incidencias", elige
+  cuál es la afectada, describe el problema y queda creado un caso de
+  soporte. A partir de ese momento, cliente y empresa hablan dentro
+  de un chat asociado a ese caso, sin perder nada del histórico.
+
+  Paso 7. Si está cómodo y prefiere no usar botones, abre el
+  asistente de voz y dice cosas como "abre la cámara del salón" o
+  "cuántas detecciones ha habido hoy". El sistema le entiende y
+  ejecuta la acción.
+
+  Paso 8. Cuando una cámara conectada a su equipo detecta una persona,
+  el cliente recibe automáticamente una notificación en el portal,
+  con el día, la hora y un clip corto que puede reproducir o
+  descargar. Esto ocurre sin que él tenga que estar pendiente.
+
+Lo importante de este recorrido no es cada función por separado, sino
+que todo ocurre dentro del mismo portal y de forma natural. El cliente
+no salta entre programas: vive en una única pantalla.
+
+
+6. CÓMO ES LA EXPERIENCIA DEL ADMINISTRADOR
+
+El administrador (la empresa OptiSecure) tiene una visión más amplia:
+
+  - Ve a todos los clientes, todas sus cuentas y todas sus cámaras.
+
+  - Puede arrastrar cámaras nuevas al plano y posicionarlas él mismo,
+    si fuese necesario, además de eliminarlas con clic derecho.
+
+  - Recibe en su panel las solicitudes de contratación pendientes y
+    decide aprobarlas o rechazarlas.
+
+  - Atiende los casos de soporte de los clientes desde la propia
+    ficha del caso, contestando en el chat integrado.
+
+  - Tiene acceso a las herramientas estándar del sistema (informes,
+    búsquedas, gestión de usuarios) sin tener que mantenerlas a mano,
+    porque las aporta la propia plataforma sobre la que está montado
+    el proyecto.
+
+Esto es importante para vender el proyecto: no solo ofrece un portal
+bonito al cliente, también ahorra trabajo interno a la empresa.
+
+
+7. LAS PIEZAS TECNOLÓGICAS, EN LENGUAJE CLARO
+
+A nivel técnico el proyecto utiliza varias piezas. Para explicarlas
+sin tecnicismos, se pueden describir así:
+
+  - Salesforce: una plataforma profesional muy usada en empresas, que
+    sirve para gestionar clientes, contratos y procesos de negocio.
+    Aporta de fábrica el almacenamiento de datos, el control de
+    accesos, los formularios y la página web del cliente.
+
+  - El portal del cliente: una web personalizada construida sobre esa
+    plataforma. La empresa controla el diseño, los menús y las
+    funciones, pero la base técnica (servidores, seguridad, login) la
+    aporta Salesforce.
+
+  - Componentes propios: pequeñas piezas visuales hechas a medida (el
+    mapa, el menú, el chat, el asistente de voz, el visor de clips)
+    que se han programado específicamente para este proyecto.
+
+  - Lógica de negocio propia: programación interna que decide, por
+    ejemplo, qué cámaras ve cada cliente, qué solicitudes están
+    pendientes o cómo se aprueban.
+
+  - Inteligencia artificial: en dos puntos. Por un lado, para entender
+    los comandos de voz del cliente (lo veremos más adelante). Por
+    otro, para detectar personas en el vídeo de la cámara y disparar
+    una alerta automática.
+
+  - Componente local del cliente: un pequeño programa que se ejecuta
+    en el ordenador del cliente, lee la cámara, la analiza y publica
+    el vídeo de forma segura para que el portal pueda enseñarlo.
+
+Todo esto trabaja como un único producto. El cliente final no necesita
+saber nada de esto.
+
+
+8. ¿QUÉ ES SALESFORCE Y POR QUÉ SE HA ELEGIDO?
+
+Salesforce es una de las plataformas empresariales más utilizadas en
+el mundo. Una analogía sencilla: si una empresa quisiese montar su
+propio sistema de gestión de clientes desde cero, tendría que comprar
+servidores, contratar gente para mantenerlos, programar el sistema de
+usuarios, el control de accesos, los informes, los correos, las
+copias de seguridad, etc. Salesforce ya ofrece todo eso hecho, y la
+empresa solo tiene que personalizarlo para su negocio.
+
+Las ventajas para un proyecto como OptiSecure Solutions son claras:
+
+  - Cada cliente tiene su login, sus datos y su privacidad sin tener
+    que reinventar nada.
+
+  - El portal web del cliente se publica con la propia herramienta,
+    sin necesidad de servidores adicionales.
+
+  - El sistema de aprobaciones, casos, contactos y cuentas existe ya
+    como concepto dentro de la plataforma, lo que acelera el
+    desarrollo.
+
+  - Se trata de una tecnología demandada en el mercado laboral, lo
+    que añade valor extra al TFG: no solo demuestra capacidad
+    técnica, también demuestra contacto con una herramienta real y
+    profesional.
+
+Frente a la opción de hacer todo "a mano" con tecnologías más
+tradicionales, elegir Salesforce permite centrarse en lo que hace
+único al proyecto (el plano interactivo, el asistente de voz, la
+detección automática), en lugar de gastar tiempo en problemas ya
+resueltos por otros.
+
+
+9. CÓMO SE CONECTA UNA CÁMARA REAL CON EL PORTAL
+
+Esta es una de las partes más originales del proyecto y conviene
+explicarla bien.
+
+El problema: el portal está en internet, en los servidores de
+Salesforce. La cámara, en cambio, está físicamente en casa del
+cliente, conectada a su ordenador. ¿Cómo se hace que el portal vea
+esa cámara sin necesidad de instalar servidores intermedios ni
+configuraciones complicadas en el router?
+
+La solución del proyecto se basa en tres ideas combinadas:
+
+  - Un programa local en Python que lee la cámara y la convierte en
+    un flujo de vídeo que cualquier navegador entiende.
+
+  - Una herramienta que crea una "puerta" segura desde internet hasta
+    ese programa local, sin necesidad de tocar el router.
+
+  - El portal, que simplemente muestra el vídeo apuntando a la
+    dirección segura que se ha generado. Para el cliente, el efecto
+    es ver la cámara en la web como si fuese una cámara IP cara,
+    pero con su cámara normal.
+
+Esto es muy potente porque:
+
+  - No hay que comprar cámaras especiales para probar el sistema.
+
+  - No hay que pedir al cliente que toque la configuración de su
+    router.
+
+  - El vídeo se transmite cifrado de extremo a extremo.
+
+  - La misma técnica permite, además, que el ordenador del cliente
+    aplique inteligencia artificial al vídeo antes de mostrarlo, que
+    es justo lo que hace el siguiente bloque.
+
+
+10. LA INTELIGENCIA ARTIFICIAL DENTRO DEL PROYECTO
+
+OptiSecure usa inteligencia artificial en dos sitios distintos. Es
+muy importante saber distinguirlos al explicarlos.
+
+10.1. IA para entender lo que el cliente dice
+
+  - El cliente abre el asistente de voz dentro del portal.
+
+  - Pulsa el micrófono y habla en español: "abre la cámara del
+    garaje", "cuántas notificaciones han llegado hoy" o "abre un caso
+    porque la cámara del salón no funciona".
+
+  - El navegador transcribe lo que dice a texto.
+
+  - Ese texto se envía a Google Gemini, que es un modelo de IA muy
+    parecido en concepto a ChatGPT, pero usado aquí de forma muy
+    controlada.
+
+  - Gemini no responde "lo que le da la gana": el sistema le ha
+    dicho exactamente qué acciones puede proponer y con qué
+    parámetros. Devuelve, en un formato cerrado, la acción a
+    ejecutar.
+
+  - El portal entonces hace lo que el cliente ha pedido: abrir una
+    cámara, contar alertas, crear un caso, etc.
+
+Esto es un punto fuerte para defender el TFG porque demuestra cómo se
+integra inteligencia artificial generativa de forma segura: no
+sustituyendo la lógica del programa, sino dejando a la IA solo el
+trabajo que mejor sabe hacer (entender el lenguaje natural).
+
+10.2. IA para detectar personas en el vídeo
+
+  - El programa local que lee la cámara aplica un modelo de visión
+    por computador llamado YOLOv8.
+
+  - Por cada fotograma de vídeo, el modelo decide si hay una persona
+    en la imagen y con qué nivel de confianza.
+
+  - Cuando la confianza supera un umbral, el sistema graba un clip
+    corto, lo guarda y avisa al portal de que ha ocurrido una
+    detección.
+
+  - Para no generar avisos infinitos cuando hay alguien parado
+    delante de la cámara, hay un periodo de "enfriamiento": entre
+    detección y detección debe pasar un tiempo mínimo.
+
+  - El portal recibe el aviso y crea automáticamente una notificación
+    visible para el cliente, con la cámara, la hora y el enlace al
+    clip.
+
+El cliente, sin hacer nada, abre su portal y ve "ha ocurrido esto, en
+esta cámara, a esta hora, aquí tienes el vídeo". Esa es exactamente
+la promesa de un sistema de seguridad moderno.
+
+
+11. SEGURIDAD Y PRIVACIDAD
+
+Cuando uno habla de un proyecto de cámaras y datos personales, la
+gente espera que se hable también de seguridad. El proyecto la trata
+en varios niveles, todos explicables sin tecnicismos:
+
+  - Cada cliente tiene su propio usuario y solo ve sus propios datos.
+    Esto está garantizado por Salesforce y también por la lógica
+    interna del proyecto.
+
+  - El acceso al portal exige correo y contraseña, con la
+    posibilidad de recuperarla mediante un enlace temporal enviado al
+    correo.
+
+  - Las claves técnicas (por ejemplo la clave para hablar con
+    Google Gemini) se guardan en un sitio seguro de Salesforce, no
+    están escritas en el código que se ve desde el navegador.
+
+  - El audio del cliente no se envía nunca tal cual a la nube. Se
+    transcribe a texto en su propio navegador y solo el texto viaja
+    al servidor.
+
+  - El vídeo de la cámara local se transmite por una conexión cifrada,
+    sin necesidad de abrir puertos en el router del cliente.
+
+  - El administrador es el único que puede aprobar solicitudes,
+    eliminar cámaras u operar a nivel global.
+
+El mensaje convincente es: "el proyecto se apoya en una plataforma
+empresarial seria para no inventar la seguridad, y añade encima una
+capa propia para que cada cliente solo vea lo suyo".
+
+
+12. POR QUÉ ESTE PROYECTO ES CONVINCENTE
+
+Cuando uno presenta el proyecto a un tribunal, a una empresa o
+simplemente a alguien interesado, los siguientes argumentos suelen
+funcionar muy bien:
+
+  - Resuelve un problema real: no es un caso de estudio inventado,
+    es un escenario que cualquier empresa de videovigilancia
+    entiende a la primera.
+
+  - Combina tecnologías modernas: una plataforma empresarial líder,
+    una capa propia de programación, visión por computador con IA y
+    un asistente de voz también con IA.
+
+  - Es un sistema completo: hay portal, hay backend, hay datos, hay
+    procesos de negocio (aprobación de solicitudes, casos de
+    soporte) y hay incluso una integración física con cámaras
+    reales.
+
+  - Es demostrable en pocos minutos: se entra al portal, se enseña
+    el plano, se abre una cámara, se contrata una nueva, se reporta
+    una incidencia, se habla al asistente. Esa secuencia se entiende
+    sin necesidad de mirar código.
+
+  - Tiene visión de producto: no es un trabajo "para sacar una
+    nota", está pensado como si tuviera que venderse a una empresa
+    real. Eso se nota en los detalles: estados de las solicitudes,
+    chat integrado, indicadores visuales, plano personalizable, etc.
+
+  - Aporta valor académico: integra varias asignaturas (programación,
+    bases de datos, redes, inteligencia artificial, ingeniería del
+    software) en un mismo entregable.
+
+
+13. POSIBLES AMPLIACIONES FUTURAS
+
+Que se mencionen líneas futuras es positivo en una defensa, porque
+demuestra visión a medio plazo. Estas son las más naturales:
+
+  - Vídeo más rápido y bidireccional con tecnología WebRTC, en lugar
+    del flujo MJPEG actual.
+
+  - Grabación y almacenamiento de vídeo de larga duración, no solo
+    clips cortos.
+
+  - Notificaciones push al móvil del cliente, además de las que se
+    ven en el portal.
+
+  - Aplicación móvil nativa, para acceder al mapa y a las cámaras
+    sin abrir el navegador.
+
+  - Soporte multi-idioma, para vender el producto fuera de España.
+
+  - Más tipos de detección: paquetes, vehículos, animales, fuego,
+    apertura de puertas, etc.
+
+  - Panel de estadísticas, con métricas de actividad por zona, por
+    cámara y por franja horaria.
+
+Estas ampliaciones se pueden mencionar como "siguiente versión", no
+como deudas pendientes; queda mucho mejor.
+
+
+14. CÓMO PRESENTARLO EN 60 SEGUNDOS
+
+Si solo hay un minuto para explicar el proyecto, esta es una versión
+recomendable. Sirve para una entrevista, para un ascensor o para
+abrir una defensa antes de la demo:
+
+  "OptiSecure Solutions es un portal web profesional, hecho sobre
+  Salesforce, para empresas de videovigilancia residencial. El
+  cliente entra con su usuario y ve un plano interactivo de su
+  vivienda con sus cámaras posicionadas como chinchetas. Puede
+  pulsar cualquiera para ver el vídeo en directo, contratar más
+  cámaras desde el propio portal, abrir incidencias, hablar con
+  soporte por chat e incluso usar un asistente de voz con
+  inteligencia artificial. Además, una capa local en Python lee la
+  cámara, detecta automáticamente cuando aparece una persona usando
+  visión por computador y guarda un clip que el cliente recibe como
+  notificación. Todo está integrado en una sola pantalla, con
+  seguridad de plataforma empresarial y con experiencia de usuario
+  cuidada."
+
+Si solo se tienen 30 segundos, se reduce a:
+
+  "Es un portal web sobre Salesforce que permite al cliente de una
+  empresa de seguridad ver sus cámaras, contratar más, abrir
+  incidencias y recibir alertas automáticas cuando una cámara detecta
+  una persona, todo desde la misma pantalla y con asistente de voz
+  con IA."
+
+
+15. CÓMO RESPONDER A PREGUNTAS HABITUALES
+
+Estas son preguntas que suelen aparecer al presentar el proyecto, con
+respuestas claras y breves para tenerlas preparadas:
+
+15.1. "¿Esto es como tener una cámara IP normal?"
+
+  No exactamente. Una cámara IP tradicional necesita un fabricante
+  concreto, una app suya y, muchas veces, registrarse en su nube.
+  OptiSecure es independiente del fabricante: vale con tener una
+  cámara cualquiera conectada al ordenador. Además, integra todo en
+  un mismo portal: cámaras, contratos, soporte y alertas.
+
+15.2. "¿Por qué Salesforce y no algo más sencillo?"
+
+  Porque Salesforce ya resuelve cosas que en otro caso habría que
+  hacer desde cero: usuarios, contratos, casos de soporte,
+  aprobaciones, seguridad. Eso permite centrar el trabajo del TFG en
+  lo que aporta valor real: la experiencia del cliente, el mapa, la
+  IA y la integración con cámaras.
+
+15.3. "¿La IA puede equivocarse?"
+
+  Sí, igual que cualquier sistema de detección. Por eso hay un
+  umbral de confianza configurable, periodos de enfriamiento entre
+  alertas y, sobre todo, las detecciones siempre se acompañan de un
+  clip de vídeo para que el cliente pueda comprobarlo con sus
+  propios ojos. La IA propone, el cliente valida.
+
+15.4. "¿Está pensado para muchos clientes a la vez?"
+
+  Sí. Salesforce está diseñado para escalar, y el proyecto se apoya
+  en su infraestructura. La carga pesada de vídeo se ejecuta en
+  cada equipo local del cliente, lo que evita saturar un servidor
+  central. Es una arquitectura "edge + cloud" muy actual.
+
+15.5. "¿Por qué hace falta un programa local en Python?"
+
+  Para poder analizar el vídeo en tiempo real cerca de la cámara,
+  con baja latencia y sin enviar continuamente vídeo bruto a
+  internet. Eso ahorra ancho de banda, reduce coste y mejora la
+  privacidad: solo viajan a la nube las alertas y los clips
+  relevantes.
+
+15.6. "¿El asistente de voz se puede saltar la lógica del sistema?"
+
+  No. La IA solo decide cuál es la intención del usuario, no
+  ejecuta nada por sí misma. El portal recibe esa intención y aplica
+  exactamente las mismas reglas que aplicaría si el cliente hubiese
+  pulsado un botón. Si el cliente no tiene permiso para algo, el
+  asistente tampoco se lo va a permitir.
+
+15.7. "¿Y si un cliente intenta ver las cámaras de otro?"
+
+  No puede. El sistema filtra los datos por contacto en cada
+  consulta. Cualquier intento de acceder a registros ajenos se
+  bloquea a nivel de servidor, no solo escondiendo botones en la
+  pantalla.
+
+15.8. "¿Qué pasa si se cae internet en casa del cliente?"
+
+  Mientras no haya conexión, no se puede ver el vídeo en directo
+  desde el portal y no llegan alertas nuevas. Cuando la conexión
+  vuelve, el sistema se recupera por sí solo y vuelve a notificar
+  los nuevos eventos.
+
+15.9. "¿Qué hace especial este TFG frente a otros?"
+
+  Tres cosas: la elección de una plataforma empresarial real
+  (Salesforce), la integración con cámaras físicas mediante una
+  arquitectura ligera y bien pensada, y el uso combinado de dos
+  capas de IA (visión por computador en la cámara y modelo de
+  lenguaje en el asistente). Todo eso, dentro de un producto que se
+  puede enseñar funcionando.
+
+
+16. GLOSARIO MUY BÁSICO
+
+Asistente de voz
+  Funcionalidad que escucha lo que dice el cliente, lo convierte en
+  texto y lanza una acción dentro del portal.
+
+Cámara local
+  Cámara conectada al ordenador del cliente cuyo vídeo se publica al
+  portal mediante un programa local y un canal seguro.
+
+Chincheta
+  Icono que representa una cámara sobre el plano del Mapa de
+  Seguridad.
+
+Clip de seguridad
+  Vídeo corto generado automáticamente cuando la cámara detecta una
+  persona. Sirve como prueba de lo ocurrido.
+
+Detección
+  Identificación automática, hecha por inteligencia artificial, de
+  que en un vídeo aparece algo relevante (en este proyecto, una
+  persona).
+
+Mapa de Seguridad
+  Pantalla principal del portal que muestra el plano de la vivienda
+  con las cámaras posicionadas.
+
+Notificación
+  Aviso visible en el portal cuando ocurre una detección. Incluye la
+  cámara, la hora y el enlace al clip.
+
+Plano personalizado
+  Imagen del plano real de la casa que el cliente sube para
+  reemplazar al plano genérico.
+
+Portal de cliente
+  Página web a la que entra cada cliente con su usuario y desde la
+  que controla todo lo relacionado con su servicio.
+
+Salesforce
+  Plataforma profesional sobre la que está construido el proyecto.
+  Aporta usuarios, datos, seguridad y la web del cliente.
+
+Solicitud de contratación
+  Petición formal del cliente para añadir más cámaras a su servicio,
+  que pasa por aprobación del administrador.
+
+Túnel seguro
+  Mecanismo que publica una dirección local del equipo del cliente
+  como una dirección pública cifrada, para que el portal pueda
+  acceder a su cámara.
+
+
+CIERRE
+
+Si tuvieras que quedarte con una sola idea para vender el proyecto,
+sería esta: OptiSecure Solutions no es solo una web bonita ni solo
+un experimento de IA, es un producto integrado de extremo a extremo
+para una empresa de videovigilancia residencial, hecho sobre una
+plataforma empresarial reconocida, con detalles que reflejan visión
+de producto real y con bloques tecnológicos modernos (visión por
+computador y asistente de voz con IA) usados de forma controlada y
+útil.
+
+Eso es exactamente lo que se espera de un Trabajo Fin de Grado que
+quiera destacar: ambición, integración y resultado funcional.
+
+Fin del documento.
