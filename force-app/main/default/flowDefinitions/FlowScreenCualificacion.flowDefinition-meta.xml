@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<FlowDefinition xmlns="http://soap.sforce.com/2006/04/metadata">
-    <activeVersionNumber>18</activeVersionNumber>
-    <description>Flow para manejar si se descarta o se convierte en cliente</description>
-    <masterLabel>Account_Screen_Cualificacion</masterLabel>
-</FlowDefinition>
